@@ -8,7 +8,7 @@
     "start": "next start",
     "playwright": "playwright test",
     "test:e2e": "npm-run-all build playwright",
-    "test:vitest": "vitest --reporter=verbose",
+    "test:vitest": "vitest run --reporter=verbose",
     "test:coverage": "vitest --coverage",
     "prettier": "prettier --ignore-path .gitignore --write \"**/*.+(js|json|ts|tsx)\"",
     "format": "npm run prettier -- --write",

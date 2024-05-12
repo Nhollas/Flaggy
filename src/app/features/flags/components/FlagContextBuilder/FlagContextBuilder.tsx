@@ -18,6 +18,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -46,39 +47,47 @@ export function FlagContextBuilder() {
 
   const addBlankContext = () =>
     append({
-      contextKind: "user",
+      kind: "user",
       attributes: {
         key: "user-123",
       },
     })
 
   const onSubmit = (payload: FlagContext) => {
-    console.log("payload", payload)
+    const data = JSON.stringify(payload)
+
+    let url = "http://localhost:3000/api/flag/context"
+    url += "?data=" + data
+    url += "&flagSecret=s4JIRrPQrD"
+    url += "&redirectUrl=http://localhost:3000/"
+
+    navigator.clipboard.writeText(url.toString()).then(
+      () => {
+        console.log("copied to clipboard")
+      },
+      (err) => {
+        console.error("failed to copy to clipboard", err)
+      },
+    )
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <h1>Flag Context Builder</h1>
-        <pre>{JSON.stringify(contexts, null, 2)}</pre>
-        <Button onClick={() => addBlankContext()}>Add Context</Button>
+        <Button type="button" onClick={() => addBlankContext()}>
+          Add Context
+        </Button>
+        <Button variant="outline" className="ml-4" type="submit">
+          Generate Url
+        </Button>
         {contexts.map((context, i) => (
-          <div key={context.id} className="flex flex-col gap-y-2">
+          <div
+            key={context.id}
+            className="flex flex-col gap-y-2 p-4 bg-gray-50 rounded-md border w-full max-w-md"
+          >
             <div className="flex flex-row gap-x-2">
               <ContextInput index={i} context={context} />
-              {/* <FormField
-                control={form.control}
-                name={`contexts.${i}.contextKey`}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Context Key</FormLabel>
-                    <FormControl>
-                      <Input placeholder="user-123" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
               <AttributesInput index={i} />
             </div>
             <AttributesTable index={i} />
@@ -182,6 +191,32 @@ function AttributesInput({ index }: { index: number }) {
   )
 }
 
+function AttributeValueInput({
+  index,
+  attribute,
+}: {
+  index: number
+  attribute: string
+}) {
+  const { control } = useFormContext<ContextBuilderForm>()
+
+  return (
+    <FormField
+      control={control}
+      name={`contexts.${index}.attributes.${attribute}`}
+      render={({ field }) => (
+        <FormControl className="ml-auto">
+          <Input
+            {...field}
+            placeholder="Value"
+            className="w-[200px] bg-white"
+          />
+        </FormControl>
+      )}
+    />
+  )
+}
+
 function AttributesTable({ index }: { index: number }) {
   const { control } = useFormContext<ContextBuilderForm>()
 
@@ -198,10 +233,14 @@ function AttributesTable({ index }: { index: number }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Object.entries(field.value).map(([key, value]) => (
+            {Object.entries(field.value).map(([key]) => (
               <TableRow key={key}>
-                <TableCell className="font-medium">{key}</TableCell>
-                <TableCell className="text-right">{value}</TableCell>
+                <TableCell className="font-medium text-[1.05rem] max-w-[150px] truncate">
+                  {key}
+                </TableCell>
+                <TableCell>
+                  <AttributeValueInput index={index} attribute={key} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -223,7 +262,7 @@ function ContextInput({ index, context }: { index: number; context: Context }) {
   return (
     <FormField
       control={control}
-      name={`contexts.${index}.contextKind`}
+      name={`contexts.${index}.kind`}
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>Context Kind</FormLabel>
@@ -264,7 +303,7 @@ function ContextInput({ index, context }: { index: number; context: Context }) {
                           { value: search, label: search.toLowerCase() },
                           ...prev,
                         ])
-                        setValue(`contexts.${index}.contextKind`, search)
+                        setValue(`contexts.${index}.kind`, search)
                         setSearch("")
                       }}
                     >
@@ -279,10 +318,7 @@ function ContextInput({ index, context }: { index: number; context: Context }) {
                         key={language.value}
                         onSelect={() => {
                           console.log("Context", context)
-                          setValue(
-                            `contexts.${index}.contextKind`,
-                            language.value,
-                          )
+                          setValue(`contexts.${index}.kind`, language.value)
                         }}
                       >
                         {language.label}

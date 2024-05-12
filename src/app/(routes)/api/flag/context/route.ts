@@ -53,6 +53,8 @@ export const GET = async (request: Request) => {
           return Response.json(error.errors, { status: 422 })
         }
 
+        span.recordException(new Error(String(error)))
+
         return new Response("Internal Server Error", { status: 500 })
       }
     })

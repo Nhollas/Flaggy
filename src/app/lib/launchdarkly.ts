@@ -83,9 +83,9 @@ export const LaunchDarklyFlagProvider: IFeatureFlagProvider = {
 }
 
 const applySingleContext = (context: Context): LaunchDarkly.LDContext => {
-  const { contextKind, attributes } = context
+  const { kind, attributes } = context
   return {
-    kind: contextKind,
+    kind,
     ...attributes,
   }
 }
@@ -94,10 +94,10 @@ const applyMultiContext = (contexts: Context[]): LaunchDarkly.LDContext => {
   return {
     kind: "multi",
     ...contexts.reduce((acc, context) => {
-      const { contextKind, attributes } = context
+      const { kind, attributes } = context
       return {
         ...acc,
-        [contextKind]: {
+        [kind]: {
           ...attributes,
         },
       }

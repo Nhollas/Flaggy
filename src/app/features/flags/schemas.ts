@@ -15,7 +15,7 @@ import { stringToJSON } from "@/app/lib/schemas"
  */
 
 export const contextSchema = z.object({
-  contextKind: z.string().min(1, { message: "ContextKind cannot be empty." }),
+  kind: z.string().min(1, { message: "Kind cannot be empty." }),
   attributes: z
     .object({
       key: z

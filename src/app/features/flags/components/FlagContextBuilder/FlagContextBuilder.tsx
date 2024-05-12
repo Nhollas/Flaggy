@@ -47,7 +47,6 @@ export function FlagContextBuilder() {
   const addBlankContext = () =>
     append({
       contextKind: "user",
-      contextKey: "user-123",
       attributes: {
         key: "user-123",
       },

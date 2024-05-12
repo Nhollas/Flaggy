@@ -17,7 +17,6 @@ describe("FlagContextBuilder", () => {
     fireEvent.click(screen.getByRole("button", { name: "Add Context" }))
 
     expect(screen.getByLabelText("Context Kind")).toBeInTheDocument()
-    expect(screen.getByLabelText("Context Key")).toBeInTheDocument()
 
     // fireEvent.click(screen.getByLabelText("Attributes"))
 

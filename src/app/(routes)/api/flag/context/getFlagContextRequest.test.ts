@@ -34,7 +34,7 @@ describe("When Request Body is Valid", () => {
   beforeEach(async () => {
     const mockedRequest = modelFactory.request({
       url: buildStringUrlWithDataQuery(
-        '{"contexts":[{"contextKind":"user","contextKey":"user-123","attributes":{"email":"user-123@gmail.com","phone":"1234567890"}}]}',
+        '{"contexts":[{"contextKind":"user","attributes":{"email":"user-123@gmail.com","phone":"1234567890","key":"user-123"}}]}',
         "http://localhost/redirect",
       ),
     })
@@ -56,7 +56,7 @@ describe("When Request Body is Valid", () => {
   it("should return a cookie with the feature context value", () => {
     const oneHourForward = "2024-04-20T14:00:00.00"
     const expectedCookiesValue =
-      '{"contexts":[{"contextKind":"user","contextKey":"user-123","attributes":{"email":"user-123@gmail.com","phone":"1234567890"}}]}'
+      '{"contexts":[{"contextKind":"user","attributes":{"key":"user-123","email":"user-123@gmail.com","phone":"1234567890"}}]}'
 
     expect(mockSetCookies).toHaveBeenCalledWith(
       "featureContext",

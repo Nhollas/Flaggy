@@ -58,7 +58,7 @@ describe("FeatureFlag", () => {
   test("adapts single context to LaunchDarkly's format and renders correctly", async () => {
     await renderFeatureFlagComponentWithContext({
       cookieValue:
-        '{"contexts":[{"contextKind":"purchase","contextKey":"purchase-123","attributes":{"productInstanceId":"1234"}}]}',
+        '{"contexts":[{"contextKind":"purchase","attributes":{"productInstanceId":"1234", "key":"purchase-123"}}]}',
       mockValue: true,
     })
 
@@ -81,7 +81,7 @@ describe("FeatureFlag", () => {
   test("adapts multi context to LaunchDarkly's format and renders correctly", async () => {
     await renderFeatureFlagComponentWithContext({
       cookieValue:
-        '{"contexts":[{"contextKind":"purchase","contextKey":"purchase-123","attributes":{"productInstanceId":"1234"}},{"contextKind":"user","contextKey":"user-123","attributes":{"email":"test@test.com","phone":"1234567890"}}]}',
+        '{"contexts":[{"contextKind":"purchase","attributes":{"productInstanceId":"1234", "key":"purchase-123"}},{"contextKind":"user","attributes":{"email":"test@test.com","phone":"1234567890","key":"user-123"}}]}',
       mockValue: true,
     })
 

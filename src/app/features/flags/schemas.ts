@@ -16,8 +16,13 @@ import { stringToJSON } from "@/app/lib/schemas"
 
 export const contextSchema = z.object({
   contextKind: z.string().min(1, { message: "ContextKind cannot be empty." }),
-  contextKey: z.string().min(1, { message: "ContextKey cannot be empty." }),
-  attributes: z.record(z.string()),
+  attributes: z
+    .object({
+      key: z
+        .string()
+        .min(1, { message: "default attribute Key cannot be empty." }),
+    })
+    .and(z.record(z.string())),
 })
 
 export const stringToJSONSchema = stringToJSON()

@@ -205,13 +205,16 @@ function AttributeValueInput({
       control={control}
       name={`contexts.${index}.attributes.${attribute}`}
       render={({ field }) => (
-        <FormControl className="ml-auto">
-          <Input
-            {...field}
-            placeholder="Value"
-            className="w-[200px] bg-white"
-          />
-        </FormControl>
+        <FormItem>
+          <FormControl className="ml-auto">
+            <Input
+              {...field}
+              placeholder="Value"
+              className="w-[200px] bg-white"
+            />
+          </FormControl>
+          <FormMessage className="text-right" />
+        </FormItem>
       )}
     />
   )

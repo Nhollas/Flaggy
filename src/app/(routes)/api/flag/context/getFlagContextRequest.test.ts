@@ -74,3 +74,27 @@ describe("When Request Body is Valid", () => {
     expect(response.headers.get("location")).toBe("http://localhost/redirect")
   })
 })
+
+describe("When endpoint secret isn't provided", () => {
+  const mockSetCookies = vi.fn()
+  let response: Response
+
+  beforeEach(async () => {
+    const mockedRequest = modelFactory.request({
+      url: "http://localhost?",
+    })
+
+    mockSetCookies.mockClear()
+
+    mockedCookies.mockReturnValue({
+      set: mockSetCookies,
+    })
+    vi.setSystemTime(new Date("2024-04-20T13:00:00"))
+
+    response = await GET(mockedRequest)
+  })
+
+  it("should return 401 Unauthorized", () => {
+    expect(response.status).toBe(401)
+  })
+})

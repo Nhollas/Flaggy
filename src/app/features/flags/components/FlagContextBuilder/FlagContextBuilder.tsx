@@ -1,6 +1,6 @@
 "use client"
 
-import { CheckIcon } from "lucide-react"
+import { CheckIcon, ChevronsUpDown, Plus } from "lucide-react"
 import { useState } from "react"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
@@ -18,7 +18,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -33,7 +32,10 @@ import { cn } from "@/app/lib/utils"
 
 import { Context, FlagContext } from "../../types"
 
-import { useContextBuilderForm } from "./useContextBuilderForm"
+import {
+  ContextBuilderForm,
+  useContextBuilderForm,
+} from "./useContextBuilderForm"
 
 export function FlagContextBuilder() {
   const form = useContextBuilderForm()
@@ -42,13 +44,13 @@ export function FlagContextBuilder() {
     name: "contexts",
   })
 
-  console.log("form", form.watch())
-
   const addBlankContext = () =>
     append({
-      contextKind: "Default",
-      contextKey: "default",
-      attributes: {},
+      contextKind: "user",
+      contextKey: "user-123",
+      attributes: {
+        key: "user-123",
+      },
     })
 
   const onSubmit = (payload: FlagContext) => {
@@ -60,26 +62,27 @@ export function FlagContextBuilder() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <h1>Flag Context Builder</h1>
         <pre>{JSON.stringify(contexts, null, 2)}</pre>
-        <AddContextButton add={addBlankContext} />
+        <Button onClick={() => addBlankContext()}>Add Context</Button>
         {contexts.map((context, i) => (
           <div key={context.id} className="flex flex-col gap-y-2">
             <div className="flex flex-row gap-x-2">
               <ContextInput index={i} context={context} />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name={`contexts.${i}.contextKey`}
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Context Key</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="user-123" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
+              <AttributesInput index={i} />
             </div>
-            <AttributesInput index={i} />
+            <AttributesTable index={i} />
           </div>
         ))}
       </form>
@@ -87,82 +90,135 @@ export function FlagContextBuilder() {
   )
 }
 
-function AddContextButton({ add }: { add: () => void }) {
-  return <Button onClick={() => add()}>Add Context</Button>
+function AttributesInput({ index }: { index: number }) {
+  const { setValue, watch } = useFormContext<ContextBuilderForm>()
+
+  const addAttribute = (attribute: string) => {
+    setValue(`contexts.${index}.attributes.${attribute}`, "default")
+  }
+
+  const attributes = watch(`contexts.${index}.attributes`)
+
+  const defaultContextKinds = [
+    { label: "Country", value: "country" },
+    { label: "Email", value: "email" },
+    { label: "IP Address", value: "ip" },
+    { label: "Key", value: "key" },
+    { label: "Name", value: "name" },
+    { label: "Anonymous", value: "anonymous" },
+    { label: "First Name", value: "firstname" },
+    { label: "Last Name", value: "lastname" },
+  ]
+
+  const [contextKindList, setContextKindList] = useState(defaultContextKinds)
+
+  const [search, setSearch] = useState("")
+
+  return (
+    <FormItem className="flex flex-col">
+      <FormLabel>Attributes</FormLabel>
+      <Popover>
+        <PopoverTrigger asChild>
+          <FormControl>
+            <Button>
+              Add attributes
+              <Plus className="ml-2 h-4 w-4 shrink-0 opacity-75" />
+            </Button>
+          </FormControl>
+        </PopoverTrigger>
+        <PopoverContent className="p-0">
+          <Command>
+            <CommandInput
+              value={search}
+              onValueChange={setSearch}
+              placeholder="Search attribute..."
+              className="h-9"
+            />
+            <CommandList>
+              <CommandEmpty className="p-1">
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    setContextKindList((prev) => [
+                      { value: search, label: search.toLowerCase() },
+                      ...prev,
+                    ])
+                    addAttribute(search)
+                    setSearch("")
+                  }}
+                >
+                  Add Custom &quot;{search}&quot; Attribute +
+                </Button>
+              </CommandEmpty>
+              <CommandGroup>
+                {contextKindList.map((language) => (
+                  <CommandItem
+                    disabled={false}
+                    value={language.label}
+                    key={language.value}
+                    onSelect={() => {
+                      console.log("language.value", language.value)
+                      addAttribute(language.value)
+                      setSearch("")
+                    }}
+                  >
+                    {language.label}
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        language.value in attributes
+                          ? "opacity-100"
+                          : "opacity-0",
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      <FormMessage />
+    </FormItem>
+  )
 }
 
-function AttributesInput({ index }: { index: number }) {
-  const { setValue, control } = useFormContext<FlagContext>()
-
-  const addAttribute = (name: string) =>
-    setValue(`contexts.${index}.attributes.${name}`, "default")
+function AttributesTable({ index }: { index: number }) {
+  const { control } = useFormContext<ContextBuilderForm>()
 
   return (
     <FormField
       control={control}
       name={`contexts.${index}.attributes`}
       render={({ field }) => (
-        <FormItem className="flex flex-col">
-          <FormLabel>Attributes</FormLabel>
-          {Object.keys(field.value).length === 0 ? (
-            <Button onClick={() => addAttribute("test")}>Add Attribute</Button>
-          ) : (
-            <>
-              <Button onClick={() => addAttribute("test")}>
-                Add Attribute
-              </Button>
-              <AttributesTable attributes={field.value} />
-            </>
-          )}
-        </FormItem>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Attribute</TableHead>
+              <TableHead className="text-right">Value</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Object.entries(field.value).map(([key, value]) => (
+              <TableRow key={key}>
+                <TableCell className="font-medium">{key}</TableCell>
+                <TableCell className="text-right">{value}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       )}
     />
   )
 }
 
-function AttributesTable({
-  attributes,
-}: {
-  attributes: Record<string, string>
-}) {
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Attribute</TableHead>
-          <TableHead className="text-right">Value</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Object.entries(attributes).map(([key, value]) => (
-          <TableRow key={key}>
-            <TableCell className="font-medium">{key}</TableCell>
-            <TableCell className="text-right">{value}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  )
-}
-
 function ContextInput({ index, context }: { index: number; context: Context }) {
-  const { setValue, control } = useFormContext<FlagContext>()
+  const { setValue, control } = useFormContext<ContextBuilderForm>()
 
-  const defaultContextKinds = [
-    { label: "English", value: "en" },
-    { label: "French", value: "fr" },
-    { label: "German", value: "de" },
-    { label: "Spanish", value: "es" },
-    { label: "Portuguese", value: "pt" },
-    { label: "Russian", value: "ru" },
-    { label: "Japanese", value: "ja" },
-    { label: "Korean", value: "ko" },
-    { label: "Chinese", value: "zh" },
-  ]
+  const defaultContextKinds = [{ label: "User", value: "user" }]
 
   const [contextKindList, setContextKindList] = useState(defaultContextKinds)
 
-  console.log("contextKindList", contextKindList)
   const [search, setSearch] = useState("")
 
   return (
@@ -183,11 +239,12 @@ function ContextInput({ index, context }: { index: number; context: Context }) {
                     !field.value && "text-muted-foreground",
                   )}
                 >
-                  {field.value
+                  {field.value !== ""
                     ? contextKindList.find(
                         (language) => language.value === field.value,
                       )?.label
-                    : "Select language"}
+                    : "Select context kind"}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
@@ -200,13 +257,16 @@ function ContextInput({ index, context }: { index: number; context: Context }) {
                   className="h-9"
                 />
                 <CommandList>
-                  <CommandEmpty>
+                  <CommandEmpty className="p-1">
                     <Button
+                      className="w-full"
                       onClick={() => {
                         setContextKindList((prev) => [
-                          ...prev,
                           { value: search, label: search.toLowerCase() },
+                          ...prev,
                         ])
+                        setValue(`contexts.${index}.contextKind`, search)
+                        setSearch("")
                       }}
                     >
                       Add &quot;{search}&quot; Context +

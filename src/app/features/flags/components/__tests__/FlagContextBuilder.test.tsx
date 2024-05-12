@@ -18,5 +18,9 @@ describe("FlagContextBuilder", () => {
 
     expect(screen.getByLabelText("Context Kind")).toBeInTheDocument()
     expect(screen.getByLabelText("Context Key")).toBeInTheDocument()
+
+    fireEvent.click(screen.getByLabelText("Attributes"))
+
+    expect(screen.getByRole("table")).toBeInTheDocument()
   })
 })

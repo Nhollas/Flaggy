@@ -4,13 +4,16 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { flagContextSchema } from "../../schemas"
+import { contextSchema } from "../../schemas"
 
-export type ContextBuilderForm = z.infer<typeof flagContextSchema>
+export type ContextBuilderForm = z.infer<typeof contextBuilderFormSchema>
+const contextBuilderFormSchema = z.object({
+  contexts: z.array(contextSchema),
+})
 
 export const useContextBuilderForm = () =>
   useForm<ContextBuilderForm>({
-    resolver: zodResolver(flagContextSchema),
+    resolver: zodResolver(contextBuilderFormSchema),
     defaultValues: {
       contexts: [],
     },

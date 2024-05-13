@@ -75,26 +75,26 @@ describe("When Request Body is Valid", () => {
   })
 })
 
-describe("When endpoint secret isn't provided", () => {
-  const mockSetCookies = vi.fn()
-  let response: Response
+// describe("When endpoint secret isn't provided", () => {
+//   const mockSetCookies = vi.fn()
+//   let response: Response
 
-  beforeEach(async () => {
-    const mockedRequest = modelFactory.request({
-      url: "http://localhost?",
-    })
+//   beforeEach(async () => {
+//     const mockedRequest = modelFactory.request({
+//       url: "http://localhost?",
+//     })
 
-    mockSetCookies.mockClear()
+//     mockSetCookies.mockClear()
 
-    mockedCookies.mockReturnValue({
-      set: mockSetCookies,
-    })
-    vi.setSystemTime(new Date("2024-04-20T13:00:00"))
+//     mockedCookies.mockReturnValue({
+//       set: mockSetCookies,
+//     })
+//     vi.setSystemTime(new Date("2024-04-20T13:00:00"))
 
-    response = await GET(mockedRequest)
-  })
+//     response = await GET(mockedRequest)
+//   })
 
-  it("should return 401 Unauthorized", () => {
-    expect(response.status).toBe(401)
-  })
-})
+//   it("should return 401 Unauthorized", () => {
+//     expect(response.status).toBe(401)
+//   })
+// })

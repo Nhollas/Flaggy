@@ -40,6 +40,7 @@ import {
 
 export function FlagContextBuilder() {
   const form = useContextBuilderForm()
+
   const { append, fields: contexts } = useFieldArray({
     control: form.control,
     name: "contexts",
@@ -56,10 +57,10 @@ export function FlagContextBuilder() {
   const onSubmit = (payload: FlagContext) => {
     const data = JSON.stringify(payload)
 
-    let url = "http://localhost:3000/api/flag/context"
+    const baseUrl = window.location.origin
+    let url = `${baseUrl}/api/flag/context`
     url += "?data=" + data
-    url += "&flagSecret=s4JIRrPQrD"
-    url += "&redirectUrl=http://localhost:3000/"
+    url += `&redirectUrl=${baseUrl}/`
 
     navigator.clipboard.writeText(url.toString()).then(
       () => {

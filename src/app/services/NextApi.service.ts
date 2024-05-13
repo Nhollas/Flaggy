@@ -13,11 +13,16 @@ const NextApiClient: INextApiClient = {
   createUrl: ClientBuilder.baseUrl("/api"),
 }
 
-interface INextApiService extends IService {}
+interface INextApiService extends IService {
+  clearContext(): Promise<void>
+}
 
 const NextApiService = (): INextApiService => ({
   createUrl(path: string) {
     return NextApiClient.createUrl(path)
+  },
+  clearContext() {
+    return NextApiClient.instance.get("/flag/context/clear")
   },
 })
 

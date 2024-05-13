@@ -3,8 +3,8 @@ import { cookies } from "next/headers"
 import { z } from "zod"
 
 import { getFlagContextRequestSchema } from "@/app/features/flags"
-import { env } from "@/app/lib/env"
-const { FLAG_SECRET } = env
+// import { env } from "@/app/lib/env"
+// const { FLAG_SECRET } = env
 
 export const GET = async (request: Request) => {
   return await trace
@@ -13,11 +13,11 @@ export const GET = async (request: Request) => {
       try {
         const { searchParams } = new URL(request.url)
 
-        const flagSecret = searchParams.get("flagSecret")
+        // const flagSecret = searchParams.get("flagSecret")
 
-        if (flagSecret !== FLAG_SECRET) {
-          return new Response("Invalid Secret", { status: 401 })
-        }
+        // if (flagSecret !== FLAG_SECRET) {
+        //   return new Response("Invalid Secret", { status: 401 })
+        // }
 
         const data = searchParams.get("data")
 

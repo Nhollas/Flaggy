@@ -6,7 +6,7 @@ export async function FlagContextContainer() {
   const flagContext = await getFlagContext()
 
   if (flagContext.contexts.length === 0) {
-    return null
+    return
   }
 
   return <FlagContextDetails flagContext={flagContext} />

@@ -28,6 +28,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  Textarea,
 } from "@/app/components/ui"
 import { cn } from "@/app/lib/utils"
 
@@ -35,6 +36,7 @@ import { Context } from "../../types"
 
 import {
   ContextBuilderForm,
+  preLoadedStateSchema,
   useContextBuilderForm,
 } from "./useContextBuilderForm"
 
@@ -75,7 +77,8 @@ export function FlagContextBuilder() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <h1>Flag Context Builder</h1>
+        <h1 className="text-xl font-medium">Flag Context Builder</h1>
+        <PreloadedStateInput />
         <Button type="button" onClick={() => addBlankContext()}>
           Add Context
         </Button>
@@ -100,6 +103,66 @@ export function FlagContextBuilder() {
   )
 }
 
+function PreloadedStateInput() {
+  const { control, setValue } = useFormContext<ContextBuilderForm>()
+
+  const handlePaste = async (event: React.ClipboardEvent) => {
+    // This function will be triggered when paste is performed
+    console.log("Paste event triggered")
+    // You can access the pasted text using event.clipboardData.getData('text')
+    const pastedText = event.clipboardData.getData("text")
+    console.log("Pasted text: ", pastedText)
+
+    const url = new URL(pastedText)
+
+    const data = JSON.parse(url.searchParams.get("data") || "{}")
+    const redirectUrl = url.searchParams.get("redirectUrl") || ""
+
+    console.log("Data: ", data)
+
+    const valid = await preLoadedStateSchema.parseAsync({
+      contexts: data.contexts,
+      redirectUrl,
+    })
+
+    console.log("Valid data: ", valid)
+    // Add your logic here
+
+    setValue("contexts", data.contexts)
+    setValue("redirectUrl", redirectUrl)
+  }
+
+  const allowPasting = (e: React.KeyboardEvent) => {
+    const isActionCTRLandV =
+      (e.ctrlKey || e.metaKey) && e.key.toUpperCase() === "V"
+
+    if (!isActionCTRLandV) {
+      e.preventDefault()
+    }
+  }
+
+  return (
+    <FormField
+      control={control}
+      name="preloadedState"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Preloaded State</FormLabel>
+          <FormControl>
+            <Textarea
+              {...field}
+              placeholder="Preloaded State (only pasting allowed)."
+              onPaste={handlePaste}
+              onKeyDown={allowPasting}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
 function RedirectUrlInput() {
   const { control } = useFormContext<ContextBuilderForm>()
 
@@ -120,6 +183,11 @@ function RedirectUrlInput() {
   )
 }
 
+type SelectOption = {
+  label: string
+  value: string
+}
+
 function AttributesInput({ index }: { index: number }) {
   const { setValue, watch } = useFormContext<ContextBuilderForm>()
 
@@ -127,9 +195,19 @@ function AttributesInput({ index }: { index: number }) {
     setValue(`contexts.${index}.attributes.${attribute}`, "default")
   }
 
+  const setAttributes = (
+    attributes: {
+      key: string
+    } & Record<string, string>,
+  ) => {
+    setValue(`contexts.${index}.attributes`, attributes)
+  }
+
   const attributes = watch(`contexts.${index}.attributes`)
 
-  const defaultContextKinds = [
+  console.log("Attributes re-render:", attributes)
+
+  const defaultAttributes: SelectOption[] = [
     { label: "Country", value: "country" },
     { label: "Email", value: "email" },
     { label: "IP Address", value: "ip" },
@@ -138,9 +216,20 @@ function AttributesInput({ index }: { index: number }) {
     { label: "Anonymous", value: "anonymous" },
     { label: "First Name", value: "firstname" },
     { label: "Last Name", value: "lastname" },
-  ]
+    ...Object.keys(attributes).map((key) => ({
+      label: key,
+      value: key,
+    })),
+  ].reduce((acc: SelectOption[], current) => {
+    const x = acc.find((item) => item.value === current.value)
+    if (!x) {
+      return acc.concat([current])
+    } else {
+      return acc
+    }
+  }, [])
 
-  const [contextKindList, setContextKindList] = useState(defaultContextKinds)
+  const [attributesList, setAttributesList] = useState(defaultAttributes)
 
   const [search, setSearch] = useState("")
 
@@ -151,7 +240,7 @@ function AttributesInput({ index }: { index: number }) {
         <PopoverTrigger asChild>
           <FormControl>
             <Button>
-              Add attributes
+              Edit attributes
               <Plus className="ml-2 h-4 w-4 shrink-0 opacity-75" />
             </Button>
           </FormControl>
@@ -169,7 +258,7 @@ function AttributesInput({ index }: { index: number }) {
                 <Button
                   className="w-full"
                   onClick={() => {
-                    setContextKindList((prev) => [
+                    setAttributesList((prev) => [
                       { value: search, label: search.toLowerCase() },
                       ...prev,
                     ])
@@ -181,22 +270,37 @@ function AttributesInput({ index }: { index: number }) {
                 </Button>
               </CommandEmpty>
               <CommandGroup>
-                {contextKindList.map((language) => (
+                {attributesList.map((attribute) => (
                   <CommandItem
-                    disabled={false}
-                    value={language.label}
-                    key={language.value}
+                    disabled={attribute.value === "key"}
+                    value={attribute.label}
+                    key={attribute.value}
                     onSelect={() => {
-                      console.log("language.value", language.value)
-                      addAttribute(language.value)
+                      if (attribute.value in attributes) {
+                        console.log("Removing attribute", attribute.value)
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        const { [attribute.value]: removed, ...rest } =
+                          attributes
+
+                        setAttributes({
+                          ...rest,
+                          key: attributes["key"],
+                        })
+
+                        return
+                      }
+
+                      console.log("Adding attribute", attribute.value)
+
+                      addAttribute(attribute.value)
                       setSearch("")
                     }}
                   >
-                    {language.label}
+                    {attribute.label}
                     <CheckIcon
                       className={cn(
                         "ml-auto h-4 w-4",
-                        language.value in attributes
+                        attribute.value in attributes
                           ? "opacity-100"
                           : "opacity-0",
                       )}
@@ -243,42 +347,48 @@ function AttributeValueInput({
 }
 
 function AttributesTable({ index }: { index: number }) {
-  const { control } = useFormContext<ContextBuilderForm>()
+  const { watch } = useFormContext<ContextBuilderForm>()
+
+  const attributes = watch(`contexts.${index}.attributes`)
 
   return (
-    <FormField
-      control={control}
-      name={`contexts.${index}.attributes`}
-      render={({ field }) => (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Attribute</TableHead>
-              <TableHead className="text-right">Value</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {Object.entries(field.value).map(([key]) => (
-              <TableRow key={key}>
-                <TableCell className="font-medium text-[1.05rem] max-w-[150px] truncate">
-                  {key}
-                </TableCell>
-                <TableCell>
-                  <AttributeValueInput index={index} attribute={key} />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
-    />
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">Attribute</TableHead>
+          <TableHead className="text-right">Value</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Object.entries(attributes).map(([key]) => (
+          <TableRow key={key}>
+            <TableCell className="font-medium text-[1.05rem] max-w-[150px] truncate">
+              {key}
+            </TableCell>
+            <TableCell>
+              <AttributeValueInput index={index} attribute={key} />
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   )
 }
 
 function ContextInput({ index, context }: { index: number; context: Context }) {
   const { setValue, control } = useFormContext<ContextBuilderForm>()
 
-  const defaultContextKinds = [{ label: "User", value: "user" }]
+  const defaultContextKinds: SelectOption[] = [
+    { label: "User", value: "user" },
+    { label: context.kind, value: context.kind },
+  ].reduce((acc: SelectOption[], current) => {
+    const x = acc.find((item) => item.value === current.value)
+    if (!x) {
+      return acc.concat([current])
+    } else {
+      return acc
+    }
+  }, [])
 
   const [contextKindList, setContextKindList] = useState(defaultContextKinds)
 

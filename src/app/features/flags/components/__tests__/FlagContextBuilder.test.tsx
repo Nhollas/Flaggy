@@ -1,4 +1,5 @@
 vi.mock("@/app/lib/env")
+vi.mock("cmdk")
 
 import { expect, vi, describe, test } from "vitest"
 
@@ -18,8 +19,6 @@ describe("FlagContextBuilder", () => {
 
     expect(screen.getByLabelText("Context Kind")).toBeInTheDocument()
 
-    // fireEvent.click(screen.getByLabelText("Attributes"))
-
-    // expect(screen.getByRole("table")).toBeInTheDocument()
+    expect(screen.getByRole("table")).toBeInTheDocument()
   })
 })

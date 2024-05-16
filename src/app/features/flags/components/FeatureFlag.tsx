@@ -1,6 +1,7 @@
-import { LaunchDarklyFlagProvider } from "@/app/lib/launchdarkly"
-
-import { getFlagContext } from ".."
+import {
+  LaunchDarklyFlagProvider,
+  getFlagContext,
+} from "@/app/lib/launchdarklyServer"
 
 export async function FeatureFlag<TValue>({
   flag,

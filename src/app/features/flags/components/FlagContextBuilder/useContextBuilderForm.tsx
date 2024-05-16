@@ -9,6 +9,9 @@ import { contextSchema } from "../../schemas"
 export type ContextBuilderForm = z.infer<typeof contextBuilderFormSchema>
 const contextBuilderFormSchema = z.object({
   contexts: z.array(contextSchema),
+  redirectUrl: z
+    .string()
+    .url({ message: "Property 'redirectUrl' must be a valid URL." }),
 })
 
 export const useContextBuilderForm = () =>

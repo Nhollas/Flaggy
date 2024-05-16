@@ -1,4 +1,4 @@
-import { getFlagContext } from "../lib"
+import { getFlagContext } from "@/app/lib/launchdarklyServer"
 
 import { FlagContextDetails } from "./FlagContextDetails"
 

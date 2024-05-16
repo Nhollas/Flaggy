@@ -38,42 +38,42 @@ export function FlagContextDetails({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-2">
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="outline">View Current Feature Context</Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="space-y-6">
-          <SheetHeader>
-            <SheetTitle>Your Flag Context</SheetTitle>
-            <SheetDescription>
-              You are currently viewing the site with the following context:
-            </SheetDescription>
-          </SheetHeader>
-          {flagContext.contexts.map((context, i) => (
-            <div
-              key={i}
-              className="flex flex-col gap-y-2 p-4 bg-gray-50 rounded-md border w-full max-w-md"
-            >
-              <div className="flex flex-row gap-x-4 items-center">
-                <h1 className="font-medium">Context Kind:</h1>
-                <p className="bg-white rounded-md px-4 py-1 border w-max">
-                  {context.kind}
-                </p>
-              </div>
-              <AttributesTable attributes={context.attributes} />
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline" className="fixed top-4 right-4">
+          View Context
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="space-y-6">
+        <SheetHeader>
+          <SheetTitle>Your Flag Context</SheetTitle>
+          <SheetDescription>
+            You are currently viewing the site with the following context:
+          </SheetDescription>
+        </SheetHeader>
+        {flagContext.contexts.map((context, i) => (
+          <div
+            key={i}
+            className="flex flex-col gap-y-2 p-4 bg-gray-50 rounded-md border w-full max-w-md"
+          >
+            <div className="flex flex-row gap-x-4 items-center">
+              <h1 className="font-medium">Context Kind:</h1>
+              <p className="bg-white rounded-md px-4 py-1 border w-max">
+                {context.kind}
+              </p>
             </div>
-          ))}
-          <SheetFooter>
-            <SheetClose asChild>
-              <Button type="button" onClick={() => clearContext()}>
-                Clear Context
-              </Button>
-            </SheetClose>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
-    </div>
+            <AttributesTable attributes={context.attributes} />
+          </div>
+        ))}
+        <SheetFooter>
+          <SheetClose asChild>
+            <Button type="button" onClick={() => clearContext()}>
+              Clear Context
+            </Button>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   )
 }
 

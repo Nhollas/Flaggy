@@ -1,11 +1,13 @@
-import * as LaunchDarkly from "@launchdarkly/node-server-sdk"
-import { LDClient } from "@launchdarkly/node-server-sdk"
+import "server-only"
+import LaunchDarkly, { LDClient } from "@launchdarkly/node-server-sdk"
 import { trace, SpanStatusCode } from "@opentelemetry/api"
+import { cookies } from "next/headers"
+import { cache } from "react"
 
 import {
-  Context,
   FlagContext,
-  IFeatureFlagProvider,
+  getFlagContextRequestSchema,
+  launchDarklyContextAdapter,
 } from "@/app/features/flags"
 
 import { env } from "./env"
@@ -59,48 +61,40 @@ export async function getVariation<T>(
     })
 }
 
+export const getFlagContext = cache(async (): Promise<FlagContext> => {
+  const cookieList = cookies()
+
+  const featureContextCookie = cookieList.get("featureContext")
+
+  if (!featureContextCookie) return { contexts: [] }
+
+  try {
+    const featureContext = await getFlagContextRequestSchema.parseAsync(
+      featureContextCookie.value,
+    )
+
+    return featureContext
+  } catch (error) {
+    return { contexts: [] }
+  }
+})
+
+interface IFeatureFlagProvider {
+  getValue<T>(
+    flag: string,
+    flagContext: FlagContext,
+    defaultValue: T,
+  ): Promise<T>
+}
+
 export const LaunchDarklyFlagProvider: IFeatureFlagProvider = {
   getValue<T>(
     flag: string,
     flagContext: FlagContext,
     defaultValue: T,
   ): Promise<T> {
-    let context: LaunchDarkly.LDContext
-    if (flagContext.contexts.length === 0) {
-      context = {
-        kind: "user",
-        anonymous: true,
-        key: "anonymous",
-      }
-    } else if (flagContext.contexts.length === 1) {
-      context = applySingleContext(flagContext.contexts[0]!)
-    } else {
-      context = applyMultiContext(flagContext.contexts)
-    }
+    const context = launchDarklyContextAdapter(flagContext)
 
     return getVariation(flag, context, defaultValue)
   },
-}
-
-const applySingleContext = (context: Context): LaunchDarkly.LDContext => {
-  const { kind, attributes } = context
-  return {
-    kind,
-    ...attributes,
-  }
-}
-
-const applyMultiContext = (contexts: Context[]): LaunchDarkly.LDContext => {
-  return {
-    kind: "multi",
-    ...contexts.reduce((acc, context) => {
-      const { kind, attributes } = context
-      return {
-        ...acc,
-        [kind]: {
-          ...attributes,
-        },
-      }
-    }, {}),
-  }
 }

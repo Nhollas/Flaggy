@@ -31,7 +31,7 @@ import {
 } from "@/app/components/ui"
 import { cn } from "@/app/lib/utils"
 
-import { Context, FlagContext } from "../../types"
+import { Context } from "../../types"
 
 import {
   ContextBuilderForm,
@@ -54,13 +54,13 @@ export function FlagContextBuilder() {
       },
     })
 
-  const onSubmit = (payload: FlagContext) => {
-    const data = JSON.stringify(payload)
+  const onSubmit = (payload: ContextBuilderForm) => {
+    const data = JSON.stringify({ contexts: payload.contexts })
 
     const baseUrl = window.location.origin
     let url = `${baseUrl}/api/flag/context`
     url += "?data=" + data
-    url += `&redirectUrl=${baseUrl}/`
+    url += `&redirectUrl=${baseUrl}${payload.redirectUrl}`
 
     navigator.clipboard.writeText(url.toString()).then(
       () => {
@@ -94,8 +94,29 @@ export function FlagContextBuilder() {
             <AttributesTable index={i} />
           </div>
         ))}
+        <RedirectUrlInput />
       </form>
     </Form>
+  )
+}
+
+function RedirectUrlInput() {
+  const { control } = useFormContext<ContextBuilderForm>()
+
+  return (
+    <FormField
+      control={control}
+      name="redirectUrl"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Redirect Url</FormLabel>
+          <FormControl>
+            <Input {...field} placeholder="Redirect Url" />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   )
 }
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
 import { FlagContextContainer } from "@/app/features/flags"
+import { getFlagContext } from "@/app/lib/launchdarklyServer"
 import Providers from "@/app/providers"
 
 import "./globals.css"
@@ -12,21 +13,24 @@ export const metadata: Metadata = {
   title: "Flaggy",
   description: "This is a cool description",
 }
-export default function RootLayout({
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const flagContext = await getFlagContext()
+
   return (
-    <Providers>
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className}>
+        <Providers flagContext={flagContext}>
           <FlagContextContainer />
           <main className="mx-auto min-h-screen max-w-6xl space-y-8 p-8 lg:p-16">
             {children}
           </main>
-        </body>
-      </html>
-    </Providers>
+        </Providers>
+      </body>
+    </html>
   )
 }

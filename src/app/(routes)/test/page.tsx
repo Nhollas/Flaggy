@@ -1,21 +1,17 @@
 "use client"
 
-import { withLDConsumer, LDClient } from "launchdarkly-react-client-sdk"
+import { useFlags, useLDClient } from "launchdarkly-react-client-sdk"
 import { useEffect } from "react"
 
-function TestPage({
-  flags,
-  ldClient,
-}: {
-  ldClient: LDClient
-  flags: Record<string, any>
-}) {
-  const { exampleFlag } = flags
+export default function TestPage() {
+  const { exampleFlag } = useFlags()
+  const ldClient = useLDClient()
 
   console.log("exampleFlag", exampleFlag)
-  console.log("flags", ldClient.variation("test", "false"))
 
   useEffect(() => {
+    if (!ldClient) return
+
     ldClient.identify({
       kind: "user",
       key: "developer",
@@ -28,5 +24,3 @@ function TestPage({
     </section>
   )
 }
-
-export default withLDConsumer()(TestPage)

@@ -1,6 +1,3 @@
-/**
- * @vitest-environment node
- */
 vi.mock("@/app/lib/env")
 vi.mock("react", async (importOriginal) => {
   const mod = await importOriginal<typeof import("react")>()
@@ -16,12 +13,7 @@ import { init } from "@launchdarkly/node-server-sdk"
 import { cookies } from "next/headers"
 import { expect, vi, MockedFunction, describe, test } from "vitest"
 
-import {
-  renderWithProviders,
-  resolveComponent,
-  screen,
-  waitFor,
-} from "@/test/utils"
+import { render, resolveComponent, screen, waitFor } from "@/test/utils"
 
 import { FeatureFlag } from "../FeatureFlag"
 
@@ -54,7 +46,7 @@ const renderFeatureFlagComponentWithContext = async ({
     ),
   })
 
-  renderWithProviders(<FeatureFlagResolved />)
+  render(<FeatureFlagResolved />)
 }
 
 describe("FeatureFlag", () => {

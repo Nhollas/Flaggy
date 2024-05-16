@@ -1,3 +1,6 @@
+/**
+ * @vitest-environment node
+ */
 vi.mock("@/app/lib/env.ts")
 vi.mock("next/headers")
 vi.mock("react", async (importOriginal) => {

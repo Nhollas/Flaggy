@@ -1,4 +1,3 @@
-import "server-only"
 import LaunchDarkly, { LDClient } from "@launchdarkly/node-server-sdk"
 import { trace, SpanStatusCode } from "@opentelemetry/api"
 import { cookies } from "next/headers"

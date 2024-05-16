@@ -1,3 +1,6 @@
+/**
+ * @vitest-environment node
+ */
 vi.mock("@/app/lib/env")
 vi.mock("react", async (importOriginal) => {
   const mod = await importOriginal<typeof import("react")>()

@@ -5,17 +5,18 @@ test("Context kind can be changed", async ({ page, context, browser }) => {
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
-  const closeCKindSelection = await u.po.flagBuilder.openContextKindSelection()
+  await u.po.flagBuilder.clickAddContext()
+  await u.po.flagBuilder.openContextKindDropdown()
 
-  await u.po.flagBuilder.expectContextKindIsSelected("User")
-  await u.po.flagBuilder.searchAndSetContextKind("Purchase")
+  await u.po.flagBuilder.expect.contextKindIsSelected("User")
+  await u.po.flagBuilder.searchContextKind("Purchase")
+  await u.po.flagBuilder.clickAddCustomContextKind("Purchase")
 
-  await closeCKindSelection()
+  await u.po.flagBuilder.closeContextKindDropdown()
 
-  await u.po.flagBuilder.openContextKindSelection()
-  await u.po.flagBuilder.expectContextKindIsUnselected("User")
-  await u.po.flagBuilder.expectContextKindIsSelected("Purchase")
+  await u.po.flagBuilder.openContextKindDropdown()
+  await u.po.flagBuilder.expect.contextKindIsUnselected("User")
+  await u.po.flagBuilder.expect.contextKindIsSelected("Purchase")
 })
 
 test("Previously added custom context kinds are retained when dismissing the dialog", async ({
@@ -26,20 +27,24 @@ test("Previously added custom context kinds are retained when dismissing the dia
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
-  const closeCKindSelection = await u.po.flagBuilder.openContextKindSelection()
-  await u.po.flagBuilder.expectContextKindIsSelected("User")
+  await u.po.flagBuilder.clickAddContext()
+  await u.po.flagBuilder.openContextKindDropdown()
+  await u.po.flagBuilder.expect.contextKindIsSelected("User")
 
-  await u.po.flagBuilder.searchAndSetContextKind("Purchase")
-  await u.po.flagBuilder.searchAndSetContextKind("Customer")
-  await u.po.flagBuilder.searchAndSetContextKind("Basket")
+  const customContextKindsToAdd = ["Purchase", "Customer", "Basket"]
 
-  await closeCKindSelection()
-  await u.po.flagBuilder.openContextKindSelection()
+  for (const kind of customContextKindsToAdd) {
+    await u.po.flagBuilder.searchContextKind(kind)
+    await u.po.flagBuilder.clickAddCustomContextKind(kind)
+    await u.po.flagBuilder.expect.contextKindIsSelected(kind)
+  }
 
-  await u.po.flagBuilder.expectContextKindOptionsAreVisible(
-    ["User", "Purchase", "Customer", "Basket"],
+  await u.po.flagBuilder.closeContextKindDropdown()
+  await u.po.flagBuilder.openContextKindDropdown()
+
+  await u.po.flagBuilder.expect.contextKindOptionsAreVisible(
+    ["User", ...customContextKindsToAdd],
     { exact: true },
   )
-  await u.po.flagBuilder.expectContextKindIsSelected("Basket")
+  await u.po.flagBuilder.expect.contextKindIsSelected("Basket")
 })

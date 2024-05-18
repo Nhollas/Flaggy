@@ -1,5 +1,3 @@
-import { expect } from "@playwright/test"
-
 import test from "@/playwright/fixtures/next-fixture"
 import { createTestUtils } from "@/playwright/utils"
 
@@ -11,8 +9,8 @@ test("Required attribute 'Key' is added by default", async ({
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
-  await u.po.flagBuilder.expectAttributeInTableWithValue("key", {
+  await u.po.flagBuilder.clickAddContext()
+  await u.po.flagBuilder.expect.attributeInTableWithValue("key", {
     value: "user-123",
   })
 })
@@ -25,10 +23,9 @@ test("Required attribute 'Key' cannot be removed", async ({
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
-  await u.po.flagBuilder.openAttributesSelection()
-  const attribute = await u.po.flagBuilder.expectAttributeOptionIsVisible("Key")
-  await expect(attribute).toBeDisabled()
+  await u.po.flagBuilder.clickAddContext()
+  await u.po.flagBuilder.openAttributesDropdown()
+  await u.po.flagBuilder.expect.attributeOptionIsDisabled("Key")
 })
 
 test("Attributes select has default values", async ({
@@ -39,9 +36,9 @@ test("Attributes select has default values", async ({
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
-  await u.po.flagBuilder.openAttributesSelection()
-  await u.po.flagBuilder.expectAttributeOptionsAreVisible(
+  await u.po.flagBuilder.clickAddContext()
+  await u.po.flagBuilder.openAttributesDropdown()
+  await u.po.flagBuilder.expect.attributeOptionsAreVisible(
     [
       "Country",
       "Email",
@@ -64,19 +61,19 @@ test("Previously added attributes don't keep their value when re-selected", asyn
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
-  const closeAttrSelection = await u.po.flagBuilder.openAttributesSelection()
+  await u.po.flagBuilder.clickAddContext()
+  await u.po.flagBuilder.openAttributesDropdown()
 
   await u.po.flagBuilder.selectAttribute("Email")
-  await closeAttrSelection()
-  await u.po.flagBuilder.editAttribute("Email", "john.doe@gmail.com")
+  await u.po.flagBuilder.closeAttributesDropdown()
+  await u.po.flagBuilder.setAttributeValue("Email", "john.doe@gmail.com")
 
-  await u.po.flagBuilder.openAttributesSelection()
+  await u.po.flagBuilder.openAttributesDropdown()
   await u.po.flagBuilder.selectAttribute("Email")
   await u.po.flagBuilder.selectAttribute("Email")
-  await closeAttrSelection()
+  await u.po.flagBuilder.closeAttributesDropdown()
 
-  await u.po.flagBuilder.expectAttributeInTableWithValue("Email", {
+  await u.po.flagBuilder.expect.attributeInTableWithValue("Email", {
     value: "default",
   })
 })
@@ -85,14 +82,13 @@ test("Attribute values can be edited", async ({ page, context, browser }) => {
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
-  const closeAttrSelection = await u.po.flagBuilder.openAttributesSelection()
+  await u.po.flagBuilder.clickAddContext()
+  await u.po.flagBuilder.openAttributesDropdown()
 
   await u.po.flagBuilder.selectAttribute("Email")
+  await u.po.flagBuilder.closeAttributesDropdown()
 
-  await closeAttrSelection()
-
-  await u.po.flagBuilder.editAttribute("Email", "john.doe@gmail.com")
+  await u.po.flagBuilder.setAttributeValue("Email", "john.doe@gmail.com")
 })
 
 test("Previously added custom attributes are retained when dismissing the dialog", async ({
@@ -103,17 +99,18 @@ test("Previously added custom attributes are retained when dismissing the dialog
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
-  await u.po.flagBuilder.openAttributesSelection()
+  await u.po.flagBuilder.clickAddContext()
+  await u.po.flagBuilder.openAttributesDropdown()
 
   const attributesToAdd = ["Middle Name", "Town", "Age"]
 
   for (const attribute of attributesToAdd) {
-    await u.po.flagBuilder.searchAndSetAttribute(attribute)
-    await u.po.flagBuilder.expectAttributeOptionIsSelected(attribute)
+    await u.po.flagBuilder.searchAttribute(attribute)
+    await u.po.flagBuilder.clickAddCustomAttribute(attribute)
+    await u.po.flagBuilder.expect.attributeOptionIsSelected(attribute)
   }
 
-  await u.po.flagBuilder.expectAttributeOptionsAreVisible(
+  await u.po.flagBuilder.expect.attributeOptionsAreVisible(
     [
       "Country",
       "Email",

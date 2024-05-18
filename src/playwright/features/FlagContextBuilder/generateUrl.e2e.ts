@@ -13,24 +13,24 @@ test("Users get their context persisted when they use a generated URL.", async (
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.setupSingleContextExample()
-  await u.po.flagBuilder.generateUrl()
+  await u.po.flagBuilder.clickGenerateUrl()
   await u.po.flagBuilder.goToGeneratedUrl()
-  await u.po.flagBuilder.viewContext()
+  await u.po.flagBuilder.clickViewContext()
 
-  await u.po.flagBuilder.expectAttributeInDetailTableWithValue("key", {
+  await u.po.flagBuilder.expect.attributeInDetailTableWithValue("key", {
     value: "user-123",
   })
-  await u.po.flagBuilder.expectAttributeInDetailTableWithValue("middle name", {
+  await u.po.flagBuilder.expect.attributeInDetailTableWithValue("middle name", {
     value: "default",
   })
 
-  await page.reload()
+  await u.page.reload()
 
-  await u.po.flagBuilder.viewContext()
-  await u.po.flagBuilder.expectAttributeInDetailTableWithValue("key", {
+  await u.po.flagBuilder.clickViewContext()
+  await u.po.flagBuilder.expect.attributeInDetailTableWithValue("key", {
     value: "user-123",
   })
-  await u.po.flagBuilder.expectAttributeInDetailTableWithValue("middle name", {
+  await u.po.flagBuilder.expect.attributeInDetailTableWithValue("middle name", {
     value: "default",
   })
 })

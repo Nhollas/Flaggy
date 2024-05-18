@@ -110,7 +110,13 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
     selectAttribute: async (attribute: string) => {
       await page.getByRole("option", { name: attribute }).click()
     },
-    setAttributeValue: async (attribute: string, value: string) => {
+    setAttributeValue: async ({
+      attribute,
+      value,
+    }: {
+      attribute: string
+      value: string
+    }) => {
       const attributeRow = page.getByRole("row", { name: attribute })
       const input = attributeRow.getByRole("textbox")
       await input.fill(value)
@@ -136,18 +142,26 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       ) => {
         await internal.expectOptionsAreVisible(attributes, config)
       },
-      attributeInTableWithValue: async (
-        attribute: string,
-        { value }: { value: string },
-      ) => {
-        const attributeRow = page.getByRole("row", { name: attribute })
+      attributeInTableWithValue: async ({
+        attribute,
+        value,
+      }: {
+        attribute: string
+        value: string
+      }) => {
+        const attributeRow = page.getByRole("row", {
+          name: attribute,
+        })
         await expect(attributeRow).toBeVisible()
         await expect(attributeRow.getByRole("textbox")).toHaveValue(value)
       },
-      attributeInDetailTableWithValue: async (
-        attribute: string,
-        { value }: { value: string },
-      ) => {
+      attributeInDetailTableWithValue: async ({
+        attribute,
+        value,
+      }: {
+        attribute: string
+        value: string
+      }) => {
         const attributeRow = page.getByRole("row", { name: attribute })
         await expect(attributeRow).toBeVisible()
         await expect(attributeRow.getByText(value)).toBeVisible()

@@ -10,7 +10,8 @@ test("Required attribute 'Key' is added by default", async ({
 
   await u.po.flagBuilder.goTo()
   await u.po.flagBuilder.clickAddContext()
-  await u.po.flagBuilder.expect.attributeInTableWithValue("key", {
+  await u.po.flagBuilder.expect.attributeInTableWithValue({
+    attribute: "key",
     value: "user-123",
   })
 })
@@ -66,14 +67,18 @@ test("Previously added attributes don't keep their value when re-selected", asyn
 
   await u.po.flagBuilder.selectAttribute("Email")
   await u.po.flagBuilder.closeAttributesDropdown()
-  await u.po.flagBuilder.setAttributeValue("Email", "john.doe@gmail.com")
+  await u.po.flagBuilder.setAttributeValue({
+    attribute: "Email",
+    value: "john.doe@gmail.com",
+  })
 
   await u.po.flagBuilder.openAttributesDropdown()
   await u.po.flagBuilder.selectAttribute("Email")
   await u.po.flagBuilder.selectAttribute("Email")
   await u.po.flagBuilder.closeAttributesDropdown()
 
-  await u.po.flagBuilder.expect.attributeInTableWithValue("Email", {
+  await u.po.flagBuilder.expect.attributeInTableWithValue({
+    attribute: "Email",
     value: "default",
   })
 })
@@ -88,7 +93,10 @@ test("Attribute values can be edited", async ({ page, context, browser }) => {
   await u.po.flagBuilder.selectAttribute("Email")
   await u.po.flagBuilder.closeAttributesDropdown()
 
-  await u.po.flagBuilder.setAttributeValue("Email", "john.doe@gmail.com")
+  await u.po.flagBuilder.setAttributeValue({
+    attribute: "Email",
+    value: "john.doe@gmail.com",
+  })
 })
 
 test("Previously added custom attributes are retained when dismissing the dialog", async ({

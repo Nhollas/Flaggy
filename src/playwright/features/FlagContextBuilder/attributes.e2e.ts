@@ -43,7 +43,7 @@ test("Attributes select has default values", async ({
   await u.po.flagBuilder.goTo()
   await u.po.flagBuilder.addContext()
   await u.po.flagBuilder.openAttributesSelection()
-  await u.po.flagBuilder.expect.attributesExistInSelection(
+  await u.po.flagBuilder.expect.attributeSelectionOptions(
     [
       "Country",
       "Email",
@@ -91,4 +91,26 @@ test("Previously added custom attributes are retained when dismissing the dialog
 
   await u.po.flagBuilder.goTo()
   await u.po.flagBuilder.addContext()
+  await u.po.flagBuilder.openAttributesSelection()
+
+  const attributesToAdd = ["Middle Name", "Town", "Age"]
+
+  for (const attribute of attributesToAdd) {
+    await u.po.flagBuilder.searchAndSetAttribute(attribute)
+  }
+
+  await u.po.flagBuilder.expect.attributeSelectionOptions(
+    [
+      "Country",
+      "Email",
+      "IP Address",
+      "Key",
+      "Name",
+      "Anonymous",
+      "First Name",
+      "Last Name",
+      ...attributesToAdd,
+    ],
+    { exact: true },
+  )
 })

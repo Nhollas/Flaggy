@@ -244,14 +244,14 @@ function AttributesInput({ index }: { index: number }) {
                   className="w-full"
                   onClick={() => {
                     setAttributesList((prev) => [
-                      { value: search, label: search.toLowerCase() },
+                      { value: search.toLowerCase(), label: search },
                       ...prev,
                     ])
-                    addAttribute(search)
+                    addAttribute(search.toLowerCase())
                     setSearch("")
                   }}
                 >
-                  Add Custom &quot;{search}&quot; Attribute +
+                  Add &quot;{search}&quot; Attribute +
                 </Button>
               </CommandEmpty>
               <CommandGroup>

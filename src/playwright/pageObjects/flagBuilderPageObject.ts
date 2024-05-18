@@ -20,7 +20,9 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       await page.getByPlaceholder("Search attribute...").fill(attribute)
     },
     setAttribute: async (attribute: string) => {
-      await page.getByRole("button", { name: `Add "${attribute}" +` }).click()
+      await page
+        .getByRole("button", { name: `Add "${attribute}" Attribute +` })
+        .click()
     },
     searchAndSetAttribute: async (attribute: string) => {
       await self.searchAttribute(attribute)
@@ -68,7 +70,7 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
 
         return option
       },
-      attributesExistInSelection: async (
+      attributeSelectionOptions: async (
         attributes: string[],
         config: { exact: boolean } | undefined,
       ) => {

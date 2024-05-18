@@ -58,28 +58,43 @@ test("Attributes select has default values", async ({
   )
 })
 
-test("Attributes can be changed", async ({ page, context, browser }) => {
+test("Previously added attributes don't keep their value when re-selected", async ({
+  page,
+  context,
+  browser,
+}) => {
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-})
+  await u.po.flagBuilder.addContext()
+  const closeAttrSelection = await u.po.flagBuilder.openAttributesSelection()
 
-test("Attributes can be removed", async ({ page, context, browser }) => {
-  const u = createTestUtils({ page, context, browser })
+  await u.po.flagBuilder.selectAttribute("Email")
+  await closeAttrSelection()
+  await u.po.flagBuilder.editAttribute("Email", "john.doe@gmail.com")
 
-  await u.po.flagBuilder.goTo()
+  await u.po.flagBuilder.openAttributesSelection()
+  await u.po.flagBuilder.selectAttribute("Email")
+  await u.po.flagBuilder.selectAttribute("Email")
+  await closeAttrSelection()
+
+  await u.po.flagBuilder.expect.attributeTableExistsWithValue("Email", {
+    value: "default",
+  })
 })
 
 test("Attribute values can be edited", async ({ page, context, browser }) => {
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-})
+  await u.po.flagBuilder.addContext()
+  const closeAttrSelection = await u.po.flagBuilder.openAttributesSelection()
 
-test("Custom attributes can be added", async ({ page, context, browser }) => {
-  const u = createTestUtils({ page, context, browser })
+  await u.po.flagBuilder.selectAttribute("Email")
 
-  await u.po.flagBuilder.goTo()
+  await closeAttrSelection()
+
+  await u.po.flagBuilder.editAttribute("Email", "john.doe@gmail.com")
 })
 
 test("Previously added custom attributes are retained when dismissing the dialog", async ({
@@ -97,6 +112,7 @@ test("Previously added custom attributes are retained when dismissing the dialog
 
   for (const attribute of attributesToAdd) {
     await u.po.flagBuilder.searchAndSetAttribute(attribute)
+    await u.po.flagBuilder.expect.attributeOptionSelected(attribute)
   }
 
   await u.po.flagBuilder.expect.attributeSelectionOptions(

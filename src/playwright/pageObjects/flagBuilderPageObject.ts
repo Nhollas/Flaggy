@@ -61,6 +61,14 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       })
       await button.click()
     },
+    selectAttribute: async (attribute: string) => {
+      await page.getByRole("option", { name: attribute }).click()
+    },
+    editAttribute: async (attribute: string, value: string) => {
+      const attributeRow = page.getByRole("row", { name: attribute })
+      const input = attributeRow.getByRole("textbox")
+      await input.fill(value)
+    },
     expect: {
       attributeIsInSelection: async (attribute: string) => {
         const dialog = page.getByRole("dialog")
@@ -69,6 +77,16 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
         await expect(option).toBeVisible()
 
         return option
+      },
+      attributeOptionSelected: async (attribute: string) => {
+        const option = page.getByRole("option", {
+          name: attribute,
+          exact: true,
+        })
+
+        await expect(option).toBeVisible()
+        await expect(option).toHaveAttribute("data-selected", "true")
+        await expect(option.getByRole("img")).toBeVisible()
       },
       attributeSelectionOptions: async (
         attributes: string[],

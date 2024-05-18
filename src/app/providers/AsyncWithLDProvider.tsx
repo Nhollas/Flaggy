@@ -9,7 +9,7 @@ import { FlagContext } from "../features/flags"
 
 const AsyncLDProviderPromise = cache((context: FlagContext) =>
   asyncWithLDProvider({
-    clientSideID: process.env.NEXT_PUBLIC_LAUNCHDARKLY_CLIENT_ID!,
+    clientSideID: process.env.NEXT_PUBLIC_LAUNCHDARKLY_CLIENT_SIDE_ID!,
     context: launchDarklyContextAdapter(context),
   }),
 )

@@ -17,7 +17,7 @@ async function initialize() {
   launchDarklyClient = LaunchDarkly.init(LAUNCHDARKLY_SDK_KEY)
   await launchDarklyClient.waitForInitialization()
 }
-export async function getClient() {
+async function getClient() {
   if (launchDarklyClient) {
     await launchDarklyClient.waitForInitialization()
     return launchDarklyClient
@@ -26,7 +26,7 @@ export async function getClient() {
   return launchDarklyClient
 }
 
-export async function getVariation<T>(
+async function getVariation<T>(
   flag: string,
   context: LaunchDarkly.LDContext,
   defaultValue: T,

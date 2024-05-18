@@ -71,6 +71,9 @@ module.exports = {
     },
     {
       files: ["*.e2e.ts"],
+      rules: {
+        "playwright/expect-expect": "off",
+      },
       extends: ["plugin:playwright/recommended"],
     },
   ],

@@ -76,19 +76,16 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
         const options = await dialog.getByRole("option").all()
 
         for (const attribute of attributes) {
-          const option = options.find((o) => o.getByText(attribute))!
-          console.log("option", option)
-
-          expect(option, {
-            message: `Option for attribute "${attribute}" not found.`,
-          }).toBeVisible()
+          await expect(
+            dialog.getByRole("option", { name: attribute, exact: true }),
+          ).toBeVisible()
         }
 
         if (config?.exact) {
-          expect(
-            options.length,
-            "Options found on page were not exactly matched to the attributes you provided.",
-          ).toBe(attributes.length)
+          expect(options.length, {
+            message:
+              "Options found on page were not exactly matched to the attributes you provided.",
+          }).toBe(attributes.length)
         }
       },
       attributeTableExistsWithValue: async (

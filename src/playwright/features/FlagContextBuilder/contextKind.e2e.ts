@@ -1,6 +1,5 @@
+import test from "@/playwright/fixtures/next-fixture"
 import { createTestUtils } from "@/playwright/utils"
-
-import test from "../../fixtures/next-fixture"
 
 test("Context kind can be changed", async ({ page, context, browser }) => {
   const u = createTestUtils({ page, context, browser })
@@ -19,7 +18,7 @@ test("Context kind can be changed", async ({ page, context, browser }) => {
   await u.po.flagBuilder.expect.contextKindSelected("Purchase")
 })
 
-test("Previously added context kinds are retained on edit", async ({
+test("Previously added custom context kinds are retained when dismissing the dialog", async ({
   page,
   context,
   browser,

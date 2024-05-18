@@ -1,36 +1,88 @@
+import { expect } from "@playwright/test"
+
+import test from "@/playwright/fixtures/next-fixture"
 import { createTestUtils } from "@/playwright/utils"
 
-import test from "../../fixtures/next-fixture"
+test("Required attribute 'Key' is added by default", async ({
+  page,
+  context,
+  browser,
+}) => {
+  const u = createTestUtils({ page, context, browser })
+
+  await u.po.flagBuilder.goTo()
+  await u.po.flagBuilder.addContext()
+
+  await u.po.flagBuilder.expect.attributeTableExistsWithValue("key", {
+    value: "user-123",
+  })
+})
+
+test("Required attribute 'Key' cannot be removed", async ({
+  page,
+  context,
+  browser,
+}) => {
+  const u = createTestUtils({ page, context, browser })
+
+  await u.po.flagBuilder.goTo()
+  await u.po.flagBuilder.addContext()
+  await u.po.flagBuilder.openAttributesSelection()
+  const attribute = await u.po.flagBuilder.expect.attributeIsInSelection("Key")
+
+  await expect(attribute).toBeDisabled()
+})
+
+test("Attributes select has default values", async ({
+  page,
+  context,
+  browser,
+}) => {
+  const u = createTestUtils({ page, context, browser })
+
+  await u.po.flagBuilder.goTo()
+  await u.po.flagBuilder.addContext()
+  await u.po.flagBuilder.openAttributesSelection()
+  await u.po.flagBuilder.expect.attributesExistInSelection(
+    [
+      "Country",
+      "Email",
+      "IP Address",
+      "Key",
+      "Name",
+      "Anonymous",
+      "First Name",
+      "Last Name",
+    ],
+    { exact: true },
+  )
+})
 
 test("Attributes can be changed", async ({ page, context, browser }) => {
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
 })
 
 test("Attributes can be removed", async ({ page, context, browser }) => {
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
 })
 
 test("Attribute values can be edited", async ({ page, context, browser }) => {
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
 })
 
 test("Custom attributes can be added", async ({ page, context, browser }) => {
   const u = createTestUtils({ page, context, browser })
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.addContext()
 })
 
-test("Previously added attributes are retained on edit", async ({
+test("Previously added custom attributes are retained when dismissing the dialog", async ({
   page,
   context,
   browser,

@@ -165,8 +165,6 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
         const attributeRow = page.getByRole("row", { name: attribute })
         await expect(attributeRow).toBeVisible()
         await expect(attributeRow.getByText(value)).toBeVisible()
-
-        return attributeRow
       },
       contextKindIsSelected: async (kind: string) => {
         const contextKindButton = page

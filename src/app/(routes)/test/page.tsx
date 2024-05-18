@@ -7,8 +7,6 @@ export default function TestPage() {
   const { exampleFlag } = useFlags()
   const ldClient = useLDClient()
 
-  console.log("exampleFlag", exampleFlag)
-
   useEffect(() => {
     if (!ldClient) return
 

@@ -64,14 +64,7 @@ export function FlagContextBuilder() {
     url += "?data=" + data
     url += `&redirectUrl=${baseUrl}${payload.redirectUrl}`
 
-    navigator.clipboard.writeText(url.toString()).then(
-      () => {
-        console.log("copied to clipboard")
-      },
-      (err) => {
-        console.error("failed to copy to clipboard", err)
-      },
-    )
+    navigator.clipboard.writeText(url.toString())
   }
 
   return (
@@ -107,29 +100,23 @@ function PreloadedStateInput() {
   const { control, setValue } = useFormContext<ContextBuilderForm>()
 
   const handlePaste = async (event: React.ClipboardEvent) => {
-    // This function will be triggered when paste is performed
-    console.log("Paste event triggered")
-    // You can access the pasted text using event.clipboardData.getData('text')
     const pastedText = event.clipboardData.getData("text")
-    console.log("Pasted text: ", pastedText)
 
     const url = new URL(pastedText)
 
     const data = JSON.parse(url.searchParams.get("data") || "{}")
     const redirectUrl = url.searchParams.get("redirectUrl") || ""
 
-    console.log("Data: ", data)
-
     const valid = await preLoadedStateSchema.parseAsync({
       contexts: data.contexts,
       redirectUrl,
     })
 
-    console.log("Valid data: ", valid)
-    // Add your logic here
+    const urlPathame = new URL(redirectUrl).pathname
 
+    console.log("Valid data: ", valid)
     setValue("contexts", data.contexts)
-    setValue("redirectUrl", redirectUrl)
+    setValue("redirectUrl", urlPathame)
   }
 
   const allowPasting = (e: React.KeyboardEvent) => {
@@ -205,8 +192,6 @@ function AttributesInput({ index }: { index: number }) {
 
   const attributes = watch(`contexts.${index}.attributes`)
 
-  console.log("Attributes re-render:", attributes)
-
   const defaultAttributes: SelectOption[] = [
     { label: "Country", value: "country" },
     { label: "Email", value: "email" },
@@ -277,7 +262,6 @@ function AttributesInput({ index }: { index: number }) {
                     key={attribute.value}
                     onSelect={() => {
                       if (attribute.value in attributes) {
-                        console.log("Removing attribute", attribute.value)
                         // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         const { [attribute.value]: removed, ...rest } =
                           attributes
@@ -289,8 +273,6 @@ function AttributesInput({ index }: { index: number }) {
 
                         return
                       }
-
-                      console.log("Adding attribute", attribute.value)
 
                       addAttribute(attribute.value)
                       setSearch("")
@@ -414,7 +396,7 @@ function ContextInput({ index, context }: { index: number; context: Context }) {
                 >
                   {field.value !== ""
                     ? contextKindList.find(
-                        (language) => language.value === field.value,
+                        (contextKind) => contextKind.value === field.value,
                       )?.label
                     : "Select context kind"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -426,19 +408,21 @@ function ContextInput({ index, context }: { index: number; context: Context }) {
                 <CommandInput
                   value={search}
                   onValueChange={setSearch}
-                  placeholder="Search framework..."
+                  placeholder="Search context kind..."
                   className="h-9"
+                  name="context-kind-search"
                 />
                 <CommandList>
                   <CommandEmpty className="p-1">
                     <Button
                       className="w-full"
                       onClick={() => {
+                        console.log("Adding context kind: ", search)
                         setContextKindList((prev) => [
-                          { value: search, label: search.toLowerCase() },
+                          { value: search.toLowerCase(), label: search },
                           ...prev,
                         ])
-                        setValue(`contexts.${index}.kind`, search)
+                        setValue(`contexts.${index}.kind`, search.toLowerCase())
                         setSearch("")
                       }}
                     >
@@ -446,25 +430,23 @@ function ContextInput({ index, context }: { index: number; context: Context }) {
                     </Button>
                   </CommandEmpty>
                   <CommandGroup>
-                    {contextKindList.map((language) => (
+                    {contextKindList.map((contextKind) => (
                       <CommandItem
                         disabled={false}
-                        value={language.label}
-                        key={language.value}
+                        value={contextKind.label}
+                        key={contextKind.value}
                         onSelect={() => {
-                          console.log("Context", context)
-                          setValue(`contexts.${index}.kind`, language.value)
+                          console.log(
+                            "Selected context kind: ",
+                            contextKind.value,
+                          )
+                          setValue(`contexts.${index}.kind`, contextKind.value)
                         }}
                       >
-                        {language.label}
-                        <CheckIcon
-                          className={cn(
-                            "ml-auto h-4 w-4",
-                            language.value === field.value
-                              ? "opacity-100"
-                              : "opacity-0",
-                          )}
-                        />
+                        {contextKind.label}
+                        {contextKind.value === field.value && (
+                          <CheckIcon className="ml-auto h-4 w-4" />
+                        )}
                       </CommandItem>
                     ))}
                   </CommandGroup>

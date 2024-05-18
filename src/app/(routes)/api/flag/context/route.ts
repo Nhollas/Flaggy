@@ -37,8 +37,6 @@ export const GET = async (request: Request) => {
 
         const redirectUrl = searchParams.get("redirectUrl")
 
-        console.log("redirectUrl", redirectUrl)
-
         if (!redirectUrl) {
           throw new Error("redirectUrl query parameter was not provided.")
         }

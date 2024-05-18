@@ -7,13 +7,14 @@ import { z } from "zod"
 import { contextSchema } from "../../schemas"
 
 export type ContextBuilderForm = z.infer<typeof contextBuilderFormSchema>
+
 const contextBuilderFormSchema = z.object({
   contexts: z.array(contextSchema),
   redirectUrl: z.string().min(1, { message: "Redirect URL is required" }),
   preloadedState: z.string().optional(),
 })
 
-export const preLoadedStateSchema = contextBuilderFormSchema.pick({
+export const preloadedContextBuilderFormSchema = contextBuilderFormSchema.pick({
   contexts: true,
   redirectUrl: true,
 })

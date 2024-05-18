@@ -9,9 +9,50 @@ export type TestArgs = {
 
 export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
   const { page } = testArgs
+
+  const internal = {
+    expectOptionIsVisible: async (optionName: string) => {
+      const dialog = page.getByRole("dialog")
+      const option = dialog.getByRole("option", {
+        name: optionName,
+        exact: true,
+      })
+
+      await expect(option).toBeVisible()
+
+      return option
+    },
+    expectOptionIsSelected: async (optionName: string) => {
+      const option = await internal.expectOptionIsVisible(optionName)
+      await expect(option).toHaveAttribute("data-selected", "true")
+      await expect(option.getByRole("img")).toBeVisible()
+    },
+    expectOptionIsUnselected: async (optionName: string) => {
+      const option = await internal.expectOptionIsVisible(optionName)
+      await expect(option).toHaveAttribute("data-selected", "false")
+      await expect(option.getByRole("img")).not.toBeVisible()
+    },
+  }
+
   const self = {
     goTo: async () => {
       return await page.goto("/")
+    },
+    goToGeneratedUrl: async () => {
+      const url = await page.evaluate(() => navigator.clipboard.readText())
+      return await page.goto(url)
+    },
+    setupSingleContextExample: async () => {
+      await self.goTo()
+      await self.addContext()
+      await self.openAttributesSelection()
+      await self.searchAndSetAttribute("Middle Name")
+    },
+    viewContext: async () => {
+      await page.getByRole("button", { name: "View Context" }).click()
+    },
+    generateUrl: async () => {
+      await page.getByRole("button", { name: "Generate Url" }).click()
     },
     addContext: async () => {
       await page.getByRole("button", { name: "Add Context" }).click()
@@ -69,91 +110,75 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       const input = attributeRow.getByRole("textbox")
       await input.fill(value)
     },
-    expect: {
-      attributeIsInSelection: async (attribute: string) => {
-        const dialog = page.getByRole("dialog")
-        const option = dialog.getByRole("option", { name: attribute })
+    // Expectations
+    expectAttributeOptionIsVisible: async (attribute: string) => {
+      return await internal.expectOptionIsVisible(attribute)
+    },
+    expectAttributeOptionIsSelected: async (attribute: string) => {
+      await internal.expectOptionIsSelected(attribute)
+    },
+    expectContextKindOptionsAreVisible: async (
+      kinds: string[],
+      config: { exact: boolean } | undefined,
+    ) => {
+      const dialog = page.getByRole("dialog")
+      const options = await dialog.getByRole("option").all()
 
-        await expect(option).toBeVisible()
+      for (const kind of kinds) {
+        await internal.expectOptionIsVisible(kind)
+      }
 
-        return option
-      },
-      attributeOptionSelected: async (attribute: string) => {
-        const option = page.getByRole("option", {
-          name: attribute,
-          exact: true,
-        })
+      if (config?.exact) {
+        expect(options.length).toBe(kinds.length)
+      }
+    },
+    expectAttributeOptionsAreVisible: async (
+      attributes: string[],
+      config: { exact: boolean } | undefined,
+    ) => {
+      const dialog = page.getByRole("dialog")
+      const options = await dialog.getByRole("option").all()
 
-        await expect(option).toBeVisible()
-        await expect(option).toHaveAttribute("data-selected", "true")
-        await expect(option.getByRole("img")).toBeVisible()
-      },
-      attributeSelectionOptions: async (
-        attributes: string[],
-        config: { exact: boolean } | undefined,
-      ) => {
-        const dialog = page.getByRole("dialog")
-        const options = await dialog.getByRole("option").all()
+      for (const attribute of attributes) {
+        await internal.expectOptionIsVisible(attribute)
+      }
 
-        for (const attribute of attributes) {
-          await expect(
-            dialog.getByRole("option", { name: attribute, exact: true }),
-          ).toBeVisible()
-        }
+      if (config?.exact) {
+        expect(options.length).toBe(attributes.length)
+      }
+    },
+    expectAttributeInTableWithValue: async (
+      attribute: string,
+      { value }: { value: string },
+    ) => {
+      const attributeRow = page.getByRole("row", { name: attribute })
+      await expect(attributeRow).toBeVisible()
+      await expect(attributeRow.getByRole("textbox")).toHaveValue(value)
+    },
+    expectAttributeInDetailTableWithValue: async (
+      attribute: string,
+      { value }: { value: string },
+    ) => {
+      const attributeRow = page.getByRole("row", { name: attribute })
+      await expect(attributeRow).toBeVisible()
+      await expect(attributeRow.getByText(value)).toBeVisible()
 
-        if (config?.exact) {
-          expect(options.length, {
-            message:
-              "Options found on page were not exactly matched to the attributes you provided.",
-          }).toBe(attributes.length)
-        }
-      },
-      attributeTableExistsWithValue: async (
-        attribute: string,
-        { value }: { value: string },
-      ) => {
-        const attributeRow = page.getByRole("row", { name: attribute })
-        await expect(attributeRow).toBeVisible()
-        await expect(attributeRow.getByRole("textbox")).toHaveValue(value)
+      return attributeRow
+    },
+    expectContextKindIsSelected: async (kind: string) => {
+      const contextKindButton = page.getByLabel("Context Kind").getByText(kind)
 
-        return attributeRow
-      },
-      contextKindSelected: async (kind: string) => {
-        const contextKindButton = page
-          .getByLabel("Context Kind")
-          .getByText(kind)
+      await expect(contextKindButton).toBeVisible()
+      await internal.expectOptionIsSelected(kind)
+    },
+    expectContextKindIsUnselected: async (kind: string) => {
+      const contextKindButton = page.getByLabel("Context Kind").getByText(kind)
 
-        await expect(contextKindButton).toBeVisible()
-
-        const option = page.getByRole("option", {
-          name: kind,
-          exact: true,
-        })
-
-        await expect(option).toBeVisible()
-        await expect(option).toHaveAttribute("data-selected", "true")
-        await expect(option.getByRole("img")).toBeVisible()
-      },
-      contextKindUnselected: async (kind: string) => {
-        const contextKindButton = page
-          .getByLabel("Context Kind")
-          .getByText(kind)
-
-        await expect(contextKindButton).not.toBeVisible()
-
-        const option = page.getByRole("option", {
-          name: kind,
-          exact: true,
-        })
-
-        await expect(option).toBeVisible()
-        await expect(option).toHaveAttribute("data-selected", "false")
-        await expect(option.getByRole("img")).not.toBeVisible()
-      },
-      contextKindOption: async (kind: string) => {
-        const option = page.getByRole("option", { name: kind, exact: true })
-        await expect(option).toBeVisible()
-      },
+      await expect(contextKindButton).not.toBeVisible()
+      await internal.expectOptionIsUnselected(kind)
+    },
+    expectContextKindOptionIsVisible: async (kind: string) => {
+      return await internal.expectOptionIsVisible(kind)
     },
   }
   return self

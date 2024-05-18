@@ -12,8 +12,7 @@ test("Required attribute 'Key' is added by default", async ({
 
   await u.po.flagBuilder.goTo()
   await u.po.flagBuilder.addContext()
-
-  await u.po.flagBuilder.expect.attributeTableExistsWithValue("key", {
+  await u.po.flagBuilder.expectAttributeInTableWithValue("key", {
     value: "user-123",
   })
 })
@@ -28,8 +27,7 @@ test("Required attribute 'Key' cannot be removed", async ({
   await u.po.flagBuilder.goTo()
   await u.po.flagBuilder.addContext()
   await u.po.flagBuilder.openAttributesSelection()
-  const attribute = await u.po.flagBuilder.expect.attributeIsInSelection("Key")
-
+  const attribute = await u.po.flagBuilder.expectAttributeOptionIsVisible("Key")
   await expect(attribute).toBeDisabled()
 })
 
@@ -43,7 +41,7 @@ test("Attributes select has default values", async ({
   await u.po.flagBuilder.goTo()
   await u.po.flagBuilder.addContext()
   await u.po.flagBuilder.openAttributesSelection()
-  await u.po.flagBuilder.expect.attributeSelectionOptions(
+  await u.po.flagBuilder.expectAttributeOptionsAreVisible(
     [
       "Country",
       "Email",
@@ -78,7 +76,7 @@ test("Previously added attributes don't keep their value when re-selected", asyn
   await u.po.flagBuilder.selectAttribute("Email")
   await closeAttrSelection()
 
-  await u.po.flagBuilder.expect.attributeTableExistsWithValue("Email", {
+  await u.po.flagBuilder.expectAttributeInTableWithValue("Email", {
     value: "default",
   })
 })
@@ -112,10 +110,10 @@ test("Previously added custom attributes are retained when dismissing the dialog
 
   for (const attribute of attributesToAdd) {
     await u.po.flagBuilder.searchAndSetAttribute(attribute)
-    await u.po.flagBuilder.expect.attributeOptionSelected(attribute)
+    await u.po.flagBuilder.expectAttributeOptionIsSelected(attribute)
   }
 
-  await u.po.flagBuilder.expect.attributeSelectionOptions(
+  await u.po.flagBuilder.expectAttributeOptionsAreVisible(
     [
       "Country",
       "Email",

@@ -36,7 +36,7 @@ import { Context } from "../../types"
 
 import {
   ContextBuilderForm,
-  preLoadedStateSchema,
+  preloadedContextBuilderFormSchema,
   useContextBuilderForm,
 } from "./useContextBuilderForm"
 
@@ -72,7 +72,7 @@ export function FlagContextBuilder() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <h1 className="text-xl font-medium">Flag Context Builder</h1>
         <PreloadedStateInput />
-        <Button type="button" onClick={() => addBlankContext()}>
+        <Button type="button" onClick={addBlankContext}>
           Add Context
         </Button>
         <Button variant="outline" className="ml-4" type="submit">
@@ -107,7 +107,7 @@ function PreloadedStateInput() {
     const data = JSON.parse(url.searchParams.get("data") || "{}")
     const redirectUrl = url.searchParams.get("redirectUrl") || ""
 
-    const valid = await preLoadedStateSchema.parseAsync({
+    const valid = await preloadedContextBuilderFormSchema.parseAsync({
       contexts: data.contexts,
       redirectUrl,
     })

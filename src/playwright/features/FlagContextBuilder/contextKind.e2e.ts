@@ -8,14 +8,14 @@ test("Context kind can be changed", async ({ page, context, browser }) => {
   await u.po.flagBuilder.addContext()
   const closeCKindSelection = await u.po.flagBuilder.openContextKindSelection()
 
-  await u.po.flagBuilder.expect.contextKindSelected("User")
+  await u.po.flagBuilder.expectContextKindIsSelected("User")
   await u.po.flagBuilder.searchAndSetContextKind("Purchase")
 
   await closeCKindSelection()
 
   await u.po.flagBuilder.openContextKindSelection()
-  await u.po.flagBuilder.expect.contextKindUnselected("User")
-  await u.po.flagBuilder.expect.contextKindSelected("Purchase")
+  await u.po.flagBuilder.expectContextKindIsUnselected("User")
+  await u.po.flagBuilder.expectContextKindIsSelected("Purchase")
 })
 
 test("Previously added custom context kinds are retained when dismissing the dialog", async ({
@@ -28,7 +28,7 @@ test("Previously added custom context kinds are retained when dismissing the dia
   await u.po.flagBuilder.goTo()
   await u.po.flagBuilder.addContext()
   const closeCKindSelection = await u.po.flagBuilder.openContextKindSelection()
-  await u.po.flagBuilder.expect.contextKindSelected("User")
+  await u.po.flagBuilder.expectContextKindIsSelected("User")
 
   await u.po.flagBuilder.searchAndSetContextKind("Purchase")
   await u.po.flagBuilder.searchAndSetContextKind("Customer")
@@ -37,8 +37,9 @@ test("Previously added custom context kinds are retained when dismissing the dia
   await closeCKindSelection()
   await u.po.flagBuilder.openContextKindSelection()
 
-  await u.po.flagBuilder.expect.contextKindOption("Purchase")
-  await u.po.flagBuilder.expect.contextKindOption("Customer")
-  await u.po.flagBuilder.expect.contextKindOption("Basket")
-  await u.po.flagBuilder.expect.contextKindSelected("Basket")
+  await u.po.flagBuilder.expectContextKindOptionsAreVisible(
+    ["User", "Purchase", "Customer", "Basket"],
+    { exact: true },
+  )
+  await u.po.flagBuilder.expectContextKindIsSelected("Basket")
 })

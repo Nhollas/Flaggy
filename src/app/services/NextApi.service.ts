@@ -1,16 +1,17 @@
-import ClientBuilder from "./ClientBuilder"
+import ClientFactory from "./ClientFactory"
 
 import { IClient, IService } from "."
 
 interface INextApiClient extends IClient {}
+
 const NextApiClient: INextApiClient = {
-  instance: ClientBuilder.build({
+  instance: ClientFactory.create({
     baseURL: "/api",
     headers: {
       "Content-Type": "application/json",
     },
   }),
-  createUrl: ClientBuilder.baseUrl("/api"),
+  createUrl: ClientFactory.baseUrl("/api"),
 }
 
 interface INextApiService extends IService {

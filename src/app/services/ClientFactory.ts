@@ -1,12 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios"
 
-interface IClientBuilder {
-  build: (defaultConfig?: AxiosRequestConfig) => AxiosInstance
+interface IClientFactory {
+  create: (defaultConfig?: AxiosRequestConfig) => AxiosInstance
   baseUrl: (base: string) => (path: string) => string
 }
 
-const ClientBuilder = (): IClientBuilder => ({
-  build(defaultConfig?: AxiosRequestConfig) {
+const ClientFactory = (): IClientFactory => ({
+  create(defaultConfig?: AxiosRequestConfig) {
     return axios.create(defaultConfig)
   },
   baseUrl(base: string) {
@@ -14,4 +14,4 @@ const ClientBuilder = (): IClientBuilder => ({
   },
 })
 
-export default ClientBuilder()
+export default ClientFactory()

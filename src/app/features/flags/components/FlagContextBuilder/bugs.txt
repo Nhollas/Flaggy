@@ -1,0 +1,12 @@
+- ContextInput component loses it's internal state is parent causes it to re-render.
+- Same bug applies to AttributesSelection.
+
+- Container pattern is shite and should only be used for display components.
+
+
+- ContextInput and AttributesSelection components should manage their own state and watch what they are looking for.
+
+I want to do achieve this with a technical requirement:
+ 
+ContextA's change in attributes shouldn't make ContextB's AttributesSelection component re-render. 
+Same thing applies to the ContextInput component.

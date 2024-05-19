@@ -22,14 +22,14 @@ import {
 
 import { Attributes } from "../../types"
 
-export function AttributesSelection({
+export default function AttributesSelection({
   attributes,
   setAttributes,
 }: {
   setAttributes: (attributes: Attributes) => void
   attributes: Attributes
 }) {
-  // console.log("Rendering AttributesSelection", { attributes })
+  console.log("re-render dis dick")
 
   const addAttribute = (attribute: string) => {
     setAttributes({
@@ -79,7 +79,7 @@ export function AttributesSelection({
   return (
     <FormItem className="flex flex-col">
       <FormLabel>Attributes</FormLabel>
-      <Popover>
+      <Popover open>
         <PopoverTrigger asChild>
           <FormControl>
             <Button>

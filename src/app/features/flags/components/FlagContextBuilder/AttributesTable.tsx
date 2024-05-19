@@ -1,6 +1,11 @@
 "use client"
 
 import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  Input,
   Table,
   TableBody,
   TableCell,
@@ -11,44 +16,57 @@ import {
 
 import { Attributes } from "../../types"
 
-import AttributeValueInput from "./AttributeValueInput"
-
-function AttributesTable({
-  index,
+const AttributesTable = ({
   attributes,
+  contextIndex,
 }: {
-  index: number
+  contextIndex: number
   attributes: Attributes
-}) {
-  console.log("Rendering AttributesTable", { index, attributes })
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Attribute</TableHead>
-          <TableHead className="text-right">Value</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Object.entries(attributes).map(([key]) => (
-          <TestRow key={key} index={index} attribute={key} />
-        ))}
-      </TableBody>
-    </Table>
-  )
-}
+}) => (
+  <Table>
+    <TableHeader>
+      <TableRow>
+        <TableHead className="w-[100px]">Attribute</TableHead>
+        <TableHead className="text-right">Value</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      {Object.entries(attributes).map(([key]) => (
+        <TestRow key={key} attribute={key} contextIndex={contextIndex} />
+      ))}
+    </TableBody>
+  </Table>
+)
 
 export default AttributesTable
 
-function TestRow({ attribute, index }: { attribute: string; index: number }) {
-  return (
-    <TableRow>
-      <TableCell className="font-medium text-[1.05rem] max-w-[150px] truncate">
-        {attribute}
-      </TableCell>
-      <TableCell>
-        <AttributeValueInput index={index} attribute={attribute} />
-      </TableCell>
-    </TableRow>
-  )
-}
+const TestRow = ({
+  attribute,
+  contextIndex,
+}: {
+  attribute: string
+  contextIndex: number
+}) => (
+  <TableRow>
+    <TableCell className="font-medium text-[1.05rem] max-w-[150px] truncate">
+      {attribute}
+    </TableCell>
+    <TableCell>
+      <FormField<Record<string, string>>
+        name={`contexts.${contextIndex}.attributes.${attribute}`}
+        render={({ field }) => (
+          <FormItem>
+            <FormControl className="ml-auto">
+              <Input
+                {...field}
+                placeholder="Value"
+                className="w-[200px] bg-white"
+              />
+            </FormControl>
+            <FormMessage className="text-right" />
+          </FormItem>
+        )}
+      />
+    </TableCell>
+  </TableRow>
+)

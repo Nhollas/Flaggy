@@ -1,7 +1,6 @@
 "use client"
 import { CheckIcon, ChevronsUpDown } from "lucide-react"
 import { useState } from "react"
-import { useFormContext } from "react-hook-form"
 
 import {
   Button,
@@ -22,26 +21,19 @@ import {
 } from "@/app/components/ui"
 import { cn } from "@/app/lib/utils"
 
-import { ContextBuilderForm } from "./useContextBuilderForm"
-
-export function ContextInput({
-  index,
+export default function ContextInput({
+  contextIndex,
+  setContextKind,
   contextKind,
 }: {
-  index: number
+  contextIndex: number
+  setContextKind: (value: string) => void
   contextKind: string
 }) {
-  console.log("Rendering ContextInput", { index, contextKind })
-
-  const { setValue, control } = useFormContext<ContextBuilderForm>()
-
   const defaultContextKinds: Set<string> = new Set(["user", contextKind])
   const [contextKindList, setContextKindList] = useState(defaultContextKinds)
 
   const [search, setSearch] = useState("")
-
-  const setContextKind = (value: string) =>
-    setValue(`contexts.${index}.kind`, value)
   const handleAddCustomContext = (search: string) => {
     const loweredSearch = search.toLowerCase()
     setContextKindList((prev) => new Set(prev).add(loweredSearch))
@@ -50,9 +42,8 @@ export function ContextInput({
   }
 
   return (
-    <FormField
-      control={control}
-      name={`contexts.${index}.kind`}
+    <FormField<Record<string, string>>
+      name={`contexts.${contextIndex}.kind`}
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>Context Kind</FormLabel>

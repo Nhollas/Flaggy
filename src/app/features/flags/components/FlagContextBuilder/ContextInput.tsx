@@ -31,6 +31,8 @@ export function ContextInput({
   index: number
   contextKind: string
 }) {
+  console.log("Rendering ContextInput", { index, contextKind })
+
   const { setValue, control } = useFormContext<ContextBuilderForm>()
 
   const defaultContextKinds: Set<string> = new Set(["user", contextKind])

@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { useFormContext } from "react-hook-form"
 
 import {
@@ -42,4 +43,4 @@ function AttributeValueInput({
   )
 }
 
-export default AttributeValueInput
+export default memo(AttributeValueInput)

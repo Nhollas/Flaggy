@@ -1,7 +1,5 @@
 "use client"
 
-import { memo } from "react"
-
 import {
   Table,
   TableBody,
@@ -22,7 +20,7 @@ function AttributesTable({
   index: number
   attributes: Attributes
 }) {
-  // console.log("Rendering AttributesTable", { index, attributes })
+  console.log("Rendering AttributesTable", { index, attributes })
   return (
     <Table>
       <TableHeader>
@@ -40,7 +38,7 @@ function AttributesTable({
   )
 }
 
-export default memo(AttributesTable)
+export default AttributesTable
 
 function TestRow({ attribute, index }: { attribute: string; index: number }) {
   return (

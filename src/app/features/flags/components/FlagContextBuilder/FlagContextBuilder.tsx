@@ -56,11 +56,7 @@ export function FlagContextBuilder() {
           Generate Url
         </Button>
         {contexts.map((context, i) => (
-          <ContextContainer
-            key={context.id}
-            index={i}
-            contextKind={context.kind}
-          />
+          <ContextContainer key={context.id} index={i} context={context} />
         ))}
         <RedirectUrlInput />
       </form>

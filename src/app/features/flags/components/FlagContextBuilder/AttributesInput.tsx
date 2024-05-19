@@ -23,8 +23,16 @@ import {
 
 import { ContextBuilderForm } from "./useContextBuilderForm"
 
-export function AttributesInput({ index }: { index: number }) {
-  const { setValue, watch } = useFormContext<ContextBuilderForm>()
+export function AttributesInput({
+  index,
+  attributes,
+}: {
+  index: number
+  attributes: {
+    key: string
+  } & Record<string, string>
+}) {
+  const { setValue } = useFormContext<ContextBuilderForm>()
 
   const addAttribute = (attribute: string) => {
     setValue(`contexts.${index}.attributes.${attribute}`, "default")
@@ -38,8 +46,6 @@ export function AttributesInput({ index }: { index: number }) {
     setValue(`contexts.${index}.attributes`, attributes)
   }
 
-  const attributes = watch(`contexts.${index}.attributes`)
-
   const defaultAttributes: Map<string, string> = new Map([
     ...Object.entries(attributes),
     ["country", "Country"],
@@ -51,19 +57,21 @@ export function AttributesInput({ index }: { index: number }) {
     ["firstname", "First Name"],
     ["lastname", "Last Name"],
   ])
-  const [attributesList, setAttributesList] = useState(defaultAttributes)
+  const [attributeMenuItems, setAttributeMenuItems] =
+    useState(defaultAttributes)
+  const [attributeList, setAttributeList] = useState(attributes)
 
   const [search, setSearch] = useState("")
 
   const handleAddCustomAttribute = (search: string) => {
     const loweredSearch = search.toLowerCase()
-    setAttributesList((prev) => new Map(prev).set(loweredSearch, search))
+    setAttributeMenuItems((prev) => new Map(prev).set(loweredSearch, search))
     addAttribute(loweredSearch)
     setSearch("")
   }
 
   const handleSelectAttribute = (attribute: string) => {
-    if (attribute in attributes) {
+    if (attribute in attributeList) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [attribute]: removed, ...rest } = attributes
 
@@ -71,9 +79,12 @@ export function AttributesInput({ index }: { index: number }) {
         ...rest,
         key: attributes["key"],
       })
+      setAttributeList({ ...rest, key: attributes["key"] })
+
       return
     }
     addAttribute(attribute)
+    setAttributeList((prev) => ({ ...prev, [attribute]: "default" }))
   }
 
   return (
@@ -106,7 +117,7 @@ export function AttributesInput({ index }: { index: number }) {
                 </Button>
               </CommandEmpty>
               <CommandGroup>
-                {Array.from(attributesList).map(([attribute, label]) => (
+                {Array.from(attributeMenuItems).map(([attribute, label]) => (
                   <CommandItem
                     disabled={attribute === "key"}
                     value={label}
@@ -114,7 +125,7 @@ export function AttributesInput({ index }: { index: number }) {
                     onSelect={() => handleSelectAttribute(attribute)}
                   >
                     {label}
-                    {attribute in attributes && (
+                    {attribute in attributeList && (
                       <CheckIcon className="ml-auto h-4 w-4" />
                     )}
                   </CommandItem>

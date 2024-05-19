@@ -8,15 +8,15 @@ test("Context kind can be changed", async ({ page, context, browser }) => {
   await u.po.flagBuilder.clickAddContext()
   await u.po.flagBuilder.openContextKindDropdown()
 
-  await u.po.flagBuilder.expect.contextKindIsSelected("User")
-  await u.po.flagBuilder.searchContextKind("Purchase")
-  await u.po.flagBuilder.clickAddCustomContextKind("Purchase")
+  await u.po.flagBuilder.expect.contextKindIsSelected("user")
+  await u.po.flagBuilder.searchContextKind("purchase")
+  await u.po.flagBuilder.clickAddCustomContextKind("purchase")
 
   await u.po.flagBuilder.closeContextKindDropdown()
 
   await u.po.flagBuilder.openContextKindDropdown()
-  await u.po.flagBuilder.expect.contextKindIsUnselected("User")
-  await u.po.flagBuilder.expect.contextKindIsSelected("Purchase")
+  await u.po.flagBuilder.expect.contextKindIsUnselected("user")
+  await u.po.flagBuilder.expect.contextKindIsSelected("purchase")
 })
 
 test("Previously added custom context kinds are retained when dismissing the dialog", async ({
@@ -29,9 +29,9 @@ test("Previously added custom context kinds are retained when dismissing the dia
   await u.po.flagBuilder.goTo()
   await u.po.flagBuilder.clickAddContext()
   await u.po.flagBuilder.openContextKindDropdown()
-  await u.po.flagBuilder.expect.contextKindIsSelected("User")
+  await u.po.flagBuilder.expect.contextKindIsSelected("user")
 
-  const customContextKindsToAdd = ["Purchase", "Customer", "Basket"]
+  const customContextKindsToAdd = ["purchase", "customer", "basket"]
 
   for (const kind of customContextKindsToAdd) {
     await u.po.flagBuilder.searchContextKind(kind)
@@ -43,8 +43,8 @@ test("Previously added custom context kinds are retained when dismissing the dia
   await u.po.flagBuilder.openContextKindDropdown()
 
   await u.po.flagBuilder.expect.contextKindOptionsAreVisible(
-    ["User", ...customContextKindsToAdd],
+    ["user", ...customContextKindsToAdd],
     { exact: true },
   )
-  await u.po.flagBuilder.expect.contextKindIsSelected("Basket")
+  await u.po.flagBuilder.expect.contextKindIsSelected("basket")
 })

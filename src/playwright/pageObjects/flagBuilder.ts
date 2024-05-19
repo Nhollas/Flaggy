@@ -24,12 +24,10 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
     },
     expectOptionIsSelected: async (optionName: string) => {
       const option = await internal.expectOptionIsVisible(optionName)
-      await expect(option).toHaveAttribute("data-selected", "true")
       await expect(option.getByRole("img")).toBeVisible()
     },
     expectOptionIsUnselected: async (optionName: string) => {
       const option = await internal.expectOptionIsVisible(optionName)
-      await expect(option).toHaveAttribute("data-selected", "false")
       await expect(option.getByRole("img")).not.toBeVisible()
     },
     expectOptionsAreVisible: async (

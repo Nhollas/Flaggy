@@ -20,7 +20,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/app/components/ui"
-import { cn } from "@/app/lib/utils"
 
 import { ContextBuilderForm } from "./useContextBuilderForm"
 
@@ -115,12 +114,9 @@ export function AttributesInput({ index }: { index: number }) {
                     onSelect={() => handleSelectAttribute(attribute)}
                   >
                     {label}
-                    <CheckIcon
-                      className={cn(
-                        "ml-auto h-4 w-4",
-                        attribute in attributes ? "opacity-100" : "opacity-0",
-                      )}
-                    />
+                    {attribute in attributes && (
+                      <CheckIcon className="ml-auto h-4 w-4" />
+                    )}
                   </CommandItem>
                 ))}
               </CommandGroup>

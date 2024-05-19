@@ -142,7 +142,7 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       ) => {
         await internal.expectOptionsAreVisible(attributes, config)
       },
-      attributeInTableWithValue: async ({
+      attributeInFormTableWithValue: async ({
         attribute,
         value,
       }: {
@@ -155,7 +155,7 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
         await expect(attributeRow).toBeVisible()
         await expect(attributeRow.getByRole("textbox")).toHaveValue(value)
       },
-      attributeInDetailTableWithValue: async ({
+      attributeInDisplayTableWithValue: async ({
         attribute,
         value,
       }: {

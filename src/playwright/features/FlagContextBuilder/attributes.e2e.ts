@@ -10,7 +10,7 @@ test("Required attribute 'Key' is added by default", async ({
 
   await u.po.flagBuilder.goTo()
   await u.po.flagBuilder.clickAddContext()
-  await u.po.flagBuilder.expect.attributeInTableWithValue({
+  await u.po.flagBuilder.expect.attributeInFormTableWithValue({
     attribute: "key",
     value: "user-123",
   })
@@ -77,7 +77,7 @@ test("Previously added attributes don't keep their value when re-selected", asyn
   await u.po.flagBuilder.selectAttribute("Email")
   await u.po.flagBuilder.closeAttributesDropdown()
 
-  await u.po.flagBuilder.expect.attributeInTableWithValue({
+  await u.po.flagBuilder.expect.attributeInFormTableWithValue({
     attribute: "Email",
     value: "default",
   })

@@ -17,11 +17,11 @@ test("Users get their context persisted when they use a generated URL.", async (
   await u.po.flagBuilder.goToGeneratedUrl()
   await u.po.flagBuilder.clickViewContext()
 
-  await u.po.flagBuilder.expect.attributeInDetailTableWithValue({
+  await u.po.flagBuilder.expect.attributeInDisplayTableWithValue({
     attribute: "key",
     value: "user-123",
   })
-  await u.po.flagBuilder.expect.attributeInDetailTableWithValue({
+  await u.po.flagBuilder.expect.attributeInDisplayTableWithValue({
     attribute: "middle name",
     value: "default",
   })
@@ -29,11 +29,11 @@ test("Users get their context persisted when they use a generated URL.", async (
   await u.page.reload()
 
   await u.po.flagBuilder.clickViewContext()
-  await u.po.flagBuilder.expect.attributeInDetailTableWithValue({
+  await u.po.flagBuilder.expect.attributeInDisplayTableWithValue({
     attribute: "key",
     value: "user-123",
   })
-  await u.po.flagBuilder.expect.attributeInDetailTableWithValue({
+  await u.po.flagBuilder.expect.attributeInDisplayTableWithValue({
     attribute: "middle name",
     value: "default",
   })

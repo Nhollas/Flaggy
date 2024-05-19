@@ -11,6 +11,7 @@ const ContextContainer = ({
   contextKind: string
   index: number
 }) => {
+  console.log("ContextContainer Rendered", index)
   return (
     <div className="flex flex-col gap-y-2 p-4 bg-gray-50 rounded-md border w-full max-w-md">
       <div className="flex flex-row gap-x-2">

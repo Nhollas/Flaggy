@@ -30,6 +30,7 @@ export default function AttributesSelection({
 }: {
   contextIndex: number
 }) {
+  console.log("AttributesSelection Rendered", contextIndex)
   const { setValue, watch } = useFormContext<ContextBuilderForm>()
   const attributes = watch(`contexts.${contextIndex}.attributes`)
 

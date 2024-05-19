@@ -2,7 +2,6 @@
 
 import { Plus, CheckIcon } from "lucide-react"
 import { useState } from "react"
-import { useFormContext } from "react-hook-form"
 
 import {
   Button,
@@ -21,29 +20,22 @@ import {
   PopoverTrigger,
 } from "@/app/components/ui"
 
-import { ContextBuilderForm } from "./useContextBuilderForm"
+import { Attributes } from "../../types"
 
-export function AttributesInput({
-  index,
+export function AttributesSelection({
   attributes,
+  setAttributes,
 }: {
-  index: number
-  attributes: {
-    key: string
-  } & Record<string, string>
+  setAttributes: (attributes: Attributes) => void
+  attributes: Attributes
 }) {
-  const { setValue } = useFormContext<ContextBuilderForm>()
+  console.log("Rendering AttributesSelection", { attributes })
 
   const addAttribute = (attribute: string) => {
-    setValue(`contexts.${index}.attributes.${attribute}`, "default")
-  }
-
-  const setAttributes = (
-    attributes: {
-      key: string
-    } & Record<string, string>,
-  ) => {
-    setValue(`contexts.${index}.attributes`, attributes)
+    setAttributes({
+      ...attributes,
+      [attribute]: "default",
+    })
   }
 
   const defaultAttributes: Map<string, string> = new Map([
@@ -59,7 +51,6 @@ export function AttributesInput({
   ])
   const [attributeMenuItems, setAttributeMenuItems] =
     useState(defaultAttributes)
-  const [attributeList, setAttributeList] = useState(attributes)
 
   const [search, setSearch] = useState("")
 
@@ -71,20 +62,18 @@ export function AttributesInput({
   }
 
   const handleSelectAttribute = (attribute: string) => {
-    if (attribute in attributeList) {
+    if (attribute in attributes) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [attribute]: removed, ...rest } = attributes
 
       setAttributes({
         ...rest,
-        key: attributes["key"],
+        key: attributes.key,
       })
-      setAttributeList({ ...rest, key: attributes["key"] })
 
       return
     }
     addAttribute(attribute)
-    setAttributeList((prev) => ({ ...prev, [attribute]: "default" }))
   }
 
   return (
@@ -125,7 +114,7 @@ export function AttributesInput({
                     onSelect={() => handleSelectAttribute(attribute)}
                   >
                     {label}
-                    {attribute in attributeList && (
+                    {attribute in attributes && (
                       <CheckIcon className="ml-auto h-4 w-4" />
                     )}
                   </CommandItem>

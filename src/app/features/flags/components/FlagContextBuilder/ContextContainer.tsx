@@ -1,30 +1,41 @@
 import { memo } from "react"
 
-import { AttributesInput } from "./AttributesInput"
+import { Attributes, Context } from "../../types"
+
+import { AttributesSelection } from "./AttributesSelection"
 import { AttributesTable } from "./AttributesTable"
 import { ContextInput } from "./ContextInput"
 
 const ContextContainer = ({
-  context,
+  contextKind,
+  attributes,
+  updateContext,
   index,
 }: {
-  context: {
-    attributes: {
-      key: string
-    } & Record<string, string>
-    kind: string
-  }
+  contextKind: string
+  attributes: Attributes
+  updateContext: (index: number, context: Context) => void
   index: number
 }) => {
-  const { attributes, kind: contextKind } = context
-  console.log(`Rendering Context: ${index}`)
+  const setAttributes = (
+    attributes: {
+      key: string
+    } & Record<string, string>,
+  ) => {
+    updateContext(index, { kind: contextKind, attributes })
+  }
+
+  console.log("Rendering ContextContainer", { index, contextKind })
   return (
     <div className="flex flex-col gap-y-2 p-4 bg-gray-50 rounded-md border w-full max-w-md">
       <div className="flex flex-row gap-x-2">
         <ContextInput index={index} contextKind={contextKind} />
-        <AttributesInput index={index} attributes={attributes} />
+        <AttributesSelection
+          attributes={attributes}
+          setAttributes={setAttributes}
+        />
       </div>
-      <AttributesTable index={index} />
+      <AttributesTable attributes={attributes} index={index} />
     </div>
   )
 }

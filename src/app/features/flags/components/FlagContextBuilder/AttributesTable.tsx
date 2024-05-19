@@ -1,7 +1,5 @@
 "use client"
 
-import { useWatch } from "react-hook-form"
-
 import {
   Table,
   TableBody,
@@ -11,15 +9,17 @@ import {
   TableRow,
 } from "@/app/components/ui"
 
-import { AttributeValueInput } from "./AttributeValueInput"
-import { ContextBuilderForm } from "./useContextBuilderForm"
+import { Attributes } from "../../types"
 
-export function AttributesTable({ index }: { index: number }) {
-  const attributes =
-    useWatch<ContextBuilderForm>({
-      name: `contexts.${index}.attributes`,
-    }) || {}
+import AttributeValueInput from "./AttributeValueInput"
 
+export function AttributesTable({
+  index,
+  attributes,
+}: {
+  index: number
+  attributes: Attributes
+}) {
   return (
     <Table>
       <TableHeader>
@@ -35,7 +35,7 @@ export function AttributesTable({ index }: { index: number }) {
               {key}
             </TableCell>
             <TableCell>
-              <AttributeValueInput index={index} attribute={key} />
+              {/* <AttributeValueInput index={index} attribute={key} /> */}
             </TableCell>
           </TableRow>
         ))}

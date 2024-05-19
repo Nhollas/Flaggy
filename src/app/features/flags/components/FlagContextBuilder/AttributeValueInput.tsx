@@ -12,13 +12,14 @@ import {
 
 import { ContextBuilderForm } from "./useContextBuilderForm"
 
-export function AttributeValueInput({
+function AttributeValueInput({
   index,
   attribute,
 }: {
   index: number
   attribute: string
 }) {
+  console.log("Rendering AttributeValueInput", { index, attribute })
   const { control } = useFormContext<ContextBuilderForm>()
 
   return (
@@ -40,3 +41,5 @@ export function AttributeValueInput({
     />
   )
 }
+
+export default AttributeValueInput

@@ -1,8 +1,11 @@
 "use client"
 
+import { useCallback } from "react"
 import { useFieldArray } from "react-hook-form"
 
 import { Button, Form } from "@/app/components/ui"
+
+import { Context } from "../../types"
 
 import ContextContainer from "./ContextContainer"
 import { PreloadedStateInput } from "./PreloadedStateInput"
@@ -14,7 +17,11 @@ import {
 
 export function FlagContextBuilder() {
   const form = useContextBuilderForm()
-  const { append, fields: contexts } = useFieldArray({
+  const {
+    append,
+    fields: contexts,
+    update,
+  } = useFieldArray({
     control: form.control,
     name: "contexts",
   })
@@ -32,6 +39,13 @@ export function FlagContextBuilder() {
       { shouldFocus: false },
     )
   }
+
+  const updateContext = useCallback(
+    (index: number, context: Context) => {
+      update(index, context)
+    },
+    [update],
+  )
 
   const onSubmit = (payload: ContextBuilderForm) => {
     const data = JSON.stringify({ contexts: payload.contexts })
@@ -56,7 +70,13 @@ export function FlagContextBuilder() {
           Generate Url
         </Button>
         {contexts.map((context, i) => (
-          <ContextContainer key={context.id} index={i} context={context} />
+          <ContextContainer
+            key={context.id}
+            index={i}
+            attributes={context.attributes}
+            contextKind={context.kind}
+            updateContext={updateContext}
+          />
         ))}
         <RedirectUrlInput />
       </form>

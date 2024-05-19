@@ -2,6 +2,7 @@
 
 import { Plus, CheckIcon } from "lucide-react"
 import { useState } from "react"
+import { useFormContext } from "react-hook-form"
 
 import {
   Button,
@@ -22,20 +23,22 @@ import {
 
 import { Attributes } from "../../types"
 
+import { ContextBuilderForm } from "./useContextBuilderForm"
+
 export default function AttributesSelection({
-  attributes,
-  setAttributes,
+  contextIndex,
 }: {
-  setAttributes: (attributes: Attributes) => void
-  attributes: Attributes
+  contextIndex: number
 }) {
-  console.log("re-render dis dick")
+  const { setValue, watch } = useFormContext<ContextBuilderForm>()
+  const attributes = watch(`contexts.${contextIndex}.attributes`)
+
+  const setAttributes = (attributes: Attributes) => {
+    setValue(`contexts.${contextIndex}.attributes`, attributes)
+  }
 
   const addAttribute = (attribute: string) => {
-    setAttributes({
-      ...attributes,
-      [attribute]: "default",
-    })
+    setValue(`contexts.${contextIndex}.attributes.${attribute}`, "default")
   }
 
   const defaultAttributes: Map<string, string> = new Map([
@@ -79,7 +82,7 @@ export default function AttributesSelection({
   return (
     <FormItem className="flex flex-col">
       <FormLabel>Attributes</FormLabel>
-      <Popover open>
+      <Popover>
         <PopoverTrigger asChild>
           <FormControl>
             <Button>

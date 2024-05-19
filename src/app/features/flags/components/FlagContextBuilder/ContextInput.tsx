@@ -1,6 +1,7 @@
 "use client"
 import { CheckIcon, ChevronsUpDown } from "lucide-react"
 import { useState } from "react"
+import { useFormContext } from "react-hook-form"
 
 import {
   Button,
@@ -21,15 +22,18 @@ import {
 } from "@/app/components/ui"
 import { cn } from "@/app/lib/utils"
 
+import { ContextBuilderForm } from "./useContextBuilderForm"
+
 export default function ContextInput({
   contextIndex,
-  setContextKind,
   contextKind,
 }: {
   contextIndex: number
-  setContextKind: (value: string) => void
   contextKind: string
 }) {
+  const { setValue } = useFormContext<ContextBuilderForm>()
+  const setContextKind = (value: string) =>
+    setValue(`contexts.${contextIndex}.kind`, value)
   const defaultContextKinds: Set<string> = new Set(["user", contextKind])
   const [contextKindList, setContextKindList] = useState(defaultContextKinds)
 

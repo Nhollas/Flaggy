@@ -1,5 +1,7 @@
 "use client"
 
+import { useFormContext } from "react-hook-form"
+
 import {
   FormControl,
   FormField,
@@ -14,29 +16,28 @@ import {
   TableRow,
 } from "@/app/components/ui"
 
-import { Attributes } from "../../types"
+import { ContextBuilderForm } from "./useContextBuilderForm"
 
-const AttributesTable = ({
-  attributes,
-  contextIndex,
-}: {
-  contextIndex: number
-  attributes: Attributes
-}) => (
-  <Table>
-    <TableHeader>
-      <TableRow>
-        <TableHead className="w-[100px]">Attribute</TableHead>
-        <TableHead className="text-right">Value</TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      {Object.entries(attributes).map(([key]) => (
-        <TestRow key={key} attribute={key} contextIndex={contextIndex} />
-      ))}
-    </TableBody>
-  </Table>
-)
+const AttributesTable = ({ contextIndex }: { contextIndex: number }) => {
+  const { watch } = useFormContext<ContextBuilderForm>()
+  const attributes = watch(`contexts.${contextIndex}.attributes`)
+
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">Attribute</TableHead>
+          <TableHead className="text-right">Value</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Object.entries(attributes).map(([key]) => (
+          <TestRow key={key} attribute={key} contextIndex={contextIndex} />
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
 
 export default AttributesTable
 

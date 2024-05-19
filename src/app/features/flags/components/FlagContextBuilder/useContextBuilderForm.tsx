@@ -24,6 +24,7 @@ export const useContextBuilderForm = () =>
     resolver: zodResolver(contextBuilderFormSchema),
     defaultValues: {
       contexts: [],
+      preloadedState: undefined,
       redirectUrl: "/",
     },
   })

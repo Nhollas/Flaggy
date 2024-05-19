@@ -4,7 +4,7 @@ import { useFieldArray } from "react-hook-form"
 
 import { Button, Form } from "@/app/components/ui"
 
-import { ContextContainer } from "./ContextContainer"
+import ContextContainer from "./ContextContainer"
 import { PreloadedStateInput } from "./PreloadedStateInput"
 import { RedirectUrlInput } from "./RedirectUrlInput"
 import {
@@ -14,19 +14,24 @@ import {
 
 export function FlagContextBuilder() {
   const form = useContextBuilderForm()
-
   const { append, fields: contexts } = useFieldArray({
     control: form.control,
     name: "contexts",
   })
 
-  const addBlankContext = () =>
-    append({
-      kind: "user",
-      attributes: {
-        key: "user-123",
+  console.log("Rendering FlagContextBuilder", contexts)
+
+  const addBlankContext = () => {
+    append(
+      {
+        kind: "user",
+        attributes: {
+          key: "user-123",
+        },
       },
-    })
+      { shouldFocus: false },
+    )
+  }
 
   const onSubmit = (payload: ContextBuilderForm) => {
     const data = JSON.stringify({ contexts: payload.contexts })

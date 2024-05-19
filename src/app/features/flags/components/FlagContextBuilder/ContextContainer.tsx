@@ -1,8 +1,10 @@
+import { memo } from "react"
+
 import { AttributesInput } from "./AttributesInput"
 import { AttributesTable } from "./AttributesTable"
 import { ContextInput } from "./ContextInput"
 
-export const ContextContainer = ({
+const ContextContainer = ({
   contextKind,
   index,
 }: {
@@ -21,3 +23,5 @@ export const ContextContainer = ({
     </div>
   )
 }
+
+export default memo(ContextContainer)

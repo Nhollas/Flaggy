@@ -26,7 +26,7 @@ export function FlagContextBuilder() {
     name: "contexts",
   })
 
-  console.log("Rendering FlagContextBuilder", contexts)
+  // console.log("Rendering FlagContextBuilder", contexts)
 
   const addBlankContext = () => {
     append(

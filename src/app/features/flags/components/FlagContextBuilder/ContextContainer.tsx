@@ -3,7 +3,7 @@ import { memo } from "react"
 import { Attributes, Context } from "../../types"
 
 import { AttributesSelection } from "./AttributesSelection"
-import { AttributesTable } from "./AttributesTable"
+import AttributesTable from "./AttributesTable"
 import { ContextInput } from "./ContextInput"
 
 const ContextContainer = ({

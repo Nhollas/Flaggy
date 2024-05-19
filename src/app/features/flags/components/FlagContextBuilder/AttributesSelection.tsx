@@ -29,7 +29,7 @@ export function AttributesSelection({
   setAttributes: (attributes: Attributes) => void
   attributes: Attributes
 }) {
-  console.log("Rendering AttributesSelection", { attributes })
+  // console.log("Rendering AttributesSelection", { attributes })
 
   const addAttribute = (attribute: string) => {
     setAttributes({

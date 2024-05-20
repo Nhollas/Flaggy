@@ -31,7 +31,6 @@ export default function ContextInput({
   contextIndex: number
   contextKind: string
 }) {
-  console.log("ContextInput Rendered", contextIndex)
   const { setValue } = useFormContext<ContextBuilderForm>()
   const setContextKind = (value: string) =>
     setValue(`contexts.${contextIndex}.kind`, value)

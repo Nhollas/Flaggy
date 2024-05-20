@@ -34,8 +34,7 @@ export function PreloadedStateInput() {
 
     const urlPathame = new URL(redirectUrl).pathname
 
-    console.log("Valid data: ", valid)
-    setValue("contexts", data.contexts)
+    setValue("contexts", valid.contexts)
     setValue("redirectUrl", urlPathame)
   }
 

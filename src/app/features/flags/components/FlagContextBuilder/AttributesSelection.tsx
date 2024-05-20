@@ -30,7 +30,6 @@ export default function AttributesSelection({
 }: {
   contextIndex: number
 }) {
-  console.log("AttributesSelection Rendered", contextIndex)
   const { setValue, watch } = useFormContext<ContextBuilderForm>()
   const attributes = watch(`contexts.${contextIndex}.attributes`)
 
@@ -42,8 +41,20 @@ export default function AttributesSelection({
     setValue(`contexts.${contextIndex}.attributes.${attribute}`, "default")
   }
 
+  const stringToTitleCase = (str: string) =>
+    str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+
+  const existingAtributesWithKeyTitleCased = Object.entries(attributes).map(
+    ([key]) => {
+      return [key, stringToTitleCase(key)]
+    },
+  ) as [string, string][]
+
   const defaultAttributes: Map<string, string> = new Map([
-    ...Object.entries(attributes),
+    ...existingAtributesWithKeyTitleCased,
     ["country", "Country"],
     ["email", "Email"],
     ["ip", "IP Address"],
@@ -60,7 +71,9 @@ export default function AttributesSelection({
 
   const handleAddCustomAttribute = (search: string) => {
     const loweredSearch = search.toLowerCase()
-    setAttributeMenuItems((prev) => new Map(prev).set(loweredSearch, search))
+    setAttributeMenuItems((prev) =>
+      new Map(prev).set(loweredSearch, stringToTitleCase(search)),
+    )
     addAttribute(loweredSearch)
     setSearch("")
   }

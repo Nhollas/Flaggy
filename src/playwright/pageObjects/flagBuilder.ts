@@ -55,6 +55,22 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       const url = await page.evaluate(() => navigator.clipboard.readText())
       return await page.goto(url)
     },
+    pastePreloadedState: async (url: string) => {
+      /* # https://github.com/microsoft/playwright/issues/24039
+        await page.evaluate(() => navigator.clipboard.writeText(url))
+
+        Does not work and is currently a known bug.
+      */
+      const redirectUrlInput = page.getByPlaceholder("Redirect Url")
+
+      await redirectUrlInput.fill(url)
+      await redirectUrlInput.press("ControlOrMeta+a")
+      await redirectUrlInput.press("ControlOrMeta+c")
+
+      await page
+        .getByPlaceholder("Preloaded State (only pasting allowed).")
+        .press("ControlOrMeta+v")
+    },
     setupSingleContextExample: async () => {
       await self.goTo()
       await self.clickAddContext()

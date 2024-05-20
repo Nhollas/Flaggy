@@ -135,7 +135,6 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       const input = attributeRow.getByRole("textbox")
       await input.fill(value)
     },
-    // Expectations
     expect: {
       attributeOptionIsDisabled: async (attribute: string) => {
         const attr = await internal.expectOptionIsVisible(attribute)

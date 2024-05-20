@@ -22,7 +22,7 @@ export default defineConfig({
   testMatch: "**/*.e2e.ts",
   /* Retry on CI only */
   retries: undefined,
-  timeout: 10000,
+  timeout: 5000,
   /* Opt out of parallel tests on CI. */
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",

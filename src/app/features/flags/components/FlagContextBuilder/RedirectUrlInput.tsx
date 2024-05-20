@@ -1,7 +1,5 @@
 "use client"
 
-import { useFormContext } from "react-hook-form"
-
 import {
   FormControl,
   FormField,
@@ -11,14 +9,9 @@ import {
   Input,
 } from "@/app/components/ui"
 
-import { ContextBuilderForm } from "./useContextBuilderForm"
-
 export function RedirectUrlInput() {
-  const { control } = useFormContext<ContextBuilderForm>()
-
   return (
     <FormField
-      control={control}
       name="redirectUrl"
       render={({ field }) => (
         <FormItem>

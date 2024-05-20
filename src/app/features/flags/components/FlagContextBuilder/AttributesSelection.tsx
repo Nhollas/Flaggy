@@ -1,7 +1,7 @@
 "use client"
 
 import { Plus, CheckIcon } from "lucide-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 
 import {
@@ -47,23 +47,26 @@ export default function AttributesSelection({
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ")
 
-  const existingAtributesWithKeyTitleCased = Object.entries(attributes).map(
-    ([key]) => {
-      return [key, stringToTitleCase(key)]
-    },
-  ) as [string, string][]
+  const defaultAttributes = useMemo(() => {
+    const existingAtributesWithKeyTitleCased = Object.entries(attributes).map(
+      ([key]) => {
+        return [key, stringToTitleCase(key)]
+      },
+    ) as [string, string][]
 
-  const defaultAttributes: Map<string, string> = new Map([
-    ...existingAtributesWithKeyTitleCased,
-    ["country", "Country"],
-    ["email", "Email"],
-    ["ip", "IP Address"],
-    ["key", "Key"],
-    ["name", "Name"],
-    ["anonymous", "Anonymous"],
-    ["firstname", "First Name"],
-    ["lastname", "Last Name"],
-  ])
+    return new Map([
+      ...existingAtributesWithKeyTitleCased,
+      ["country", "Country"],
+      ["email", "Email"],
+      ["ip", "IP Address"],
+      ["key", "Key"],
+      ["name", "Name"],
+      ["anonymous", "Anonymous"],
+      ["firstname", "First Name"],
+      ["lastname", "Last Name"],
+    ])
+  }, [attributes])
+
   const [attributeMenuItems, setAttributeMenuItems] =
     useState(defaultAttributes)
 

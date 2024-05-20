@@ -195,9 +195,6 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
         await expect(contextKindButton).not.toBeVisible()
         await internal.expectOptionIsUnselected(kind)
       },
-      contextKindOptionIsVisible: async (kind: string) => {
-        return await internal.expectOptionIsVisible(kind)
-      },
     },
   }
   return self

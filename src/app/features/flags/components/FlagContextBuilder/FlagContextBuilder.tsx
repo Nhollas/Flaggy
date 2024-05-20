@@ -31,20 +31,26 @@ export function FlagContextBuilder() {
     )
   }
 
-  const onSubmit = (payload: ContextBuilderForm) => {
-    const data = JSON.stringify({ contexts: payload.contexts })
+  const createAndCopyContextUrl = ({
+    contexts,
+    redirectUrl,
+  }: ContextBuilderForm) => {
+    const data = JSON.stringify({ contexts })
 
     const baseUrl = window.location.origin
     let url = `${baseUrl}/api/flag/context`
     url += "?data=" + data
-    url += `&redirectUrl=${baseUrl}${payload.redirectUrl}`
+    url += `&redirectUrl=${baseUrl}${redirectUrl}`
 
-    navigator.clipboard.writeText(url.toString())
+    navigator.clipboard.writeText(url)
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(createAndCopyContextUrl)}
+        className="space-y-6"
+      >
         <h1 className="text-xl font-medium">Flag Context Builder</h1>
         <PreloadedStateInput />
         <Button type="button" onClick={addBlankContext}>

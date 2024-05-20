@@ -32,7 +32,7 @@ const AttributesTable = ({ contextIndex }: { contextIndex: number }) => {
       </TableHeader>
       <TableBody>
         {Object.entries(attributes).map(([key]) => (
-          <TestRow key={key} attribute={key} contextIndex={contextIndex} />
+          <AttributeRow key={key} attribute={key} contextIndex={contextIndex} />
         ))}
       </TableBody>
     </Table>
@@ -41,7 +41,7 @@ const AttributesTable = ({ contextIndex }: { contextIndex: number }) => {
 
 export default AttributesTable
 
-const TestRow = ({
+const AttributeRow = ({
   attribute,
   contextIndex,
 }: {

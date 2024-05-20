@@ -59,7 +59,7 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       /* # https://github.com/microsoft/playwright/issues/24039
         await page.evaluate(() => navigator.clipboard.writeText(url))
 
-        Does not work and is currently a known bug.
+        Does not work and is currently a known bug when using headless chromium.
       */
       const redirectUrlInput = page.getByPlaceholder("Redirect Url")
 

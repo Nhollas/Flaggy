@@ -15,7 +15,9 @@ import {
 } from "./useContextBuilderForm"
 
 const DynamicContextContainer = dynamic(() => import("./ContextContainer"), {
-  loading: () => <Skeleton className="w-[100px] h-[20px] rounded-full" />,
+  loading: () => (
+    <Skeleton className="w-[448px] h-[192.5px] bg-gray-50 rounded-md border" />
+  ),
 })
 
 export function FlagContextBuilder() {

@@ -11,7 +11,6 @@ const NextApiClient: INextApiClient = {
       "Content-Type": "application/json",
     },
   }),
-  createUrl: ClientFactory.baseUrl("/api"),
 }
 
 interface INextApiService extends IService {
@@ -19,9 +18,6 @@ interface INextApiService extends IService {
 }
 
 const NextApiService = (): INextApiService => ({
-  createUrl(path: string) {
-    return NextApiClient.createUrl(path)
-  },
   clearContext() {
     return NextApiClient.instance.get("/flag/context/clear")
   },

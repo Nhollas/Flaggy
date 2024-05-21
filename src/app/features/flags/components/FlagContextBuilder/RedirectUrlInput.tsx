@@ -6,8 +6,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
-} from "@/app/components/ui"
+} from "@/app/components/ui/form"
+import { Input } from "@/app/components/ui/input"
 
 export function RedirectUrlInput() {
   return (

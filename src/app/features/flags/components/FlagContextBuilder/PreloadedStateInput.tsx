@@ -8,8 +8,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Textarea,
-} from "@/app/components/ui"
+} from "@/app/components/ui/form"
+import { Textarea } from "@/app/components/ui/textarea"
 
 import {
   ContextBuilderForm,

@@ -68,7 +68,7 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       await redirectUrlInput.press("ControlOrMeta+c")
 
       await page
-        .getByPlaceholder("Preloaded State (only pasting allowed).")
+        .getByPlaceholder("Preloade State With Url (only pasting allowed).")
         .press("ControlOrMeta+v")
     },
     setupSingleContextExample: async () => {

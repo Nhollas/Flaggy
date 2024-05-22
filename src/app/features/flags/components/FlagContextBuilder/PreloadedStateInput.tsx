@@ -53,11 +53,11 @@ export function PreloadedStateInput() {
       name="preloadedState"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Preloaded State</FormLabel>
+          <FormLabel>Preload State With Url</FormLabel>
           <FormControl>
             <Textarea
               {...field}
-              placeholder="Preloaded State (only pasting allowed)."
+              placeholder="Preloade State With Url (only pasting allowed)."
               onPaste={handlePaste}
               onKeyDown={allowPasting}
             />

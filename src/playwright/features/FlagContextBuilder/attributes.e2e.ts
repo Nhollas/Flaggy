@@ -12,10 +12,10 @@ test("Importing context with custom attributes populates attribute selection", a
 }) => {
   const u = createTestUtils({ page, context, browser })
 
-  const url = `http://localhost:3000/api/flag/context?data={"contexts":[{"kind":"user","attributes":{"key":"user-123","custom":"customValue"}}]}&redirectUrl=http://localhost:3000/`
+  const singleContextWithCustomAttribute = `http://localhost:3000/api/flag/context?data={"contexts":[{"kind":"user","attributes":{"key":"user-123","custom":"customValue"}}]}&redirectUrl=http://localhost:3000/`
 
   await u.po.flagBuilder.goTo()
-  await u.po.flagBuilder.pastePreloadedState(url)
+  await u.po.flagBuilder.pastePreloadedState(singleContextWithCustomAttribute)
 
   await u.po.flagBuilder.openAttributesDropdown()
   await u.po.flagBuilder.expect.attributeOptionsAreVisible(

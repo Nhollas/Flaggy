@@ -1,4 +1,4 @@
-import { Browser, BrowserContext, Page } from "@playwright/test"
+import { Page } from "@playwright/test"
 
 import { createFlagBuilderComponentPageObject } from "./pageObjects/flagBuilder"
 
@@ -7,8 +7,6 @@ export const buildLocalUrl = (port: string, path: string = "") =>
 
 type TestUtilsArgs = {
   page: Page
-  context: BrowserContext
-  browser: Browser
 }
 
 export const createTestUtils = (params: TestUtilsArgs) => {

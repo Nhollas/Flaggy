@@ -1,10 +1,8 @@
-import type { Browser, BrowserContext, Page } from "@playwright/test"
+import type { Page } from "@playwright/test"
 import { expect } from "@playwright/test"
 
 export type TestArgs = {
   page: Page
-  context: BrowserContext
-  browser: Browser
 }
 
 export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {

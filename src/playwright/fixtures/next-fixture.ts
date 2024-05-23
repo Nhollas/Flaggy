@@ -4,10 +4,12 @@ import { type SetupServer } from "msw/node"
 import { server } from "@/test/server"
 
 import { setupNextServer } from "../setup"
-import { buildLocalUrl } from "../utils"
+import { buildLocalUrl, createTestUtils } from "../utils"
 
 export const test = base.extend<
-  object,
+  {
+    utils: ReturnType<typeof createTestUtils>
+  },
   {
     port: string
     requestInterceptor: SetupServer
@@ -15,6 +17,11 @@ export const test = base.extend<
 >({
   baseURL: async ({ port }, use) => {
     await use(buildLocalUrl(port))
+  },
+  utils: async ({ page }, use) => {
+    const u = createTestUtils({ page })
+
+    await use(u)
   },
   port: [
     async ({}, use) => {

@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic"
-import { Suspense } from "react"
 
 import { FlagContext } from "../features/flags"
 
@@ -17,11 +16,9 @@ const Providers = ({
   flagContext: FlagContext
 }) => {
   return (
-    <Suspense>
-      <AsyncLDProvider flagContext={flagContext}>
-        <QueryClientProvider>{children}</QueryClientProvider>
-      </AsyncLDProvider>
-    </Suspense>
+    <AsyncLDProvider flagContext={flagContext}>
+      <QueryClientProvider>{children}</QueryClientProvider>
+    </AsyncLDProvider>
   )
 }
 

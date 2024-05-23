@@ -1,6 +1,26 @@
 import { LDContext } from "@launchdarkly/node-server-sdk"
+import { cache } from "react"
 
+import { getFlagContextRequestSchema } from "./schemas"
 import { Context, FlagContext } from "./types"
+
+export const getFlagContext = cache(async (): Promise<FlagContext> => {
+  const cookieList = (await import("next/headers")).cookies()
+
+  const featureContextCookie = cookieList.get("featureContext")
+
+  if (!featureContextCookie) return { contexts: [] }
+
+  try {
+    const featureContext = await getFlagContextRequestSchema.parseAsync(
+      featureContextCookie.value,
+    )
+
+    return featureContext
+  } catch (error) {
+    return { contexts: [] }
+  }
+})
 
 export const launchDarklyContextAdapter = (
   flagContext: FlagContext,

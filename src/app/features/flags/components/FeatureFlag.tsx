@@ -1,7 +1,6 @@
-import {
-  LaunchDarklyFlagProvider,
-  getFlagContext,
-} from "@/app/lib/launchdarklyServer"
+import { getVariation } from "@/app/lib/launchdarklyServer"
+
+import { getFlagContext, launchDarklyContextAdapter } from "../utils"
 
 export async function FeatureFlag<TValue>({
   flag,
@@ -13,11 +12,11 @@ export async function FeatureFlag<TValue>({
   render: (value: TValue) => JSX.Element
 }) {
   const context = await getFlagContext()
-  const flagValue = await LaunchDarklyFlagProvider.getValue(
+  const flagValue = await getVariation({
     flag,
-    context,
+    context: launchDarklyContextAdapter(context),
     defaultValue,
-  )
+  })
 
   return render(flagValue)
 }

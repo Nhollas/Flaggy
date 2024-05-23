@@ -1,13 +1,5 @@
 import LaunchDarkly, { LDClient } from "@launchdarkly/node-server-sdk"
 import { trace, SpanStatusCode } from "@opentelemetry/api"
-import { cookies } from "next/headers"
-import { cache } from "react"
-
-import {
-  FlagContext,
-  getFlagContextRequestSchema,
-  launchDarklyContextAdapter,
-} from "@/app/features/flags"
 
 import { env } from "./env"
 
@@ -26,11 +18,16 @@ async function getClient() {
   return launchDarklyClient
 }
 
-async function getVariation<T>(
-  flag: string,
-  context: LaunchDarkly.LDContext,
-  defaultValue: T,
-): Promise<T> {
+type GetVariationArgs<T> = {
+  flag: string
+  context: LaunchDarkly.LDContext
+  defaultValue: T
+}
+export async function getVariation<T>({
+  flag,
+  context,
+  defaultValue,
+}: GetVariationArgs<T>): Promise<T> {
   return await trace
     .getTracer("launchdarkly")
     .startActiveSpan("getVariation", async (span) => {
@@ -58,42 +55,4 @@ async function getVariation<T>(
         span.end()
       }
     })
-}
-
-export const getFlagContext = cache(async (): Promise<FlagContext> => {
-  const cookieList = cookies()
-
-  const featureContextCookie = cookieList.get("featureContext")
-
-  if (!featureContextCookie) return { contexts: [] }
-
-  try {
-    const featureContext = await getFlagContextRequestSchema.parseAsync(
-      featureContextCookie.value,
-    )
-
-    return featureContext
-  } catch (error) {
-    return { contexts: [] }
-  }
-})
-
-interface IFeatureFlagProvider {
-  getValue<T>(
-    flag: string,
-    flagContext: FlagContext,
-    defaultValue: T,
-  ): Promise<T>
-}
-
-export const LaunchDarklyFlagProvider: IFeatureFlagProvider = {
-  getValue<T>(
-    flag: string,
-    flagContext: FlagContext,
-    defaultValue: T,
-  ): Promise<T> {
-    const context = launchDarklyContextAdapter(flagContext)
-
-    return getVariation(flag, context, defaultValue)
-  },
 }

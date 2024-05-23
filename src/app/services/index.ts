@@ -1,7 +1,5 @@
-import { AxiosInstance } from "axios"
-
 export interface IClient {
-  instance: AxiosInstance
+  fetch: (url: string, options?: RequestInit) => Promise<Response>
 }
 
 export interface IService {}

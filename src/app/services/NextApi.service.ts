@@ -1,12 +1,23 @@
-import ClientFactory from "./ClientFactory"
-
 import { IClient, IService } from "."
 
-interface INextApiClient extends IClient {}
+interface FetchConfig extends RequestInit {
+  baseUrl?: string
+}
 
-const NextApiClient: INextApiClient = {
-  instance: ClientFactory.create({
-    baseURL: "/api",
+function createFetchWrapper(defaultConfig: FetchConfig) {
+  return function (
+    input: string | URL | Request,
+    init?: RequestInit | undefined,
+  ) {
+    const combinedConfig = { ...defaultConfig, ...init }
+
+    return fetch(input, combinedConfig)
+  }
+}
+
+const NextApiClient: IClient = {
+  fetch: createFetchWrapper({
+    baseUrl: "/api",
     headers: {
       "Content-Type": "application/json",
     },
@@ -14,12 +25,14 @@ const NextApiClient: INextApiClient = {
 }
 
 interface INextApiService extends IService {
-  clearContext(): Promise<void>
+  clearContext(): Promise<Response>
 }
 
 const NextApiService = (): INextApiService => ({
   clearContext() {
-    return NextApiClient.instance.get("/flag/context/clear")
+    return NextApiClient.fetch("/flag/context/clear", {
+      method: "GET",
+    })
   },
 })
 

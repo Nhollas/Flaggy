@@ -11,5 +11,3 @@ export function fetchWrapper(
     return fetch(baseUrl + url, mergedConfig)
   }
 }
-
-export interface IService {}

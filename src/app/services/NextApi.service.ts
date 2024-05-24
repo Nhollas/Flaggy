@@ -1,4 +1,4 @@
-import { IClient, IService, fetchWrapper } from "."
+import { IClient, fetchWrapper } from "."
 
 const NextApiClient: IClient = {
   fetch: fetchWrapper("/api", {
@@ -8,7 +8,7 @@ const NextApiClient: IClient = {
   }),
 }
 
-interface INextApiService extends IService {
+interface INextApiService {
   clearContext(): Promise<Response>
 }
 

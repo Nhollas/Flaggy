@@ -79,6 +79,9 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
     clickViewContext: async () => {
       await page.getByRole("button", { name: "View Context" }).click()
     },
+    clickClearContext: async () => {
+      await page.getByRole("button", { name: "Clear Context" }).click()
+    },
     clickGenerateUrl: async () => {
       await page.getByRole("button", { name: "Generate Url" }).click()
     },
@@ -134,6 +137,14 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
       await input.fill(value)
     },
     expect: {
+      viewContextButtonIsHidden: async () => {
+        await expect(
+          page.getByRole("button", { name: "View Context" }),
+        ).not.toBeVisible()
+      },
+      displayTableIsHidden: async () => {
+        await expect(page.getByRole("dialog")).not.toBeVisible()
+      },
       attributeOptionIsDisabled: async (attribute: string) => {
         const attr = await internal.expectOptionIsVisible(attribute)
         await expect(attr).toBeDisabled()
@@ -166,16 +177,19 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
         await expect(attributeRow).toBeVisible()
         await expect(attributeRow.getByRole("textbox")).toHaveValue(value)
       },
-      attributeInDisplayTableWithValue: async ({
-        attribute,
+      itemInDisplayTableWithValue: async ({
+        item,
         value,
       }: {
-        attribute: string
+        item: string
         value: string
       }) => {
-        const attributeRow = page.getByRole("row", { name: attribute })
-        await expect(attributeRow).toBeVisible()
-        await expect(attributeRow.getByText(value)).toBeVisible()
+        const itemRow = page.getByRole("row", { name: item })
+        await expect(itemRow).toBeVisible()
+        await expect(itemRow.getByText(value)).toBeVisible()
+      },
+      contextKindInDisplayTable: async (kind: string) => {
+        await expect(page.getByText(`Context Kind:${kind}`)).toBeVisible()
       },
       contextKindIsSelected: async (kind: string) => {
         const contextKindButton = page

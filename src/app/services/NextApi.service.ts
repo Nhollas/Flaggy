@@ -1,23 +1,7 @@
-import { IClient, IService } from "."
-
-interface FetchConfig extends RequestInit {
-  baseUrl?: string
-}
-
-function createFetchWrapper(defaultConfig: FetchConfig) {
-  return function (
-    input: string | URL | Request,
-    init?: RequestInit | undefined,
-  ) {
-    const combinedConfig = { ...defaultConfig, ...init }
-
-    return fetch(input, combinedConfig)
-  }
-}
+import { IClient, IService, fetchWrapper } from "."
 
 const NextApiClient: IClient = {
-  fetch: createFetchWrapper({
-    baseUrl: "/api",
+  fetch: fetchWrapper("/api", {
     headers: {
       "Content-Type": "application/json",
     },

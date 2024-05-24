@@ -19,10 +19,12 @@ test("Context kind can be changed", async ({ utils }) => {
 test("Importing context with custom contextKinds populates contextKind selection", async ({
   utils,
 }) => {
-  const url = `http://localhost:3000/api/flag/context?data={"contexts":[{"kind":"basket","attributes":{"key":"user-123"}}]}&redirectUrl=http://localhost:3000/`
+  const singleContextWithCustomContextKind = `http://localhost:3000/api/flag/context?data={"contexts":[{"kind":"basket","attributes":{"key":"user-123"}}]}&redirectUrl=http://localhost:3000/`
 
   await utils.po.flagBuilder.goTo()
-  await utils.po.flagBuilder.pastePreloadedState(url)
+  await utils.po.flagBuilder.pastePreloadedState(
+    singleContextWithCustomContextKind,
+  )
 
   await utils.po.flagBuilder.openContextKindDropdown()
   await utils.po.flagBuilder.expect.contextKindOptionsAreVisible(

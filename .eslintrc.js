@@ -6,7 +6,7 @@ module.exports = {
   },
   parserOptions: { ecmaVersion: "latest", sourceType: "module" },
   ignorePatterns: ["node_modules/*"],
-  extends: ["eslint:recommended"],
+  extends: ["eslint:recommended", "next/core-web-vitals"],
   overrides: [
     {
       files: ["**/*.ts", "**/*.tsx"],
@@ -34,7 +34,6 @@ module.exports = {
         "plugin:prettier/recommended",
         "plugin:tailwindcss/recommended",
         "plugin:vitest/legacy-recommended",
-        "next/core-web-vitals",
       ],
       rules: {
         "import/no-cycle": "error",

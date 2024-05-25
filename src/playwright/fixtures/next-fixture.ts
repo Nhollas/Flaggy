@@ -24,7 +24,7 @@ export const test = base.extend<
     await use(u)
   },
   port: [
-    async (_, use) => {
+    async ({}, use) => {
       const port = await setupNextServer()
 
       await use(port)
@@ -32,7 +32,7 @@ export const test = base.extend<
     { auto: true, scope: "worker" },
   ],
   requestInterceptor: [
-    async (_, use) => {
+    async ({}, use) => {
       server.listen({ onUnhandledRequest: "warn" })
 
       await use(server)

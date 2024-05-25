@@ -3,6 +3,8 @@
 import { useFlags, useLDClient } from "launchdarkly-react-client-sdk"
 import { useEffect } from "react"
 
+import { Paragraph } from "@/app/components/ui"
+
 export default function TestPage() {
   const { exampleFlag } = useFlags()
   const ldClient = useLDClient()
@@ -18,7 +20,7 @@ export default function TestPage() {
 
   return (
     <section className="w-full space-y-8">
-      <p>Example flag is: {exampleFlag ? "true" : "false"}</p>
+      <Paragraph>Example flag is: {exampleFlag ? "true" : "false"}</Paragraph>
     </section>
   )
 }

@@ -55,6 +55,7 @@ module.exports = {
             alphabetize: { order: "asc", caseInsensitive: true },
           },
         ],
+        "no-empty-pattern": "off",
         "import/default": "off",
         "import/no-named-as-default-member": "off",
         "import/no-named-as-default": "off",

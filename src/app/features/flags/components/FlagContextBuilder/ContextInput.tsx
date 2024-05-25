@@ -65,7 +65,7 @@ export default function ContextInput({
                   {contextKindList.has(field.value)
                     ? field.value
                     : "Select context kind"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
@@ -97,7 +97,7 @@ export default function ContextInput({
                       >
                         {value}
                         {value === field.value && (
-                          <CheckIcon className="ml-auto h-4 w-4" />
+                          <CheckIcon className="ml-auto size-4" />
                         )}
                       </CommandItem>
                     ))}

@@ -40,7 +40,7 @@ export function FlagContextDetails({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" className="fixed top-4 right-4">
+        <Button variant="outline" className="fixed right-4 top-4">
           View Context
         </Button>
       </SheetTrigger>
@@ -54,11 +54,11 @@ export function FlagContextDetails({
         {flagContext.contexts.map((context, i) => (
           <div
             key={i}
-            className="flex flex-col gap-y-2 p-4 bg-gray-50 rounded-md border w-full max-w-md"
+            className="flex w-full max-w-md flex-col gap-y-2 rounded-md border bg-gray-50 p-4"
           >
-            <div className="flex flex-row gap-x-4 items-center">
+            <div className="flex flex-row items-center gap-x-4">
               <h1 className="font-medium">Context Kind:</h1>
-              <p className="bg-white rounded-md px-4 py-1 border w-max">
+              <p className="w-max rounded-md border bg-white px-4 py-1">
                 {context.kind}
               </p>
             </div>
@@ -93,7 +93,7 @@ function AttributesTable({
       <TableBody>
         {Object.entries(attributes).map(([key, value]) => (
           <TableRow key={key}>
-            <TableCell className="font-medium text-[1.05rem] max-w-[150px] truncate">
+            <TableCell className="max-w-[150px] truncate text-[1.05rem] font-medium">
               {key}
             </TableCell>
             <TableCell>

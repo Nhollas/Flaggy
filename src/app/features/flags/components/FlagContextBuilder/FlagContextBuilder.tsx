@@ -16,7 +16,7 @@ import {
 
 const DynamicContextContainer = dynamic(() => import("./ContextContainer"), {
   loading: () => (
-    <Skeleton className="w-[448px] h-[192.5px] bg-gray-50 rounded-md border" />
+    <Skeleton className="h-[192.5px] w-[448px] rounded-md border bg-gray-50" />
   ),
 })
 

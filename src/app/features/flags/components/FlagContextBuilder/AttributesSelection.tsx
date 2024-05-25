@@ -103,7 +103,7 @@ export default function AttributesSelection({
           <FormControl>
             <Button>
               Edit attributes
-              <Plus className="ml-2 h-4 w-4 shrink-0 opacity-75" />
+              <Plus className="ml-2 size-4 shrink-0 opacity-75" />
             </Button>
           </FormControl>
         </PopoverTrigger>
@@ -134,7 +134,7 @@ export default function AttributesSelection({
                   >
                     {label}
                     {attribute in attributes && (
-                      <CheckIcon className="ml-auto h-4 w-4" />
+                      <CheckIcon className="ml-auto size-4" />
                     )}
                   </CommandItem>
                 ))}

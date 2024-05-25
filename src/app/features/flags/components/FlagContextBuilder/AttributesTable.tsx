@@ -49,7 +49,7 @@ const AttributeRow = ({
   contextIndex: number
 }) => (
   <TableRow>
-    <TableCell className="font-medium text-[1.05rem] max-w-[150px] truncate">
+    <TableCell className="max-w-[150px] truncate text-[1.05rem] font-medium">
       {attribute}
     </TableCell>
     <TableCell>

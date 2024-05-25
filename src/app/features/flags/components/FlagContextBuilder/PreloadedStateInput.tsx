@@ -1,6 +1,7 @@
 "use client"
 
 import { useFormContext } from "react-hook-form"
+import { z } from "zod"
 
 import {
   FormControl,
@@ -17,12 +18,25 @@ import {
 } from "./useContextBuilderForm"
 
 export function PreloadedStateInput() {
-  const { control, setValue } = useFormContext<ContextBuilderForm>()
+  const { setValue, setError, control } = useFormContext<ContextBuilderForm>()
 
   const handlePaste = async (event: React.ClipboardEvent) => {
     const pastedText = event.clipboardData.getData("text")
 
-    const url = new URL(pastedText)
+    const isValidUrl = await z.string().url().safeParseAsync(pastedText)
+
+    console.log(isValidUrl)
+    if (!isValidUrl.success) {
+      setError("preloadedState", {
+        type: "invalidUrl",
+        message: "Invalid URL",
+      })
+      return
+    }
+
+    console.log("deez nuts")
+
+    const url = new URL(isValidUrl.data)
 
     const data = JSON.parse(url.searchParams.get("data") || "{}")
     const redirectUrl = url.searchParams.get("redirectUrl") || ""
@@ -33,16 +47,19 @@ export function PreloadedStateInput() {
     })
 
     const urlPathame = new URL(redirectUrl).pathname
-
     setValue("contexts", valid.contexts)
     setValue("redirectUrl", urlPathame)
   }
 
-  const allowPasting = (e: React.KeyboardEvent) => {
-    const isActionCTRLandV =
+  const allowOperations = (e: React.KeyboardEvent) => {
+    const isPasteAction =
       (e.ctrlKey || e.metaKey) && e.key.toUpperCase() === "V"
+    const isSelectAllAction =
+      (e.ctrlKey || e.metaKey) && e.key.toUpperCase() === "A"
+    const isDeleteAction =
+      e.key.toUpperCase() === "DELETE" || e.key.toUpperCase() === "BACKSPACE"
 
-    if (!isActionCTRLandV) {
+    if (!isPasteAction && !isSelectAllAction && !isDeleteAction) {
       e.preventDefault()
     }
   }
@@ -59,7 +76,7 @@ export function PreloadedStateInput() {
               {...field}
               placeholder="Preloade State With Url (only pasting allowed)."
               onPaste={handlePaste}
-              onKeyDown={allowPasting}
+              onKeyDown={allowOperations}
             />
           </FormControl>
           <FormMessage />

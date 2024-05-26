@@ -2,7 +2,7 @@
 const nextConfig = {
   experimental: {
     instrumentationHook: true,
-    optimizePackageImports: ['@/app/components/ui'],
+    optimizePackageImports: ["@/app/components/ui"],
   },
 }
 

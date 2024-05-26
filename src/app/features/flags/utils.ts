@@ -1,25 +1,35 @@
 import { LDContext } from "@launchdarkly/node-server-sdk"
+import { trace } from "@opentelemetry/api"
 import { cache } from "react"
 
 import { getFlagContextRequestSchema } from "./schemas"
 import { Context, FlagContext } from "./types"
 
 export const getFlagContext = cache(async (): Promise<FlagContext> => {
-  const cookieList = (await import("next/headers")).cookies()
+  return await trace
+    .getTracer("example-app")
+    .startActiveSpan("getFlagContext", async (span) => {
+      try {
+        const cookieList = (await import("next/headers")).cookies()
 
-  const featureContextCookie = cookieList.get("featureContext")
+        const featureContextCookie = cookieList.get("featureContext")
 
-  if (!featureContextCookie) return { contexts: [] }
+        if (!featureContextCookie) return { contexts: [] }
 
-  try {
-    const featureContext = await getFlagContextRequestSchema.parseAsync(
-      featureContextCookie.value,
-    )
+        const featureContext = await getFlagContextRequestSchema.parseAsync(
+          featureContextCookie.value,
+        )
 
-    return featureContext
-  } catch (error) {
-    return { contexts: [] }
-  }
+        span.setAttributes({
+          "feature.context": JSON.stringify(featureContext),
+        })
+
+        return featureContext
+      } catch (error) {
+        span.recordException(new Error(String(error)))
+        return { contexts: [] }
+      }
+    })
 })
 
 export const launchDarklyContextAdapter = (

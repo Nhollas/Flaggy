@@ -74,7 +74,7 @@ export function PreloadedStateInput() {
           <FormControl>
             <Textarea
               {...field}
-              placeholder="Preloade State With Url (only pasting allowed)."
+              placeholder="Preload State With Url (only pasting allowed)."
               onPaste={handlePaste}
               onKeyDown={allowOperations}
             />

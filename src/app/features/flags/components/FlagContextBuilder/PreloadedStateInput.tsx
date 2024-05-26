@@ -25,7 +25,6 @@ export function PreloadedStateInput() {
 
     const isValidUrl = await z.string().url().safeParseAsync(pastedText)
 
-    console.log(isValidUrl)
     if (!isValidUrl.success) {
       setError("preloadedState", {
         type: "invalidUrl",
@@ -33,8 +32,6 @@ export function PreloadedStateInput() {
       })
       return
     }
-
-    console.log("deez nuts")
 
     const url = new URL(isValidUrl.data)
 

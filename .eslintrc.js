@@ -36,6 +36,18 @@ module.exports = {
         "plugin:vitest/legacy-recommended",
       ],
       rules: {
+        "no-restricted-imports": [
+          "error",
+          {
+            patterns: [
+              {
+                group: ["@/app/features/*/*"],
+                message:
+                  "Please import from the root @features folder (e.g. @features/ui instead of @features/ui/button).",
+              },
+            ],
+          },
+        ],
         "import/no-cycle": "error",
         "linebreak-style": ["error", "unix"],
         "react/prop-types": "off",

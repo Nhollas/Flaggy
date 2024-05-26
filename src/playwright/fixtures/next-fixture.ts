@@ -1,8 +1,6 @@
 import { test as base } from "@playwright/test"
 import { type SetupServer } from "msw/node"
 
-import { server } from "@/test/server"
-
 import { setupNextServer } from "../setup"
 import { buildLocalUrl, createTestUtils } from "../utils"
 
@@ -30,19 +28,6 @@ export const test = base.extend<
       await use(port)
     },
     { auto: true, scope: "worker" },
-  ],
-  requestInterceptor: [
-    async ({}, use) => {
-      server.listen({ onUnhandledRequest: "warn" })
-
-      await use(server)
-
-      server.resetHandlers()
-      server.close()
-    },
-    {
-      scope: "worker",
-    },
   ],
 })
 

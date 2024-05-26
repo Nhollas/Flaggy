@@ -3,9 +3,7 @@
 import dynamic from "next/dynamic"
 import { useFieldArray } from "react-hook-form"
 
-import { Button } from "@/app/components/ui/button"
-import { Form } from "@/app/components/ui/form"
-import { Skeleton } from "@/app/components/ui/skeleton"
+import { Button, Form, Skeleton } from "@/app/components/ui"
 
 import { PreloadedStateInput } from "./PreloadedStateInput"
 import { RedirectUrlInput } from "./RedirectUrlInput"

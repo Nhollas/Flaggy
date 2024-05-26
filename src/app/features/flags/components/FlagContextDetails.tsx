@@ -3,15 +3,7 @@
 import { useRouter } from "next/navigation"
 
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/app/components/ui"
-import { Button } from "@/app/components/ui/button"
-import {
+  Button,
   Sheet,
   SheetClose,
   SheetContent,
@@ -20,7 +12,13 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/app/components/ui/sheet"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/app/components/ui"
 import NextApiService from "@/app/services/NextApi.service"
 
 import { FlagContext } from "../types"

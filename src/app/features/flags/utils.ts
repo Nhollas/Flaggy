@@ -28,6 +28,8 @@ export const getFlagContext = cache(async (): Promise<FlagContext> => {
       } catch (error) {
         span.recordException(new Error(String(error)))
         return { contexts: [] }
+      } finally {
+        span.end()
       }
     })
 })

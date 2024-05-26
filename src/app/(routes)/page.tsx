@@ -1,5 +1,5 @@
 import { FlagContextBuilder } from "@/app/features/flags"
 
-export default async function Home() {
+export default function Home() {
   return <FlagContextBuilder />
 }

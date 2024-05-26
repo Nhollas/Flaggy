@@ -12,7 +12,6 @@ vi.useFakeTimers()
 import { cookies } from "next/headers"
 import { describe, it, expect, beforeEach, vi, MockedFunction } from "vitest"
 
-import { env } from "@/app/lib/env"
 import modelFactory from "@/test/model-factory"
 
 import { GET } from "./route"
@@ -20,7 +19,6 @@ import { GET } from "./route"
 const buildStringUrlWithDataQuery = (data: string, redirectUrl: string) => {
   const url = new URL("http://localhost")
   url.searchParams.set("data", data)
-  url.searchParams.set("flagSecret", env.FLAG_SECRET)
   url.searchParams.set("redirectUrl", redirectUrl)
   return url.toString()
 }

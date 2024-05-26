@@ -10,11 +10,7 @@ import { SEMRESATTRS_SERVICE_NAME } from "@opentelemetry/semantic-conventions"
 export function getProcessor(): SpanProcessor {
   const exporter = new OTLPTraceExporter()
 
-  return new BatchSpanProcessor(exporter, {
-    maxQueueSize: 16000,
-    maxExportBatchSize: 1000,
-    scheduledDelayMillis: 500,
-  })
+  return new BatchSpanProcessor(exporter)
 }
 
 const sdk = new NodeSDK({

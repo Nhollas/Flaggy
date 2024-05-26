@@ -5,9 +5,13 @@ import { redirect } from "next/navigation"
 export const GET = async () => {
   return await trace
     .getTracer("example-app")
-    .startActiveSpan("clearFlagContextRequest", async () => {
-      cookies().delete("featureContext")
+    .startActiveSpan("clearFlagContextRequest", async (span) => {
+      try {
+        cookies().delete("featureContext")
 
-      return redirect("/")
+        return redirect("/")
+      } finally {
+        span.end()
+      }
     })
 }

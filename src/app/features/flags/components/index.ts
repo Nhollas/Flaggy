@@ -1,2 +1,2 @@
-export * from "./FlagContextContainer"
+export * from "./FlagContextDetails"
 export * from "./FlagContextBuilder/FlagContextBuilder"

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
-import { FlagContextContainer, getFlagContext } from "@/app/features/flags"
+import { getFlagContext } from "@/app/features/flags"
 import Providers from "@/app/providers"
 
 import "./globals.css"
@@ -24,7 +24,6 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers flagContext={flagContext}>
-          <FlagContextContainer />
           <main className="mx-auto min-h-screen max-w-2xl space-y-8 p-8 lg:p-16">
             {children}
           </main>

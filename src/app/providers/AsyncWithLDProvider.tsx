@@ -3,7 +3,11 @@
 import { asyncWithLDProvider } from "launchdarkly-react-client-sdk"
 import { cache, use } from "react"
 
-import { launchDarklyContextAdapter, FlagContext } from "@/app/features/flags"
+import {
+  launchDarklyContextAdapter,
+  FlagContext,
+  FlagContextDetails,
+} from "@/app/features/flags"
 
 const AsyncLDProviderPromise = cache((context: FlagContext) =>
   asyncWithLDProvider({
@@ -21,5 +25,12 @@ export default function AsyncLDProvider({
 }) {
   const LDDynaProvider = use(AsyncLDProviderPromise(flagContext))
 
-  return <LDDynaProvider>{children}</LDDynaProvider>
+  return (
+    <LDDynaProvider>
+      {flagContext.contexts.length > 0 && (
+        <FlagContextDetails flagContext={flagContext} />
+      )}
+      {children}
+    </LDDynaProvider>
+  )
 }

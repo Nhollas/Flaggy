@@ -1,10 +1,12 @@
 # Flaggy
 
-Flaggy provides easy to use tools that help with managing feature flag context. We aim to support multiple SASS flag providers but currently supported providers LaunchDarkly. More to come.
+Flaggy is a unique tool designed to simplify the management of feature flag contexts. It provides an intuitive user interface for setting up and distributing flag contexts within your team or anyone who wants to look at a feature with the safety a feature flag provides.
+
+Currently, Flaggy supports LaunchDarkly as a feature flag provider, but we are actively working on adding support for more providers.
 
 ![The running application](docs/app.png)
 
-Generates you with a link like this:
+Our UI will generate you with a link like this:
 
 ```link
 https://flaggy-six.vercel.app/api/flag/context?data={"contexts":[{"kind":"user","attributes":{"key":"user-123","plan":"premium","age":"25"}},{"kind":"purchase","attributes":{"key":"purchase-123","basket-id":"basket-abEz8if"}}]}&redirectUrl=https://flaggy-six.vercel.app/
@@ -14,7 +16,7 @@ Using the link will persist the context you setup up on the site, meaning that i
 
 Every flag evaluation that is made to Launchdarkly either on the server or client will be given this context.
 
-You can also use a previously generated link to quickly get back the context you setup in the Context Builder the builder saving you time.
+You can also use a previously generated link to quickly get back the context you setup in the Context Builder the builder saving you time and effort.
 
 ![The running application](docs/result.png)
 

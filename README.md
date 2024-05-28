@@ -1,8 +1,8 @@
 # Flaggy
 
-Flaggy is a unique tool designed to simplify the management of feature flag contexts. It provides an intuitive user interface for setting up and distributing flag contexts within your team or anyone who wants to look at a feature with the safety a feature flag provides.
+Flaggy is a open-source tool designed to simplify the management of feature flag contexts. It provides an intuitive user interface for setting up and distributing flag contexts within your team or anyone who wants to look at a feature with the safety a feature flag provides.
 
-Currently, Flaggy supports LaunchDarkly as a feature flag provider, but we are actively working on adding support for more providers.
+Currently, Flaggy supports LaunchDarkly as a feature flag provider, but the codebase is designed to be extensible, and contributions to support more providers are welcome.
 
 ![The running application](docs/app.png)
 
@@ -72,3 +72,7 @@ npm run dev
 ```
 
 Now you can open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+
+## Contributing
+
+Flaggy is an open-source project, and contributions are always welcome! If you have a feature request, bug report, or proposal for code refactor, please feel free to open an issue or submit a pull request.

@@ -9,7 +9,7 @@ vi.mock("react", async (importOriginal) => {
 })
 vi.useFakeTimers()
 
-import { cookies } from "next/headers"
+import { cookies, draftMode } from "next/headers"
 import { describe, it, expect, beforeEach, vi, MockedFunction } from "vitest"
 
 import modelFactory from "@/test/model-factory"
@@ -24,6 +24,7 @@ const buildStringUrlWithDataQuery = (data: string, redirectUrl: string) => {
 }
 
 const mockedCookies = cookies as MockedFunction<any>
+const mockedDraftmodeFn = draftMode as MockedFunction<any>
 
 describe("When Request Body is Valid", () => {
   const mockSetCookies = vi.fn()
@@ -42,6 +43,11 @@ describe("When Request Body is Valid", () => {
     mockedCookies.mockReturnValue({
       set: mockSetCookies,
     })
+
+    mockedDraftmodeFn.mockReturnValue({
+      enable: () => {},
+    })
+
     vi.setSystemTime(new Date("2024-04-20T13:00:00"))
 
     response = await GET(mockedRequest)

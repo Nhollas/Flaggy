@@ -10,7 +10,7 @@ vi.mock("next/headers")
 vi.mock("@launchdarkly/node-server-sdk")
 
 import { init } from "@launchdarkly/node-server-sdk"
-import { cookies } from "next/headers"
+import { cookies, draftMode } from "next/headers"
 import { expect, vi, MockedFunction, describe, test } from "vitest"
 
 import { render, resolveComponent, screen, waitFor } from "@/test/utils"
@@ -19,6 +19,7 @@ import { FeatureFlag } from "../FeatureFlag"
 
 const mockVariationFn = vi.fn()
 const mockedCookiesFn = cookies as MockedFunction<any>
+const mockedDraftmodeFn = draftMode as MockedFunction<any>
 const mockedLaunchDarklyInitFn = init as MockedFunction<any>
 
 const renderFeatureFlagComponentWithContext = async ({
@@ -30,6 +31,10 @@ const renderFeatureFlagComponentWithContext = async ({
 }) => {
   mockedCookiesFn.mockReturnValue({
     get: () => ({ value: cookieValue }),
+  })
+
+  mockedDraftmodeFn.mockReturnValue({
+    isEnabled: true,
   })
 
   mockVariationFn.mockReturnValue(mockValue)

@@ -1,5 +1,5 @@
 import { trace } from "@opentelemetry/api"
-import { cookies } from "next/headers"
+import { cookies, draftMode } from "next/headers"
 import { redirect } from "next/navigation"
 
 export const GET = async () => {
@@ -8,6 +8,7 @@ export const GET = async () => {
     .startActiveSpan("clearFlagContextRequest", async (span) => {
       try {
         cookies().delete("featureContext")
+        draftMode().disable()
 
         return redirect("/")
       } finally {

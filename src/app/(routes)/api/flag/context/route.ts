@@ -1,5 +1,5 @@
 import { trace } from "@opentelemetry/api"
-import { cookies } from "next/headers"
+import { cookies, draftMode } from "next/headers"
 import { z } from "zod"
 
 import { getFlagContextRequestSchema } from "@/app/features/flags"
@@ -32,6 +32,8 @@ export const GET = async (request: Request) => {
         if (!redirectUrl) {
           throw new Error("redirectUrl query parameter was not provided.")
         }
+
+        draftMode().enable()
 
         return Response.redirect(redirectUrl)
       } catch (error) {

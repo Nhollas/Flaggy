@@ -10,7 +10,17 @@ export const getFlagContext = cache(async (): Promise<FlagContext> => {
     .getTracer("example-app")
     .startActiveSpan("getFlagContext", async (span) => {
       try {
-        const cookieList = (await import("next/headers")).cookies()
+        const headersImport = await import("next/headers")
+
+        const { isEnabled } = headersImport.draftMode()
+
+        span.setAttribute("draftMode.enabled", isEnabled)
+
+        if (!isEnabled) {
+          return { contexts: [] }
+        }
+
+        const cookieList = headersImport.cookies()
 
         const featureContextCookie = cookieList.get("featureContext")
 

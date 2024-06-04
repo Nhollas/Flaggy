@@ -13,6 +13,7 @@ const AsyncLDProviderPromise = cache((context: FlagContext) =>
   asyncWithLDProvider({
     clientSideID: process.env.NEXT_PUBLIC_LAUNCHDARKLY_CLIENT_SIDE_ID!,
     context: launchDarklyContextAdapter(context),
+    timeout: 2.5,
   }),
 )
 

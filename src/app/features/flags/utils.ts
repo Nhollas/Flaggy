@@ -47,19 +47,22 @@ export const getFlagContext = cache(async (): Promise<FlagContext> => {
 export const launchDarklyContextAdapter = (
   flagContext: FlagContext,
 ): LDContext => {
-  let context: LDContext
-  if (flagContext.contexts.length === 0) {
-    context = {
+  const { contexts } = flagContext
+
+  if (contexts.length === 0) {
+    return {
       kind: "user",
       anonymous: true,
       key: "anonymous",
     }
-  } else if (flagContext.contexts.length === 1) {
-    context = applySingleContext(flagContext.contexts[0]!)
-  } else {
-    context = applyMultiContext(flagContext.contexts)
   }
-  return context
+
+  const [firstContext] = contexts
+  if (contexts.length === 1 && firstContext) {
+    return applySingleContext(firstContext)
+  }
+
+  return applyMultiContext(contexts)
 }
 
 const applySingleContext = (context: Context): LDContext => {

@@ -7,11 +7,11 @@ const { LAUNCHDARKLY_SDK_KEY } = env
 let launchDarklyClient: LDClient
 async function initialize() {
   launchDarklyClient = LaunchDarkly.init(LAUNCHDARKLY_SDK_KEY)
-  await launchDarklyClient.waitForInitialization()
+  await launchDarklyClient.waitForInitialization({ timeout: 2.5 })
 }
 async function getClient() {
   if (launchDarklyClient) {
-    await launchDarklyClient.waitForInitialization()
+    await launchDarklyClient.waitForInitialization({ timeout: 2.5 })
     return launchDarklyClient
   }
   await initialize()

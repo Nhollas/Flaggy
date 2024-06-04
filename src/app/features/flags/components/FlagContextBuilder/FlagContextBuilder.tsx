@@ -62,10 +62,12 @@ export function FlagContextBuilder() {
       >
         <h1 className="text-xl font-medium">Flag Context Builder</h1>
         <PreloadedStateInput />
-        <Button type="button" onClick={addBlankContext}>
-          Add Context
-        </Button>
-        <GenerateUrlButton />
+        <section className="flex flex-row gap-x-6">
+          <Button type="button" onClick={addBlankContext}>
+            Add Context
+          </Button>
+          <GenerateUrlButton />
+        </section>
         {contexts.map((context, i) => (
           <DynamicContextContainer
             key={context.id}

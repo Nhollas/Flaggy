@@ -19,12 +19,7 @@ const GenerateUrlButton = () => {
   }, [isCopied])
 
   return (
-    <Button
-      variant="outline"
-      className="ml-4"
-      type="submit"
-      onClick={() => setIsCopied(true)}
-    >
+    <Button variant="outline" type="submit" onClick={() => setIsCopied(true)}>
       Generate Url
       {isCopied ? (
         <Check className="ml-2 size-4 shrink-0 text-green-600" />

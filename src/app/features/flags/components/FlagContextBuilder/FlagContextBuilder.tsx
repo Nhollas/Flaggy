@@ -5,6 +5,7 @@ import { useFieldArray } from "react-hook-form"
 
 import { Button, Form, Skeleton } from "@/app/components/ui"
 
+import GenerateUrlButton from "./GenerateUrlButton"
 import { PreloadedStateInput } from "./PreloadedStateInput"
 import { RedirectUrlInput } from "./RedirectUrlInput"
 import {
@@ -24,6 +25,8 @@ export function FlagContextBuilder() {
     control: form.control,
     name: "contexts",
   })
+
+  console.log("sugma builder")
 
   const addBlankContext = () => {
     append(
@@ -54,17 +57,15 @@ export function FlagContextBuilder() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(createAndCopyContextUrl)}
         className="space-y-6"
+        onSubmit={form.handleSubmit(createAndCopyContextUrl)}
       >
         <h1 className="text-xl font-medium">Flag Context Builder</h1>
         <PreloadedStateInput />
         <Button type="button" onClick={addBlankContext}>
           Add Context
         </Button>
-        <Button variant="outline" className="ml-4" type="submit">
-          Generate Url
-        </Button>
+        <GenerateUrlButton />
         {contexts.map((context, i) => (
           <DynamicContextContainer
             key={context.id}

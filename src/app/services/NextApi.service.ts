@@ -1,10 +1,8 @@
 import { IClient, fetchWrapper } from "."
 
 const NextApiClient: IClient = {
-  fetch: fetchWrapper("/api", {
-    headers: {
-      "Content-Type": "application/json",
-    },
+  fetch: fetchWrapper({
+    baseUrl: "/api",
   }),
 }
 

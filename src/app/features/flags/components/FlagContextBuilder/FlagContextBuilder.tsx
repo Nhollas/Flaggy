@@ -44,12 +44,14 @@ export function FlagContextBuilder() {
   }: ContextBuilderForm) => {
     const data = JSON.stringify({ contexts })
 
-    const baseUrl = window.location.origin
-    let url = `${baseUrl}/api/flag/context`
-    url += "?data=" + data
-    url += `&redirectUrl=${baseUrl}${redirectUrl}`
+    const url = new URL(window.location.href + "api/flag/context")
+    url.searchParams.append("data", data)
+    url.searchParams.append(
+      "redirectUrl",
+      `${window.location.href}${redirectUrl === "/" ? "" : redirectUrl}`,
+    )
 
-    navigator.clipboard.writeText(url)
+    navigator.clipboard.writeText(decodeURIComponent(url.toString()))
   }
 
   return (

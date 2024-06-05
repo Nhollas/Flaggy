@@ -1,6 +1,5 @@
 import { trace } from "@opentelemetry/api"
 import { cookies, draftMode } from "next/headers"
-import { redirect } from "next/navigation"
 
 export const GET = async () => {
   return await trace
@@ -10,7 +9,7 @@ export const GET = async () => {
         cookies().delete("featureContext")
         draftMode().disable()
 
-        return redirect("/")
+        return Response.json({}, { status: 200 })
       } finally {
         span.end()
       }

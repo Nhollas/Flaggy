@@ -26,8 +26,6 @@ export function FlagContextBuilder() {
     name: "contexts",
   })
 
-  console.log("sugma builder")
-
   const addBlankContext = () => {
     append(
       {

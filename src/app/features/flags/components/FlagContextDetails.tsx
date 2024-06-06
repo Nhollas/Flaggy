@@ -38,7 +38,7 @@ export function FlagContextDetails({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" className="fixed right-4 top-4">
+        <Button variant="default" className="fixed right-4 top-4">
           View Context
         </Button>
       </SheetTrigger>

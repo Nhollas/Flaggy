@@ -58,11 +58,7 @@ const AttributeRow = ({
         render={({ field }) => (
           <FormItem>
             <FormControl className="ml-auto">
-              <Input
-                {...field}
-                placeholder="Value"
-                className="w-[200px] bg-white"
-              />
+              <Input {...field} placeholder="Value" className="w-[200px]" />
             </FormControl>
             <FormMessage className="text-right" />
           </FormItem>

@@ -52,11 +52,11 @@ export function FlagContextDetails({
         {flagContext.contexts.map((context, i) => (
           <div
             key={i}
-            className="flex w-full max-w-md flex-col gap-y-2 rounded-md border bg-gray-50 p-4"
+            className="flex w-full max-w-md flex-col gap-y-2 rounded-md border bg-card p-4"
           >
             <div className="flex flex-row items-center gap-x-4">
               <h1 className="font-medium">Context Kind:</h1>
-              <p className="w-max rounded-md border bg-white px-4 py-1">
+              <p className="w-max rounded-md border px-4 py-1">
                 {context.kind}
               </p>
             </div>

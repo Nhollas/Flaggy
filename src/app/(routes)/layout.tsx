@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
-import { getFlagContext } from "@/app/features/flags"
+import { FlagContextDetails, getFlagContext } from "@/app/features/flags"
 import Providers from "@/app/providers"
 
 import "./globals.css"
@@ -18,6 +18,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  console.log("layout rendering")
   const flagContext = await getFlagContext()
 
   return (
@@ -27,6 +28,9 @@ export default async function RootLayout({
           <main className="mx-auto min-h-screen max-w-2xl space-y-8 p-8 lg:p-16">
             {children}
           </main>
+          {flagContext.contexts.length > 0 && (
+            <FlagContextDetails flagContext={flagContext} />
+          )}
         </Providers>
       </body>
     </html>

@@ -1,7 +1,3 @@
-"use client"
-
-import { useRouter } from "next/navigation"
-
 import {
   Button,
   Sheet,
@@ -19,22 +15,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/components/ui"
-import NextApiService from "@/app/services/NextApi.service"
 
 import { FlagContext } from "../types"
+
+import { ClearContextButton } from "./ClearContextButton"
 
 export function FlagContextDetails({
   flagContext,
 }: {
   flagContext: FlagContext
 }) {
-  const router = useRouter()
-
-  const clearContext = async () => {
-    await NextApiService.clearContext()
-    router.refresh()
-  }
-
+  console.log("flagContext", flagContext)
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -65,9 +56,7 @@ export function FlagContextDetails({
         ))}
         <SheetFooter>
           <SheetClose asChild>
-            <Button type="button" onClick={() => clearContext()}>
-              Clear Context
-            </Button>
+            <ClearContextButton />
           </SheetClose>
         </SheetFooter>
       </SheetContent>

@@ -25,7 +25,6 @@ export function FlagContextDetails({
 }: {
   flagContext: FlagContext
 }) {
-  console.log("flagContext", flagContext)
   return (
     <Sheet>
       <SheetTrigger asChild>

@@ -18,7 +18,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  console.log("layout rendering")
   const flagContext = await getFlagContext()
 
   return (

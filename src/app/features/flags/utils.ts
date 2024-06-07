@@ -44,6 +44,24 @@ export const getFlagContext = cache(async (): Promise<FlagContext> => {
     })
 })
 
+export const createFlagContextUrl = (
+  baseUrl: URL,
+  flagContext: FlagContext,
+  redirectPath: string,
+) => {
+  const url = new URL("/api/flag/context", baseUrl)
+
+  const data = JSON.stringify({ contexts: flagContext.contexts })
+
+  url.searchParams.append("data", data)
+  url.searchParams.append(
+    "redirectUrl",
+    new URL(redirectPath, baseUrl).toString(),
+  )
+
+  return decodeURIComponent(url.toString())
+}
+
 export const launchDarklyContextAdapter = (
   flagContext: FlagContext,
 ): LDContext => {

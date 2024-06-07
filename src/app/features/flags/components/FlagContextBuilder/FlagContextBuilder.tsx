@@ -5,6 +5,8 @@ import { useFieldArray } from "react-hook-form"
 
 import { Button, Form, Skeleton } from "@/app/components/ui"
 
+import { createFlagContextUrl } from "../../utils"
+
 import GenerateUrlButton from "./GenerateUrlButton"
 import { PreloadedStateInput } from "./PreloadedStateInput"
 import { RedirectUrlInput } from "./RedirectUrlInput"
@@ -42,16 +44,13 @@ export function FlagContextBuilder() {
     contexts,
     redirectUrl,
   }: ContextBuilderForm) => {
-    const data = JSON.stringify({ contexts })
-
-    const url = new URL(window.location.href + "api/flag/context")
-    url.searchParams.append("data", data)
-    url.searchParams.append(
-      "redirectUrl",
-      `${window.location.href}${redirectUrl === "/" ? "" : redirectUrl}`,
+    const url = createFlagContextUrl(
+      new URL(window.location.href),
+      { contexts },
+      redirectUrl,
     )
 
-    navigator.clipboard.writeText(decodeURIComponent(url.toString()))
+    navigator.clipboard.writeText(url)
   }
 
   return (

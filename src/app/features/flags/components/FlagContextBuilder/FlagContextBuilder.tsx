@@ -61,7 +61,7 @@ export function FlagContextBuilder() {
       >
         <h1 className="text-xl font-medium">Flag Context Builder</h1>
         <PreloadedStateInput />
-        <section className="flex flex-row gap-x-6">
+        <section className="flex flex-row justify-between">
           <Button type="button" onClick={addBlankContext}>
             Add Context
           </Button>

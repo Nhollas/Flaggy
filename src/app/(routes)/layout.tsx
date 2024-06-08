@@ -24,7 +24,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers flagContext={flagContext}>
-          <main className="mx-auto min-h-screen max-w-2xl space-y-8 p-8 lg:p-16">
+          <main className="mx-auto min-h-screen max-w-2xl space-y-8 p-4">
             {children}
           </main>
           {flagContext.contexts.length > 0 && (

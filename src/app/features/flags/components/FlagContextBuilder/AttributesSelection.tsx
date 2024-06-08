@@ -2,7 +2,7 @@
 
 import { Plus, CheckIcon } from "lucide-react"
 import { useMemo, useState } from "react"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 
 import {
   Button,
@@ -30,9 +30,10 @@ export default function AttributesSelection({
 }: {
   contextIndex: number
 }) {
-  const { setValue, watch } = useFormContext<ContextBuilderForm>()
-  const attributes = watch(`contexts.${contextIndex}.attributes`)
-
+  const { setValue } = useFormContext<ContextBuilderForm>()
+  const attributes = useWatch<ContextBuilderForm>({
+    name: `contexts.${contextIndex}.attributes`,
+  }) as Attributes
   const setAttributes = (attributes: Attributes) => {
     setValue(`contexts.${contextIndex}.attributes`, attributes)
   }
@@ -81,18 +82,15 @@ export default function AttributesSelection({
   }
 
   const handleSelectAttribute = (attribute: string) => {
-    if (attribute in attributes) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { [attribute]: removed, ...rest } = attributes
-
-      setAttributes({
-        ...rest,
-        key: attributes.key,
-      })
-
-      return
+    if (!(attribute in attributes)) {
+      addAttribute(attribute)
     }
-    addAttribute(attribute)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { [attribute]: removed, ...rest } = attributes
+    setAttributes({
+      ...rest,
+      key: attributes.key,
+    })
   }
 
   return (

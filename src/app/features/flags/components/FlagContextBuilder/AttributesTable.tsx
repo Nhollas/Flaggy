@@ -1,6 +1,7 @@
 "use client"
 
-import { useFormContext } from "react-hook-form"
+import { memo } from "react"
+import { useWatch } from "react-hook-form"
 
 import {
   FormControl,
@@ -16,18 +17,21 @@ import {
   TableRow,
 } from "@/app/components/ui"
 
+import { Attributes } from "../../types"
+
 import { ContextBuilderForm } from "./useContextBuilderForm"
 
 const AttributesTable = ({ contextIndex }: { contextIndex: number }) => {
-  const { watch } = useFormContext<ContextBuilderForm>()
-  const attributes = watch(`contexts.${contextIndex}.attributes`)
+  const attributes = useWatch<ContextBuilderForm>({
+    name: `contexts.${contextIndex}.attributes`,
+  }) as Attributes
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Attribute</TableHead>
-          <TableHead className="text-right">Value</TableHead>
+          <TableHead className="px-0 py-2">Attribute</TableHead>
+          <TableHead className="px-0 py-2 text-right">Value</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -41,29 +45,33 @@ const AttributesTable = ({ contextIndex }: { contextIndex: number }) => {
 
 export default AttributesTable
 
-const AttributeRow = ({
-  attribute,
-  contextIndex,
-}: {
-  attribute: string
-  contextIndex: number
-}) => (
-  <TableRow>
-    <TableCell className="max-w-[150px] truncate text-[1.05rem] font-medium">
-      {attribute}
-    </TableCell>
-    <TableCell>
-      <FormField<Record<string, string>>
-        name={`contexts.${contextIndex}.attributes.${attribute}`}
-        render={({ field }) => (
-          <FormItem>
-            <FormControl className="ml-auto">
-              <Input {...field} placeholder="Value" className="w-[200px]" />
-            </FormControl>
-            <FormMessage className="text-right" />
-          </FormItem>
-        )}
-      />
-    </TableCell>
-  </TableRow>
+const AttributeRow = memo(
+  ({
+    attribute,
+    contextIndex,
+  }: {
+    attribute: string
+    contextIndex: number
+  }) => (
+    <TableRow>
+      <TableCell className="max-w-[150px] truncate text-[1.05rem] font-medium">
+        {attribute}
+      </TableCell>
+      <TableCell>
+        <FormField<Record<string, string>>
+          name={`contexts.${contextIndex}.attributes.${attribute}`}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl className="ml-auto">
+                <Input {...field} placeholder="Value" className="w-[200px]" />
+              </FormControl>
+              <FormMessage className="text-right" />
+            </FormItem>
+          )}
+        />
+      </TableCell>
+    </TableRow>
+  ),
 )
+
+AttributeRow.displayName = "AttributeRow"

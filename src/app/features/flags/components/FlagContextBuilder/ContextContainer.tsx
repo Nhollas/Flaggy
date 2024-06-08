@@ -12,8 +12,8 @@ const ContextContainer = ({
   index: number
 }) => {
   return (
-    <div className="flex w-full flex-col gap-y-2 rounded-md border bg-card p-4">
-      <div className="flex flex-row gap-x-2">
+    <div className="flex w-full flex-col gap-y-4 rounded-md border bg-card p-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <ContextInput contextIndex={index} contextKind={contextKind} />
         <AttributesSelection contextIndex={index} />
       </div>

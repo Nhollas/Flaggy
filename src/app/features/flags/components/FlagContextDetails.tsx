@@ -28,11 +28,14 @@ export function FlagContextDetails({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="default" className="fixed right-4 top-4">
+        <Button
+          variant="default"
+          className="fixed inset-x-0 bottom-0 m-2 h-12 max-w-screen-sm sm:mx-auto sm:mb-6"
+        >
           View Context
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="space-y-6">
+      <SheetContent side="left" className="w-11/12 space-y-6 p-4 sm:p-6">
         <SheetHeader>
           <SheetTitle>Your Flag Context</SheetTitle>
           <SheetDescription>
@@ -46,7 +49,7 @@ export function FlagContextDetails({
           >
             <div className="flex flex-row items-center gap-x-4">
               <h1 className="font-medium">Context Kind:</h1>
-              <p className="w-max rounded-md border px-4 py-1">
+              <p className="w-max rounded-md border bg-background px-4 py-1">
                 {context.kind}
               </p>
             </div>
@@ -72,17 +75,17 @@ function AttributesTable({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Attribute</TableHead>
-          <TableHead className="text-right">Value</TableHead>
+          <TableHead className="px-0 py-2">Attribute</TableHead>
+          <TableHead className="px-0 py-2 text-right">Value</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {Object.entries(attributes).map(([key, value]) => (
           <TableRow key={key}>
-            <TableCell className="max-w-[150px] truncate text-[1.05rem] font-medium">
+            <TableCell className="max-w-[150px] truncate px-0 text-[1.05rem] font-medium">
               {key}
             </TableCell>
-            <TableCell>
+            <TableCell className="px-0">
               <p className="text-right">{value}</p>
             </TableCell>
           </TableRow>

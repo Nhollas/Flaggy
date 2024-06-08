@@ -56,7 +56,7 @@ export function FlagContextBuilder() {
   return (
     <Form {...form}>
       <form
-        className="space-y-6"
+        className="space-y-4 sm:space-y-6"
         onSubmit={form.handleSubmit(createAndCopyContextUrl)}
       >
         <h1 className="text-xl font-medium">Flag Context Builder</h1>

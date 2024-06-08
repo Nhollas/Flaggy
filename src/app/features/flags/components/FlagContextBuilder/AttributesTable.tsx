@@ -54,10 +54,10 @@ const AttributeRow = memo(
     contextIndex: number
   }) => (
     <TableRow>
-      <TableCell className="max-w-[150px] truncate text-[1.05rem] font-medium">
+      <TableCell className="max-w-[150px] truncate px-0 text-[1.05rem] font-medium">
         {attribute}
       </TableCell>
-      <TableCell>
+      <TableCell className="px-0">
         <FormField<Record<string, string>>
           name={`contexts.${contextIndex}.attributes.${attribute}`}
           render={({ field }) => (

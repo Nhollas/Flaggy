@@ -82,15 +82,16 @@ export default function AttributesSelection({
   }
 
   const handleSelectAttribute = (attribute: string) => {
-    if (!(attribute in attributes)) {
+    if (attribute in attributes) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [attribute]: removed, ...rest } = attributes
+      setAttributes({
+        ...rest,
+        key: attributes.key,
+      })
+    } else {
       addAttribute(attribute)
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { [attribute]: removed, ...rest } = attributes
-    setAttributes({
-      ...rest,
-      key: attributes.key,
-    })
   }
 
   return (

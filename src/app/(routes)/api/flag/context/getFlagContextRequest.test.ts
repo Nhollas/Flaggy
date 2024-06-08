@@ -16,13 +16,6 @@ import modelFactory from "@/test/model-factory"
 
 import { GET } from "./route"
 
-const buildStringUrlWithDataQuery = (data: string, redirectUrl: string) => {
-  const url = new URL("http://localhost")
-  url.searchParams.set("data", data)
-  url.searchParams.set("redirectUrl", redirectUrl)
-  return url.toString()
-}
-
 const mockedCookies = cookies as MockedFunction<any>
 const mockedDraftmodeFn = draftMode as MockedFunction<any>
 
@@ -31,11 +24,10 @@ describe("When Request Body is Valid", () => {
   let response: Response
 
   beforeEach(async () => {
+    const singleContextWithUserAttributes = `http://localhost:3000/api/flag/context?data={"contexts":[{"kind":"user","attributes":{"key":"user-123","email":"user-123@gmail.com","phone":"1234567890"}}]}&redirectUrl=http://localhost:3000/redirect`
+
     const mockedRequest = modelFactory.request({
-      url: buildStringUrlWithDataQuery(
-        '{"contexts":[{"kind":"user","attributes":{"email":"user-123@gmail.com","phone":"1234567890","key":"user-123"}}]}',
-        "http://localhost/redirect",
-      ),
+      url: singleContextWithUserAttributes,
     })
 
     mockSetCookies.mockClear()
@@ -75,6 +67,8 @@ describe("When Request Body is Valid", () => {
   })
 
   it("should redirect to the url provided", async () => {
-    expect(response.headers.get("location")).toBe("http://localhost/redirect")
+    expect(response.headers.get("location")).toBe(
+      "http://localhost:3000/redirect",
+    )
   })
 })

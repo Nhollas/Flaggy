@@ -44,11 +44,17 @@ export const getFlagContext = cache(async (): Promise<FlagContext> => {
     })
 })
 
-export const createFlagContextUrl = (
-  baseUrl: URL,
-  flagContext: FlagContext,
-  redirectPath: string,
-) => {
+type CreateFlagContextUrlArgs = {
+  baseUrl: URL
+  flagContext: FlagContext
+  redirectPath: string
+}
+
+export const createFlagContextUrl = ({
+  baseUrl,
+  flagContext,
+  redirectPath,
+}: CreateFlagContextUrlArgs) => {
   const url = new URL("/api/flag/context", baseUrl)
 
   const data = JSON.stringify({ contexts: flagContext.contexts })

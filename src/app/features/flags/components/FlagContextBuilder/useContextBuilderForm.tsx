@@ -10,13 +10,13 @@ export type ContextBuilderForm = z.infer<typeof contextBuilderFormSchema>
 
 const contextBuilderFormSchema = z.object({
   contexts: z.array(contextSchema),
-  redirectUrl: z.string().min(1, { message: "Redirect URL is required" }),
+  redirectPath: z.string().min(1, { message: "Redirect Path is required" }),
   preloadedState: z.string().url().optional(),
 })
 
 export const preloadedContextBuilderFormSchema = contextBuilderFormSchema.pick({
   contexts: true,
-  redirectUrl: true,
+  preloadedState: true,
 })
 
 export const useContextBuilderForm = () =>
@@ -24,6 +24,6 @@ export const useContextBuilderForm = () =>
     resolver: zodResolver(contextBuilderFormSchema),
     defaultValues: {
       contexts: [],
-      redirectUrl: "/",
+      redirectPath: "/",
     },
   })

@@ -9,15 +9,15 @@ import {
   Input,
 } from "@/app/components/ui"
 
-export function RedirectUrlInput() {
+export function RedirectPathInput() {
   return (
     <FormField
-      name="redirectUrl"
+      name="redirectPath"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Redirect Url</FormLabel>
+          <FormLabel>Redirect Path</FormLabel>
           <FormControl>
-            <Input {...field} placeholder="Redirect Url" />
+            <Input {...field} placeholder="Redirect Path" />
           </FormControl>
           <FormMessage />
         </FormItem>

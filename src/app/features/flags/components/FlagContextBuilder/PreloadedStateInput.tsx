@@ -45,7 +45,7 @@ export function PreloadedStateInput() {
 
     const urlPathame = new URL(redirectUrl).pathname
     setValue("contexts", valid.contexts)
-    setValue("redirectUrl", urlPathame)
+    setValue("redirectPath", urlPathame)
   }
 
   const allowOperations = (e: React.KeyboardEvent) => {

@@ -9,7 +9,7 @@ import { createFlagContextUrl } from "../../utils"
 
 import GenerateUrlButton from "./GenerateUrlButton"
 import { PreloadedStateInput } from "./PreloadedStateInput"
-import { RedirectUrlInput } from "./RedirectUrlInput"
+import { RedirectPathInput } from "./RedirectPathInput"
 import {
   ContextBuilderForm,
   useContextBuilderForm,
@@ -42,13 +42,13 @@ export function FlagContextBuilder() {
 
   const createAndCopyContextUrl = ({
     contexts,
-    redirectUrl,
+    redirectPath,
   }: ContextBuilderForm) => {
-    const url = createFlagContextUrl(
-      new URL(window.location.href),
-      { contexts },
-      redirectUrl,
-    )
+    const url = createFlagContextUrl({
+      baseUrl: new URL(window.location.href),
+      flagContext: { contexts },
+      redirectPath,
+    })
 
     navigator.clipboard.writeText(url)
   }
@@ -74,7 +74,7 @@ export function FlagContextBuilder() {
             contextKind={context.kind}
           />
         ))}
-        <RedirectUrlInput />
+        <RedirectPathInput />
       </form>
     </Form>
   )

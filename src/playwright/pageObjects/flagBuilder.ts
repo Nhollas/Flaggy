@@ -59,7 +59,7 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
 
         Does not work and is currently a known bug when using headless chromium.
       */
-      const redirectUrlInput = page.getByPlaceholder("Redirect Url")
+      const redirectUrlInput = page.getByPlaceholder("Redirect Path")
 
       await redirectUrlInput.fill(url)
       await redirectUrlInput.press("ControlOrMeta+a")

@@ -29,7 +29,7 @@ export function FlagContextDetails({
       <SheetTrigger asChild>
         <Button
           variant="default"
-          className="fixed inset-x-0 bottom-0 m-2 h-12 max-w-screen-sm sm:mx-auto sm:mb-6"
+          className="fixed inset-x-0 bottom-0 m-4 h-12 max-w-[592px] sm:m-6 sm:mx-auto"
         >
           View Context
         </Button>

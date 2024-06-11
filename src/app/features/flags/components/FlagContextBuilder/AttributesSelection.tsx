@@ -2,7 +2,7 @@
 
 import { Plus, CheckIcon } from "lucide-react"
 import { useMemo, useState } from "react"
-import { useFormContext, useWatch } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 
 import {
   Button,
@@ -21,9 +21,8 @@ import {
   PopoverTrigger,
 } from "@/app/components/ui"
 
-import { Attributes } from "../../types"
-
-import { ContextBuilderForm } from "./useContextBuilderForm"
+import { useAttributes } from "../../hooks"
+import { Attributes, ContextBuilderForm } from "../../types"
 
 export default function AttributesSelection({
   contextIndex,
@@ -31,9 +30,8 @@ export default function AttributesSelection({
   contextIndex: number
 }) {
   const { setValue } = useFormContext<ContextBuilderForm>()
-  const attributes = useWatch<ContextBuilderForm>({
-    name: `contexts.${contextIndex}.attributes`,
-  }) as Attributes
+  const attributes = useAttributes(contextIndex)
+
   const setAttributes = (attributes: Attributes) => {
     setValue(`contexts.${contextIndex}.attributes`, attributes)
   }

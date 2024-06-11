@@ -5,15 +5,13 @@ import { useFieldArray } from "react-hook-form"
 
 import { Button, Form, Skeleton } from "@/app/components/ui"
 
-import { createFlagContextUrl } from "../../utils"
+import { useContextBuilderForm } from "../../hooks"
+import { createFlagContextUrl } from "../../lib/createFlagContextUrl"
+import { ContextBuilderForm } from "../../types"
 
 import GenerateUrlButton from "./GenerateUrlButton"
 import { PreloadedStateInput } from "./PreloadedStateInput"
 import { RedirectPathInput } from "./RedirectPathInput"
-import {
-  ContextBuilderForm,
-  useContextBuilderForm,
-} from "./useContextBuilderForm"
 
 const DynamicContextContainer = dynamic(() => import("./ContextContainer"), {
   loading: () => (

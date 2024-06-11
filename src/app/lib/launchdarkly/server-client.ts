@@ -1,7 +1,7 @@
 import LaunchDarkly, { LDClient } from "@launchdarkly/node-server-sdk"
 import { trace, SpanStatusCode } from "@opentelemetry/api"
 
-import { env } from "./env"
+import { env } from "../env"
 
 const { LAUNCHDARKLY_SDK_KEY } = env
 let launchDarklyClient: LDClient
@@ -23,6 +23,7 @@ type GetVariationArgs<T> = {
   context: LaunchDarkly.LDContext
   defaultValue: T
 }
+
 export async function getVariation<T>({
   flag,
   context,

@@ -11,13 +11,12 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/app/components/ui"
 
 import { FlagContext } from "../types"
 
+import { AttributeTableCell, AttributesTableHeader } from "./AttributesTable"
 import { ClearContextButton } from "./ClearContextButton"
 
 export function FlagContextDetails({
@@ -73,18 +72,11 @@ function AttributesTable({
 }) {
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="px-0 py-2">Attribute</TableHead>
-          <TableHead className="px-0 py-2 text-right">Value</TableHead>
-        </TableRow>
-      </TableHeader>
+      <AttributesTableHeader />
       <TableBody>
-        {Object.entries(attributes).map(([key, value]) => (
-          <TableRow key={key}>
-            <TableCell className="max-w-[150px] truncate px-0 text-[1.05rem] font-medium">
-              {key}
-            </TableCell>
+        {Object.entries(attributes).map(([attribute, value]) => (
+          <TableRow key={attribute}>
+            <AttributeTableCell attribute={attribute} />
             <TableCell className="px-0">
               <p className="text-right">{value}</p>
             </TableCell>

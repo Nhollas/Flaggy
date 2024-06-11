@@ -12,10 +12,8 @@ import {
   Textarea,
 } from "@/app/components/ui"
 
-import {
-  ContextBuilderForm,
-  preloadedContextBuilderFormSchema,
-} from "./useContextBuilderForm"
+import { preloadedContextBuilderFormSchema } from "../../schemas"
+import { ContextBuilderForm } from "../../types"
 
 export function PreloadedStateInput() {
   const { setValue, setError, control } = useFormContext<ContextBuilderForm>()
@@ -38,13 +36,13 @@ export function PreloadedStateInput() {
     const data = JSON.parse(url.searchParams.get("data") || "{}")
     const redirectUrl = url.searchParams.get("redirectUrl") || ""
 
-    const valid = await preloadedContextBuilderFormSchema.parseAsync({
+    const { contexts } = await preloadedContextBuilderFormSchema.parseAsync({
       contexts: data.contexts,
       redirectUrl,
     })
 
     const urlPathame = new URL(redirectUrl).pathname
-    setValue("contexts", valid.contexts)
+    setValue("contexts", contexts)
     setValue("redirectPath", urlPathame)
   }
 

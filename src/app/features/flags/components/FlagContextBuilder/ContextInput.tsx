@@ -22,7 +22,7 @@ import {
 } from "@/app/components/ui"
 import { cn } from "@/app/lib/utils"
 
-import { ContextBuilderForm } from "./useContextBuilderForm"
+import { ContextBuilderForm } from "../../types"
 
 export default function ContextInput({
   contextIndex,

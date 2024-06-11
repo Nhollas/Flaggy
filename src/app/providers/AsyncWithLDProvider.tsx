@@ -3,7 +3,8 @@
 import { asyncWithLDProvider } from "launchdarkly-react-client-sdk"
 import { cache, use } from "react"
 
-import { launchDarklyContextAdapter, FlagContext } from "@/app/features/flags"
+import { FlagContext } from "@/app/features/flags"
+import launchDarklyContextAdapter from "@/app/lib/launchdarkly/adapter"
 
 const AsyncLDProviderPromise = cache((context: FlagContext) =>
   asyncWithLDProvider({

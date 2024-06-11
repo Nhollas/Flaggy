@@ -1,6 +1,7 @@
-import { getVariation } from "@/app/lib/launchdarklyServer"
+import launchDarklyContextAdapter from "@/app/lib/launchdarkly/adapter"
+import { getVariation } from "@/app/lib/launchdarkly/server-client"
 
-import { getFlagContext, launchDarklyContextAdapter } from "../utils"
+import { getFlagContext } from "../lib/getFlagContext"
 
 export async function FeatureFlag<TValue>({
   flag,

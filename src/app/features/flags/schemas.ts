@@ -2,28 +2,18 @@ import { z } from "zod"
 
 import { stringToJSON } from "@/app/lib/schemas"
 
-/**
-  @example
-  {
-    kind: "user",
-    attributes: {
-      key: "nick",
-      email: "nick@gmail.com"
-      phone: "123456789"
-    }
-  }
- */
-
-export const contextSchema = z.object({
-  kind: z.string().min(1, { message: "Property 'kind' cannot be empty." }),
-  attributes: z
-    .object({
-      key: z
-        .string()
-        .min(1, { message: "Required attribute 'key' cannot be empty." }),
-    })
-    .and(z.record(z.string())),
-})
+export const contextSchema = z
+  .object({
+    kind: z.string().min(1, { message: "Property 'kind' cannot be empty." }),
+    attributes: z
+      .object({
+        key: z
+          .string()
+          .min(1, { message: "Required attribute 'key' cannot be empty." }),
+      })
+      .and(z.record(z.string())),
+  })
+  .strict()
 
 export const stringToJSONSchema = stringToJSON()
 
@@ -35,3 +25,14 @@ export const flagContextSchema = z
 
 export const getFlagContextRequestSchema =
   stringToJSONSchema.pipe(flagContextSchema)
+
+export const contextBuilderFormSchema = z.object({
+  contexts: z.array(contextSchema),
+  redirectPath: z.string().min(1, { message: "Redirect Path is required" }),
+  preloadedState: z.string().url().optional(),
+})
+
+export const preloadedContextBuilderFormSchema = contextBuilderFormSchema.pick({
+  contexts: true,
+  preloadedState: true,
+})

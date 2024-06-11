@@ -1,7 +1,8 @@
 import { memo } from "react"
 
+import { AttributesTable } from "../AttributesTable"
+
 import AttributesSelection from "./AttributesSelection"
-import AttributesTable from "./AttributesTable"
 import ContextInput from "./ContextInput"
 
 const ContextContainer = ({

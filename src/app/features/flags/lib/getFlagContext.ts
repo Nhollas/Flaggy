@@ -1,4 +1,5 @@
 import { trace } from "@opentelemetry/api"
+import { draftMode, cookies } from "next/headers"
 import { cache } from "react"
 
 import { getFlagContextRequestSchema } from "../schemas"
@@ -9,9 +10,7 @@ export const getFlagContext = cache(async (): Promise<FlagContext> => {
     .getTracer("example-app")
     .startActiveSpan("getFlagContext", async (span) => {
       try {
-        const headersImport = await import("next/headers")
-
-        const { isEnabled } = headersImport.draftMode()
+        const { isEnabled } = draftMode()
 
         span.setAttribute("draftMode.enabled", isEnabled)
 
@@ -19,7 +18,7 @@ export const getFlagContext = cache(async (): Promise<FlagContext> => {
           return { contexts: [] }
         }
 
-        const cookieList = headersImport.cookies()
+        const cookieList = cookies()
 
         const featureContextCookie = cookieList.get("featureContext")
 

@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 
 import { FlagContextDetails, getFlagContext } from "@/app/features/flags"
-import Providers from "@/app/providers"
 
 import "./globals.css"
 
@@ -23,14 +22,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers flagContext={flagContext}>
-          <main className="mx-auto mb-16 max-w-screen-sm p-4 sm:mb-[72px] sm:p-6">
-            {children}
-          </main>
-          {flagContext.contexts.length > 0 && (
-            <FlagContextDetails flagContext={flagContext} />
-          )}
-        </Providers>
+        <main className="mx-auto mb-16 max-w-screen-sm p-4 sm:mb-[72px] sm:p-6">
+          {children}
+        </main>
+        {flagContext.contexts.length > 0 && (
+          <FlagContextDetails flagContext={flagContext} />
+        )}
       </body>
     </html>
   )

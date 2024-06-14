@@ -6,11 +6,7 @@ const launchDarklyContextAdapter = (flagContext: FlagContext): LDContext => {
   const { contexts } = flagContext
 
   if (contexts.length === 0) {
-    return {
-      kind: "user",
-      anonymous: true,
-      key: "anonymous",
-    }
+    return unknownContext()
   }
 
   const [firstContext] = contexts
@@ -19,6 +15,14 @@ const launchDarklyContextAdapter = (flagContext: FlagContext): LDContext => {
   }
 
   return applyMultiContext(contexts)
+}
+
+const unknownContext = (): LDContext => {
+  return {
+    kind: "user",
+    anonymous: true,
+    key: "anonymous",
+  }
 }
 
 const applySingleContext = (context: Context): LDContext => {

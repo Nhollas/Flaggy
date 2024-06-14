@@ -47,13 +47,13 @@ export default function AttributesSelection({
       .join(" ")
 
   const defaultAttributes = useMemo(() => {
-    const existingAtributesWithKeyTitleCased: [string, string][] =
+    const existingAttributesWithKeyTitleCased: [string, string][] =
       Object.entries(attributes).map(([key]) => {
         return [key, stringToTitleCase(key)]
       })
 
     return new Map([
-      ...existingAtributesWithKeyTitleCased,
+      ...existingAttributesWithKeyTitleCased,
       ["country", "Country"],
       ["email", "Email"],
       ["ip", "IP Address"],

@@ -1,5 +1,5 @@
 import { Copy, Check } from "lucide-react"
-import { useState, useEffect, memo } from "react"
+import { useState, useEffect } from "react"
 
 import { Button } from "@/app/components/ui"
 
@@ -30,4 +30,4 @@ const GenerateUrlButton = () => {
   )
 }
 
-export default memo(GenerateUrlButton)
+export default GenerateUrlButton

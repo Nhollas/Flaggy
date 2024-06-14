@@ -17,7 +17,7 @@ import { render, resolveComponent, screen, waitFor } from "@/test/utils"
 
 import { FeatureFlag } from "../FeatureFlag"
 
-const mockVariationFn = vi.fn()
+const mockedVariationFn = vi.fn()
 const mockedCookiesFn = cookies as MockedFunction<any>
 const mockedDraftmodeFn = draftMode as MockedFunction<any>
 const mockedLaunchDarklyInitFn = init as MockedFunction<any>
@@ -37,10 +37,10 @@ const renderFeatureFlagComponentWithContext = async ({
     isEnabled: true,
   })
 
-  mockVariationFn.mockReturnValue(mockValue)
+  mockedVariationFn.mockReturnValue(mockValue)
   mockedLaunchDarklyInitFn.mockReturnValue({
     waitForInitialization: async () => {},
-    variation: mockVariationFn,
+    variation: mockedVariationFn,
   })
 
   const FeatureFlagResolved = await resolveComponent(FeatureFlag, {
@@ -67,7 +67,7 @@ describe("FeatureFlag", () => {
       key: "purchase-123",
       productInstanceId: "1234",
     }
-    expect(mockVariationFn).toHaveBeenCalledWith(
+    expect(mockedVariationFn).toHaveBeenCalledWith(
       "exampleFlag",
       expectedContext,
       false,
@@ -97,7 +97,7 @@ describe("FeatureFlag", () => {
         phone: "1234567890",
       },
     }
-    expect(mockVariationFn).toHaveBeenCalledWith(
+    expect(mockedVariationFn).toHaveBeenCalledWith(
       "exampleFlag",
       expectedContext,
       false,
@@ -119,7 +119,7 @@ describe("FeatureFlag", () => {
       key: "anonymous",
       anonymous: true,
     }
-    expect(mockVariationFn).toHaveBeenCalledWith(
+    expect(mockedVariationFn).toHaveBeenCalledWith(
       "exampleFlag",
       expectedContext,
       false,
@@ -141,7 +141,7 @@ describe("FeatureFlag", () => {
       key: "anonymous",
       anonymous: true,
     }
-    expect(mockVariationFn).toHaveBeenCalledWith(
+    expect(mockedVariationFn).toHaveBeenCalledWith(
       "exampleFlag",
       expectedContext,
       false,

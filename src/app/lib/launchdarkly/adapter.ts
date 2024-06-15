@@ -8,11 +8,11 @@ type ContextFunction = (contexts: Context[]) => LDContext
 const launchDarklyContextAdapter = (flagContext: FlagContext): LDContext => {
   const { contexts } = flagContext
 
-  const patterns: Array<[ContextChecker, ContextFunction]> = [
+  const patterns = new Map<ContextChecker, ContextFunction>([
     [(ctxs) => ctxs.length === 0, () => unknownContext()],
     [(ctxs) => ctxs.length === 1, (ctxs) => applySingleContext(ctxs[0]!)],
     [(ctxs) => ctxs.length > 1, (ctxs) => applyMultiContext(ctxs)],
-  ]
+  ])
 
   for (const [check, func] of patterns) {
     if (check(contexts)) {

@@ -14,9 +14,9 @@ const launchDarklyContextAdapter = (flagContext: FlagContext): LDContext => {
     [(ctxs) => ctxs.length > 1, (ctxs) => applyMultiContext(ctxs)],
   ])
 
-  for (const [check, func] of patterns) {
-    if (check(contexts)) {
-      return func(contexts)
+  for (const [match, adapter] of patterns) {
+    if (match(contexts)) {
+      return adapter(contexts)
     }
   }
 

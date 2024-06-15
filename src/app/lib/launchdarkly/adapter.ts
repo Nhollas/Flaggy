@@ -2,50 +2,43 @@ import { LDContext } from "@launchdarkly/node-server-sdk"
 
 import { Context, FlagContext } from "@/app/features/flags"
 
+type ContextChecker = (contexts: Context[]) => boolean
+type ContextFunction = (contexts: Context[]) => LDContext
+
 const launchDarklyContextAdapter = (flagContext: FlagContext): LDContext => {
   const { contexts } = flagContext
 
-  if (contexts.length === 0) {
-    return unknownContext()
+  const patterns: Array<[ContextChecker, ContextFunction]> = [
+    [(ctxs) => ctxs.length === 0, () => unknownContext()],
+    [(ctxs) => ctxs.length === 1, (ctxs) => applySingleContext(ctxs[0]!)],
+    [(ctxs) => ctxs.length > 1, (ctxs) => applyMultiContext(ctxs)],
+  ]
+
+  for (const [check, func] of patterns) {
+    if (check(contexts)) {
+      return func(contexts)
+    }
   }
 
-  const [firstContext] = contexts
-  if (contexts.length === 1 && firstContext) {
-    return applySingleContext(firstContext)
-  }
-
-  return applyMultiContext(contexts)
+  return unknownContext()
 }
 
-const unknownContext = (): LDContext => {
-  return {
-    kind: "user",
-    anonymous: true,
-    key: "anonymous",
-  }
-}
+const unknownContext = (): LDContext => ({
+  kind: "user",
+  anonymous: true,
+  key: "anonymous",
+})
 
-const applySingleContext = (context: Context): LDContext => {
-  const { kind, attributes } = context
-  return {
-    kind,
-    ...attributes,
-  }
-}
+const applySingleContext = (context: Context): LDContext => ({
+  kind: context.kind,
+  ...context.attributes,
+})
 
-const applyMultiContext = (contexts: Context[]): LDContext => {
-  return {
-    kind: "multi",
-    ...contexts.reduce((acc, context) => {
-      const { kind, attributes } = context
-      return {
-        ...acc,
-        [kind]: {
-          ...attributes,
-        },
-      }
-    }, {}),
-  }
-}
+const applyMultiContext = (contexts: Context[]): LDContext => ({
+  kind: "multi",
+  ...Object.fromEntries(
+    contexts.map(({ kind, attributes }) => [kind, attributes]),
+  ),
+})
 
 export default launchDarklyContextAdapter

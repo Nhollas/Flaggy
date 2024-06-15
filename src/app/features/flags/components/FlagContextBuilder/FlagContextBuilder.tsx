@@ -1,23 +1,17 @@
 "use client"
 
-import dynamic from "next/dynamic"
 import { useFieldArray } from "react-hook-form"
 
-import { Button, Form, Skeleton } from "@/app/components/ui"
+import { Button, Form } from "@/app/components/ui"
 
 import { useContextBuilderForm } from "../../hooks"
 import { createFlagContextUrl } from "../../lib/createFlagContextUrl"
 import { ContextBuilderForm } from "../../types"
 
+import ContextContainer from "./ContextContainer"
 import GenerateUrlButton from "./GenerateUrlButton"
 import { PreloadedStateInput } from "./PreloadedStateInput"
 import { RedirectPathInput } from "./RedirectPathInput"
-
-const DynamicContextContainer = dynamic(() => import("./ContextContainer"), {
-  loading: () => (
-    <Skeleton className="h-[192.5px] w-full rounded-md border bg-muted" />
-  ),
-})
 
 export function FlagContextBuilder() {
   const form = useContextBuilderForm()
@@ -66,7 +60,7 @@ export function FlagContextBuilder() {
           <GenerateUrlButton />
         </section>
         {contexts.map((context, i) => (
-          <DynamicContextContainer
+          <ContextContainer
             key={context.id}
             index={i}
             contextKind={context.kind}

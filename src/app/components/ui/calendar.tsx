@@ -1,52 +1,13 @@
 "use client"
 
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
 import * as React from "react"
-import { DayPicker, DropdownProps } from "react-day-picker"
+import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/app/lib/utils"
 
 import { buttonVariants } from "./button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./select"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
-
-function CustomDropdown({ value, onChange, children }: DropdownProps) {
-  const options = React.Children.toArray(children) as OptionElement[]
-
-  const handleChange = (value: string) => {
-    const changeEvent = {
-      target: {
-        value,
-      },
-    } as React.ChangeEvent<HTMLSelectElement>
-    onChange?.(changeEvent)
-  }
-
-  return (
-    <Select value={value?.toString()} onValueChange={handleChange}>
-      <SelectTrigger>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option, childIdx: number) => (
-          <SelectItem
-            key={`${option.props.value}-${childIdx}`}
-            value={option.props.value?.toString() ?? ""}
-          >
-            {option.props.children}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  )
-}
 
 const Calendar = ({
   className,
@@ -96,22 +57,18 @@ const Calendar = ({
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
         caption_dropdowns: "flex flex-row gap-x-2 w-full",
-
+        vhidden: "vhidden hidden",
         ...classNames,
       }}
       components={{
-        IconLeft: () => <ChevronLeftIcon className="size-4" />,
-        IconRight: () => <ChevronRightIcon className="size-4" />,
-        Dropdown: CustomDropdown,
-        CaptionLabel: () => null,
+        Caption: () => {
+          return <h1>deeez</h1>
+        },
       }}
       {...props}
     />
   )
 }
 Calendar.displayName = "Calendar"
-
-type OptionProps = React.HTMLProps<HTMLOptionElement>
-type OptionElement = React.ReactElement<OptionProps>
 
 export { Calendar }

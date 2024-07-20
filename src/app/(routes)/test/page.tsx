@@ -2,7 +2,7 @@
 
 import { addDays, format, startOfDay } from "date-fns"
 import { CalendarIcon } from "lucide-react"
-import React from "react"
+import { useState } from "react"
 
 import {
   Popover,
@@ -11,16 +11,17 @@ import {
   PopoverTrigger,
   Calendar,
 } from "@/app/components/ui"
+import YearAndMonthDropdown from "@/app/components/ui/calendar/year-month-dropdown"
 import { cn } from "@/app/lib/utils"
 
 export default function Test() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
+  const [date, setDate] = useState<Date | undefined>()
   const fromDate = new Date()
   const toDate = addDays(fromDate ?? new Date(), 30)
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild onClick={(e) => console.log(e)}>
         <Button
           variant="outline"
           className={cn(
@@ -28,7 +29,7 @@ export default function Test() {
             !date && "text-muted-foreground",
           )}
         >
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {date ? format(date, "PPPp") : <span>Pick a date</span>}
           <CalendarIcon className="ml-auto size-4 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -45,6 +46,9 @@ export default function Test() {
             startOfDay(date) < startOfDay(fromDate) ||
             startOfDay(date) > startOfDay(toDate)
           }
+          components={{
+            Dropdown: YearAndMonthDropdown,
+          }}
         />
       </PopoverContent>
     </Popover>

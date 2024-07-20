@@ -53,7 +53,13 @@ test("ShadnCn Calendar Component Range Assertion", async ({ page }) => {
       return acc
     }, {})
 
-  for (const days of Object.values(groupedDaysByMonth)) {
+  await page.getByRole("button", { name: "Pick a date" }).click()
+
+  for (const month in groupedDaysByMonth) {
+    await page.getByLabel("Month:").click()
+    await page.getByRole("option", { name: month }).click()
+
+    const days = groupedDaysByMonth[month]!
     for (const day of days) {
       const { enabled, number } = day
 
@@ -63,7 +69,5 @@ test("ShadnCn Calendar Component Range Assertion", async ({ page }) => {
         enabled,
       })
     }
-
-    await page.getByRole("button", { name: /next month/i }).click()
   }
 })

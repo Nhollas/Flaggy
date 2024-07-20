@@ -73,3 +73,7 @@
     }
   }
 }
+
+.rdp-vhidden {
+  display: none;
+}

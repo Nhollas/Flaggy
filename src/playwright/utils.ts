@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test"
 
-import { createFlagBuilderComponentPageObject } from "./pageObjects/flagBuilder"
+import { createFlagBuilderPageObject } from "./pageObjects/flagBuilder"
 
 export const buildLocalUrl = (port: string, path: string = "") =>
   `http://localhost:${port}${path}`
@@ -10,13 +10,11 @@ type TestUtilsArgs = {
 }
 
 export const createTestUtils = (params: TestUtilsArgs) => {
-  const { page } = params
   const pageObjects = {
-    flagBuilder: createFlagBuilderComponentPageObject(params),
+    flagBuilderPage: createFlagBuilderPageObject(params),
   }
 
   return {
     po: pageObjects,
-    page,
   }
 }

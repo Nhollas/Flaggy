@@ -5,17 +5,15 @@ test.use({
 })
 
 test("Importing context with custom attributes populates attribute selection", async ({
-  utils,
+  po: { flagBuilderPage },
 }) => {
   const singleContextWithCustomAttribute = `http://localhost:3000/api/flag/context?data={"contexts":[{"kind":"user","attributes":{"key":"user-123","custom":"customValue"}}]}&redirectUrl=http://localhost:3000/`
 
-  await utils.po.flagBuilder.goTo()
-  await utils.po.flagBuilder.pastePreloadedState(
-    singleContextWithCustomAttribute,
-  )
+  await flagBuilderPage.goTo()
+  await flagBuilderPage.pastePreloadedState(singleContextWithCustomAttribute)
 
-  await utils.po.flagBuilder.openAttributesDropdown()
-  await utils.po.flagBuilder.expect.attributeOptionsAreVisible(
+  await flagBuilderPage.openAttributesDropdown()
+  await flagBuilderPage.expect.attributeOptionsAreVisible(
     [
       "Country",
       "Email",
@@ -30,25 +28,27 @@ test("Importing context with custom attributes populates attribute selection", a
     { exact: true },
   )
 
-  await utils.po.flagBuilder.expect.attributeInFormTableWithValue({
+  await flagBuilderPage.expect.attributeInFormTableWithValue({
     attribute: "Custom",
     value: "customValue",
   })
 })
 
-test("Attribute display names are title cased", async ({ utils }) => {
-  await utils.po.flagBuilder.goTo()
-  await utils.po.flagBuilder.clickAddContext()
-  await utils.po.flagBuilder.openAttributesDropdown()
+test("Attribute display names are title cased", async ({
+  po: { flagBuilderPage },
+}) => {
+  await flagBuilderPage.goTo()
+  await flagBuilderPage.clickAddContext()
+  await flagBuilderPage.openAttributesDropdown()
 
-  await utils.po.flagBuilder.searchAttribute(
+  await flagBuilderPage.searchAttribute(
     "custom attribute that is not title cased",
   )
-  await utils.po.flagBuilder.clickAddCustomAttribute(
+  await flagBuilderPage.clickAddCustomAttribute(
     "custom attribute that is not title cased",
   )
 
-  await utils.po.flagBuilder.expect.attributeOptionsAreVisible(
+  await flagBuilderPage.expect.attributeOptionsAreVisible(
     [
       "Country",
       "Email",
@@ -64,27 +64,33 @@ test("Attribute display names are title cased", async ({ utils }) => {
   )
 })
 
-test("Required attribute 'Key' is added by default", async ({ utils }) => {
-  await utils.po.flagBuilder.goTo()
-  await utils.po.flagBuilder.clickAddContext()
-  await utils.po.flagBuilder.expect.attributeInFormTableWithValue({
+test("Required attribute 'Key' is added by default", async ({
+  po: { flagBuilderPage },
+}) => {
+  await flagBuilderPage.goTo()
+  await flagBuilderPage.clickAddContext()
+  await flagBuilderPage.expect.attributeInFormTableWithValue({
     attribute: "key",
     value: "user-123",
   })
 })
 
-test("Required attribute 'Key' cannot be removed", async ({ utils }) => {
-  await utils.po.flagBuilder.goTo()
-  await utils.po.flagBuilder.clickAddContext()
-  await utils.po.flagBuilder.openAttributesDropdown()
-  await utils.po.flagBuilder.expect.attributeOptionIsDisabled("Key")
+test("Required attribute 'Key' cannot be removed", async ({
+  po: { flagBuilderPage },
+}) => {
+  await flagBuilderPage.goTo()
+  await flagBuilderPage.clickAddContext()
+  await flagBuilderPage.openAttributesDropdown()
+  await flagBuilderPage.expect.attributeOptionIsDisabled("Key")
 })
 
-test("Attributes select has default values", async ({ utils }) => {
-  await utils.po.flagBuilder.goTo()
-  await utils.po.flagBuilder.clickAddContext()
-  await utils.po.flagBuilder.openAttributesDropdown()
-  await utils.po.flagBuilder.expect.attributeOptionsAreVisible(
+test("Attributes select has default values", async ({
+  po: { flagBuilderPage },
+}) => {
+  await flagBuilderPage.goTo()
+  await flagBuilderPage.clickAddContext()
+  await flagBuilderPage.openAttributesDropdown()
+  await flagBuilderPage.expect.attributeOptionsAreVisible(
     [
       "Country",
       "Email",
@@ -100,60 +106,60 @@ test("Attributes select has default values", async ({ utils }) => {
 })
 
 test("Previously added attributes don't keep their value when re-selected", async ({
-  utils,
+  po: { flagBuilderPage },
 }) => {
-  await utils.po.flagBuilder.goTo()
-  await utils.po.flagBuilder.clickAddContext()
-  await utils.po.flagBuilder.openAttributesDropdown()
+  await flagBuilderPage.goTo()
+  await flagBuilderPage.clickAddContext()
+  await flagBuilderPage.openAttributesDropdown()
 
-  await utils.po.flagBuilder.selectAttribute("Email")
-  await utils.po.flagBuilder.closeAttributesDropdown()
-  await utils.po.flagBuilder.setAttributeValue({
+  await flagBuilderPage.selectAttribute("Email")
+  await flagBuilderPage.closeAttributesDropdown()
+  await flagBuilderPage.setAttributeValue({
     attribute: "Email",
     value: "john.doe@gmail.com",
   })
 
-  await utils.po.flagBuilder.openAttributesDropdown()
-  await utils.po.flagBuilder.selectAttribute("Email")
-  await utils.po.flagBuilder.selectAttribute("Email")
-  await utils.po.flagBuilder.closeAttributesDropdown()
+  await flagBuilderPage.openAttributesDropdown()
+  await flagBuilderPage.selectAttribute("Email")
+  await flagBuilderPage.selectAttribute("Email")
+  await flagBuilderPage.closeAttributesDropdown()
 
-  await utils.po.flagBuilder.expect.attributeInFormTableWithValue({
+  await flagBuilderPage.expect.attributeInFormTableWithValue({
     attribute: "Email",
     value: "default",
   })
 })
 
-test("Attribute values can be edited", async ({ utils }) => {
-  await utils.po.flagBuilder.goTo()
-  await utils.po.flagBuilder.clickAddContext()
-  await utils.po.flagBuilder.openAttributesDropdown()
+test("Attribute values can be edited", async ({ po: { flagBuilderPage } }) => {
+  await flagBuilderPage.goTo()
+  await flagBuilderPage.clickAddContext()
+  await flagBuilderPage.openAttributesDropdown()
 
-  await utils.po.flagBuilder.selectAttribute("Email")
-  await utils.po.flagBuilder.closeAttributesDropdown()
+  await flagBuilderPage.selectAttribute("Email")
+  await flagBuilderPage.closeAttributesDropdown()
 
-  await utils.po.flagBuilder.setAttributeValue({
+  await flagBuilderPage.setAttributeValue({
     attribute: "Email",
     value: "john.doe@gmail.com",
   })
 })
 
 test("Previously added custom attributes are retained when dismissing the dialog", async ({
-  utils,
+  po: { flagBuilderPage },
 }) => {
-  await utils.po.flagBuilder.goTo()
-  await utils.po.flagBuilder.clickAddContext()
-  await utils.po.flagBuilder.openAttributesDropdown()
+  await flagBuilderPage.goTo()
+  await flagBuilderPage.clickAddContext()
+  await flagBuilderPage.openAttributesDropdown()
 
   const attributesToAdd = ["Middle Name", "Town", "Age"]
 
   for (const attribute of attributesToAdd) {
-    await utils.po.flagBuilder.searchAttribute(attribute)
-    await utils.po.flagBuilder.clickAddCustomAttribute(attribute)
-    await utils.po.flagBuilder.expect.attributeOptionIsSelected(attribute)
+    await flagBuilderPage.searchAttribute(attribute)
+    await flagBuilderPage.clickAddCustomAttribute(attribute)
+    await flagBuilderPage.expect.attributeOptionIsSelected(attribute)
   }
 
-  await utils.po.flagBuilder.expect.attributeOptionsAreVisible(
+  await flagBuilderPage.expect.attributeOptionsAreVisible(
     [
       "Country",
       "Email",

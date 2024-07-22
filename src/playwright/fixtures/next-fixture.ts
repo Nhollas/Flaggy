@@ -1,5 +1,4 @@
 import { test as base } from "@playwright/test"
-import { type SetupServer } from "msw/node"
 
 import { setupNextServer } from "../setup"
 import { buildLocalUrl, createTestUtils } from "../utils"
@@ -7,10 +6,10 @@ import { buildLocalUrl, createTestUtils } from "../utils"
 export const test = base.extend<
   {
     utils: ReturnType<typeof createTestUtils>
+    po: ReturnType<typeof createTestUtils>["po"]
   },
   {
     port: string
-    requestInterceptor: SetupServer
   }
 >({
   baseURL: async ({ port }, use) => {
@@ -20,6 +19,9 @@ export const test = base.extend<
     const u = createTestUtils({ page })
 
     await use(u)
+  },
+  po: async ({ utils }, use) => {
+    await use(utils.po)
   },
   port: [
     async ({}, use) => {

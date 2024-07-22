@@ -5,7 +5,7 @@ export type TestArgs = {
   page: Page
 }
 
-export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
+export const createFlagBuilderPageObject = (testArgs: TestArgs) => {
   const { page } = testArgs
 
   const internal = {
@@ -208,6 +208,7 @@ export const createFlagBuilderComponentPageObject = (testArgs: TestArgs) => {
         await internal.expectOptionIsUnselected(kind)
       },
     },
+    ...page,
   }
   return self
 }

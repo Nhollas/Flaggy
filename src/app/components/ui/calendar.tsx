@@ -60,11 +60,6 @@ const Calendar = ({
         vhidden: "vhidden hidden",
         ...classNames,
       }}
-      components={{
-        Caption: () => {
-          return <h1>deeez</h1>
-        },
-      }}
       {...props}
     />
   )

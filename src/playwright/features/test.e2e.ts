@@ -25,33 +25,16 @@ test("ShadnCn Calendar Component Range Assertion", async ({ page }) => {
     end: toMonthDate,
   })
 
-  type Day = {
-    number: string
-    month: string
-    enabled: boolean
-  }
-
-  type DaysGroupByMonth = {
-    [month: string]: Day[]
-  }
-
-  const groupedDaysByMonth: DaysGroupByMonth = daysInMonthRange
-    .map((day) => ({
+  const groupedDaysByMonth = Object.groupBy(
+    daysInMonthRange.map((day) => ({
       number: day.getDate().toString(),
       month: day.toLocaleString("en", { month: "long" }),
       enabled:
         startOfDay(day) >= startOfDay(fromDate) &&
         startOfDay(day) <= startOfDay(toDate),
-    }))
-    .reduce((acc: DaysGroupByMonth, day) => {
-      if (!acc[day.month]) {
-        acc[day.month] = []
-      }
-
-      acc[day.month]!.push(day)
-
-      return acc
-    }, {})
+    })),
+    ({ month }) => month,
+  )
 
   await page.getByRole("button", { name: "Pick a date" }).click()
 

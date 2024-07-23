@@ -208,7 +208,7 @@ export const createFlagBuilderPageObject = (testArgs: TestArgs) => {
         await internal.expectOptionIsUnselected(kind)
       },
     },
-    ...page,
   }
-  return self
+
+  return Object.assign(page, self)
 }

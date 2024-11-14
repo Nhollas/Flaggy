@@ -1,25 +1,10 @@
 import { Copy, Check } from "lucide-react"
-import { useState, useEffect } from "react"
 
 import { Button } from "@/app/components/ui"
 
-const GenerateUrlButton = () => {
-  const [isCopied, setIsCopied] = useState(false)
-
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout
-    if (isCopied) {
-      timeoutId = setTimeout(() => setIsCopied(false), 3000)
-    }
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId)
-      }
-    }
-  }, [isCopied])
-
+const GenerateUrlButton = ({ isCopied }: { isCopied: boolean }) => {
   return (
-    <Button variant="outline" type="submit" onClick={() => setIsCopied(true)}>
+    <Button variant="outline" type="submit">
       Generate Url
       {isCopied ? (
         <Check className="ml-2 size-4 shrink-0 text-green-600" />

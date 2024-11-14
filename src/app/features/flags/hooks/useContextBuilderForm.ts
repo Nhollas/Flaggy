@@ -10,5 +10,6 @@ export const useContextBuilderForm = () =>
     defaultValues: {
       contexts: [],
       redirectPath: "/",
+      flagSecret: "",
     },
   })

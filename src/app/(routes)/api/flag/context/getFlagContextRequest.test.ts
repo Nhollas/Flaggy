@@ -12,6 +12,7 @@ vi.useFakeTimers()
 import { cookies, draftMode } from "next/headers"
 import { describe, it, expect, beforeEach, vi, MockedFunction } from "vitest"
 
+import { env } from "@/app/lib/env"
 import modelFactory from "@/test/model-factory"
 
 import { GET } from "./route"
@@ -24,7 +25,7 @@ describe("When Request Body is Valid", () => {
   let response: Response
 
   beforeEach(async () => {
-    const singleContextWithUserAttributes = `http://localhost:3000/api/flag/context?data={"contexts":[{"kind":"user","attributes":{"key":"user-123","email":"user-123@gmail.com","phone":"1234567890"}}]}&redirectUrl=http://localhost:3000/redirect`
+    const singleContextWithUserAttributes = `http://localhost:3000/api/flag/context?data={"contexts":[{"kind":"user","attributes":{"key":"user-123","email":"user-123@gmail.com","phone":"1234567890"}}]}&redirectUrl=http://localhost:3000/redirect&secret=${env.LAUNCHDARKLY_CONTEXT_FLAG_SECRET}`
 
     const mockedRequest = modelFactory.request({
       url: singleContextWithUserAttributes,

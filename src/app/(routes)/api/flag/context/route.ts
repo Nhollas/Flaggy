@@ -3,6 +3,7 @@ import { cookies, draftMode } from "next/headers"
 import { z } from "zod"
 
 import { getFlagContextRequestSchema } from "@/app/features/flags"
+import { env } from "@/app/lib/env"
 
 export const GET = async (request: Request) => {
   return await trace
@@ -15,6 +16,15 @@ export const GET = async (request: Request) => {
 
         if (!data) {
           return new Response("No context provided", { status: 400 })
+        }
+
+        const flagSecret = searchParams.get("secret")
+
+        if (
+          !flagSecret ||
+          flagSecret !== env.LAUNCHDARKLY_CONTEXT_FLAG_SECRET
+        ) {
+          return new Response("No flag secret provided", { status: 401 })
         }
 
         const { contexts } = await getFlagContextRequestSchema.parseAsync(data)

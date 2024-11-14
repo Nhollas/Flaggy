@@ -1,6 +1,7 @@
 "use client"
 
 import dynamic from "next/dynamic"
+import { useState } from "react"
 import { useFieldArray } from "react-hook-form"
 
 import { Button, Form, Skeleton } from "@/app/components/ui"
@@ -9,6 +10,7 @@ import { useContextBuilderForm } from "../../hooks"
 import { createFlagContextUrl } from "../../lib/createFlagContextUrl"
 import { ContextBuilderForm } from "../../types"
 
+import { FlagSecretInput } from "./FlagSecretInput"
 import GenerateUrlButton from "./GenerateUrlButton"
 import { PreloadedStateInput } from "./PreloadedStateInput"
 import { RedirectPathInput } from "./RedirectPathInput"
@@ -25,6 +27,7 @@ export function FlagContextBuilder() {
     control: form.control,
     name: "contexts",
   })
+  const [isCopied, setIsCopied] = useState(false)
 
   const addBlankContext = () => {
     append(
@@ -41,14 +44,19 @@ export function FlagContextBuilder() {
   const createAndCopyContextUrl = ({
     contexts,
     redirectPath,
+    flagSecret,
   }: ContextBuilderForm) => {
     const url = createFlagContextUrl({
       baseUrl: new URL(window.location.href),
       flagContext: { contexts },
       redirectPath,
+      flagSecret,
     })
 
     navigator.clipboard.writeText(url)
+
+    setIsCopied(true)
+    setTimeout(() => setIsCopied(false), 3000)
   }
 
   return (
@@ -59,11 +67,12 @@ export function FlagContextBuilder() {
       >
         <h1 className="text-xl font-medium">Flag Context Builder</h1>
         <PreloadedStateInput />
+        <FlagSecretInput />
         <section className="flex flex-row justify-between">
           <Button type="button" onClick={addBlankContext}>
             Add Context
           </Button>
-          <GenerateUrlButton />
+          <GenerateUrlButton isCopied={isCopied} />
         </section>
         {contexts.map((context, i) => (
           <DynamicContextContainer

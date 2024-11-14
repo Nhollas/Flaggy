@@ -29,6 +29,7 @@ export const getFlagContextRequestSchema =
 export const contextBuilderFormSchema = z.object({
   contexts: z.array(contextSchema),
   redirectPath: z.string().min(1, { message: "Redirect Path is required" }),
+  flagSecret: z.string().min(1, { message: "Flag Secret is required" }),
   preloadedState: z.string().url().optional(),
 })
 

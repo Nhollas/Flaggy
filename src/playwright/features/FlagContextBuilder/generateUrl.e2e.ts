@@ -1,3 +1,4 @@
+import { env } from "@/app/lib/env"
 import test from "@/playwright/fixtures/next-fixture"
 
 test.use({
@@ -39,7 +40,7 @@ test("Users can clear their context when they use a generated URL.", async ({
   page,
   baseURL,
 }) => {
-  const singleContextWithCustomContextKind = `/api/flag/context?data={"contexts":[{"kind":"basket","attributes":{"key":"user-123"}}]}&redirectUrl=${baseURL}/`
+  const singleContextWithCustomContextKind = `/api/flag/context?data={"contexts":[{"kind":"basket","attributes":{"key":"user-123"}}]}&redirectUrl=${baseURL}/&secret=${env.LAUNCHDARKLY_CONTEXT_FLAG_SECRET}`
 
   await page.goto(singleContextWithCustomContextKind)
   await flagBuilderPage.clickViewContext()

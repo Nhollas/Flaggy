@@ -1,6 +1,8 @@
 import type { Page } from "@playwright/test"
 import { expect } from "@playwright/test"
 
+import { env } from "@/app/lib/env"
+
 export type TestArgs = {
   page: Page
 }
@@ -75,6 +77,7 @@ export const createFlagBuilderPageObject = (testArgs: TestArgs) => {
       await self.openAttributesDropdown()
       await self.searchAttribute("Middle Name")
       await self.clickAddCustomAttribute("Middle Name")
+      await self.fillFlagContextSecret(env.LAUNCHDARKLY_CONTEXT_FLAG_SECRET)
     },
     clickViewContext: async () => {
       await page.getByRole("button", { name: "View Context" }).click()
@@ -90,6 +93,9 @@ export const createFlagBuilderPageObject = (testArgs: TestArgs) => {
     },
     searchAttribute: async (attribute: string) => {
       await page.getByPlaceholder("Search attribute...").fill(attribute)
+    },
+    fillFlagContextSecret: async (value: string) => {
+      await page.getByLabel("Flag Secret").fill(value)
     },
     clickAddCustomAttribute: async (attribute: string) => {
       await page

@@ -30,6 +30,7 @@ export const contextBuilderFormSchema = z.object({
   contexts: z.array(contextSchema),
   redirectPath: z.string().min(1, { message: "Redirect Path is required" }),
   flagSecret: z.string().min(1, { message: "Flag Secret is required" }),
+  baseUrl: z.string().min(1, { message: "Base Url is required" }),
   preloadedState: z.string().url().optional(),
 })
 

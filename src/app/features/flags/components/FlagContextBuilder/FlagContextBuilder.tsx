@@ -10,6 +10,7 @@ import { useContextBuilderForm } from "../../hooks"
 import { createFlagContextUrl } from "../../lib/createFlagContextUrl"
 import { ContextBuilderForm } from "../../types"
 
+import { BaseUrlInput } from "./BaseUrlInput"
 import { FlagSecretInput } from "./FlagSecretInput"
 import GenerateUrlButton from "./GenerateUrlButton"
 import { PreloadedStateInput } from "./PreloadedStateInput"
@@ -45,9 +46,10 @@ export function FlagContextBuilder() {
     contexts,
     redirectPath,
     flagSecret,
+    baseUrl,
   }: ContextBuilderForm) => {
     const url = createFlagContextUrl({
-      baseUrl: new URL(window.location.href),
+      baseUrl: new URL(baseUrl),
       flagContext: { contexts },
       redirectPath,
       flagSecret,
@@ -68,6 +70,7 @@ export function FlagContextBuilder() {
         <h1 className="text-xl font-medium">Flag Context Builder</h1>
         <PreloadedStateInput />
         <FlagSecretInput />
+        <BaseUrlInput />
         <section className="flex flex-row justify-between">
           <Button type="button" onClick={addBlankContext}>
             Add Context

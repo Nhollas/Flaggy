@@ -11,5 +11,6 @@ export const useContextBuilderForm = () =>
       contexts: [],
       redirectPath: "/",
       flagSecret: "",
+      baseUrl: typeof window !== "undefined" ? window.location.href : "",
     },
   })

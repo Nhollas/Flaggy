@@ -24,5 +24,5 @@ export const createFlagContextUrl = ({
     new URL(redirectPath, baseUrl).toString(),
   )
 
-  return decodeURIComponent(url.toString())
+  return url.toString()
 }
